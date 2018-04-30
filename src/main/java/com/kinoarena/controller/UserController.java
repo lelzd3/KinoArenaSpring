@@ -28,6 +28,7 @@ public class UserController {
 	@Autowired
 	ServletContext context;
 	
+	//from index,error and register.jsp -> login.jsp
 	@RequestMapping(value = "loginPage", method = RequestMethod.GET)
 	public String getLoginPage(){
 		return "login";
@@ -109,10 +110,24 @@ public class UserController {
 		}
 	}
 	
+	
+	//logout
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request,HttpSession s){
 		s.invalidate();
 		return "login";
 	}
 	
+	//main.jsp -> viewAllMovies.jsp
+	@RequestMapping(value = "viewAllMoviesPage", method = RequestMethod.GET)
+	public String viewAllMoviesPage(){
+		return "viewAllMovies";
+	}
+	
+	
+	//login.jsp -> register.jsp
+	@RequestMapping(value = "getRegisterPage", method = RequestMethod.GET)
+	public String getRegisterPage(){
+		return "register";
+	}
 }

@@ -22,7 +22,7 @@ response.setHeader("Cache-Control", "no-cache");
 		<h2 align="center">Session id is <%= s %></h2>
 		<br>
 		
-		<form action="viewAllMovies.jsp" method="get">
+		<form action="viewAllMoviesPage" method="get">
 			<input type="submit" value="Movies"><br>
 		</form>
 		

@@ -41,7 +41,7 @@ response.setHeader("Cache-Control", "no-cache");
 	            </tr>
 	           </table>
 	           <button style="margin:auto;display:block" type="submit">Register</button><br>
-	           <a href="login.jsp">Already have an account? Click here to login.</a>
+	           <a href="loginPage">Already have an account? Click here to login.</a>
 			</form>
 	</body>
 </html>

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -24,10 +25,11 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**").addResourceLocations("/static/css/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/src/main/webapp/static/css/");
         registry.addResourceHandler("/img/**").addResourceLocations("/static/img/");
         registry.addResourceHandler("/pdfs/**").addResourceLocations("/static/pdf/");
         registry.addResourceHandler("/html/**").addResourceLocations("/static/html/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/static/js/");
     }
     
 	@Bean
@@ -39,6 +41,13 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		
 		return resolver;
 	}
+	
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("utf-8");
+        return resolver;
+    }
 	
 	// localization configuration
 	@Bean
@@ -61,5 +70,6 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter {
 		changeInterceptor.setParamName("language");
 		registry.addInterceptor(changeInterceptor);
 	}
+	
 	
 }

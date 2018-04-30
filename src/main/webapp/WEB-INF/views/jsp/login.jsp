@@ -18,7 +18,7 @@ response.setHeader("Cache-Control", "no-cache");
 			Username<input type="text" name="username" value="Stanislav1"><br>
 			Password<input type="password" name="password" value="#12345678sS"><br>
 			<input type="submit" value="Login"><br>
-			Don`t have an account? <a href="register.jsp">Register here</a>
+			Don`t have an account? <a href="getRegisterPage">Register here</a>
 		</form>
 		
 	</body>

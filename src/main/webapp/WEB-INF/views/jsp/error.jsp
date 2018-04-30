@@ -19,7 +19,7 @@ response.setHeader("Cache-Control", "no-cache");
 		<h4>Excp <%= e.getLocalizedMessage() %></h4>
 		<h5>E <%= e.getCause() %></h5>
 		<h6>E <%= e.getClass().getName() %></h6>
-		<a href="login.jsp">Back to login, sorry about that</a>
+		<a href="loginPage">Back to login, sorry about that</a>
 		
 	</body>
 </html>

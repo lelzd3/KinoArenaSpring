@@ -4,6 +4,8 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public class Movie  {
 	
+
+
 	private int id;
 	private String title;
 	private String description;
@@ -55,7 +57,7 @@ public class Movie  {
 		return duration;
 	}
 	
-	public String getFileLocation() {
+	public String getFile_location() {
 		return file_location;
 	}
 	
@@ -98,6 +100,10 @@ public class Movie  {
 		else {
 			throw new InvalidDataException("Invalid duration");
 		}
+	}
+
+	public void setFile_location(String file_location) {
+		this.file_location = file_location;
 	}
 
 	@Override

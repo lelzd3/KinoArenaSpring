@@ -38,7 +38,7 @@ public class MovieDao implements IMovieDao{
 		s.setString(2, m.getDescription());
 		s.setDouble(3, m.getRating());
 		s.setDouble(4, m.getDuration());
-		s.setString(5, m.getFileLocation());
+		s.setString(5, m.getFile_location());
 		s.executeUpdate();
 		
 		// set the ID for the instance of Movie m

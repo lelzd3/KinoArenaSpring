@@ -11,13 +11,14 @@
 	<name>KinoArenaSpring</name>
 	<description>Final project for ITTalents training camp</description>
 
-<repositories>
-    <repository>
-      <id>my-repo1</id>
-      <name>xuggle_repo</name>
-      <url>http://www.dcm4che.org/maven2/</url>
-    </repository>
-  </repositories>
+
+	<repositories>
+	    <repository>
+	      <id>my-repo1</id>
+	      <name>xuggle_repo</name>
+	      <url>http://www.dcm4che.org/maven2/</url>
+	    </repository>
+ 	</repositories>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -64,6 +65,17 @@
 		    <groupId>xuggle</groupId>
 		    <artifactId>xuggle-xuggler</artifactId>
 		    <version>5.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+		   <groupId>commons-fileupload</groupId>
+		   <artifactId>commons-fileupload</artifactId>
+		   <version>1.2.1</version> <!-- makesure correct version here -->
 		</dependency>
 		<dependency>
 		    <groupId>mysql</groupId>
