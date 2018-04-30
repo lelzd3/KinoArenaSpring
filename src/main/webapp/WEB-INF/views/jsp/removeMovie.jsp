@@ -1,3 +1,4 @@
+<%@page import="com.kinoarena.model.dao.MovieDao"%>
 <%@page import="com.kinoarena.model.pojo.Movie"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -9,7 +10,7 @@
 		<title>Remove Movie page</title>
 		
 		<%
-			ArrayList<Movie> movies = (ArrayList<Movie>) application.getAttribute("movies");
+			ArrayList<Movie> movies = (ArrayList<Movie>) MovieDao.getInstance().getAllMovies();
 		%>
 	</head>
 	<body>
