@@ -27,7 +27,7 @@ response.setHeader("Cache-Control", "no-cache");
 		<h2 align="center">Session id is <%= s %></h2>
 		<br>
 
-		<form action="addMovie.jsp" method="get">
+		<form action="addMoviePage" method="get">
 			<button type="submit">Add Movie</button>
 		</form>
 		<br>
@@ -52,7 +52,7 @@ response.setHeader("Cache-Control", "no-cache");
 		</form>
 		<br>
 		
-		<form action="removeMovie.jsp" method="get">
+		<form action="removeMoviePage" method="get">
 			<button type="submit">Remove Movie</button>
 		</form>
 		<br>

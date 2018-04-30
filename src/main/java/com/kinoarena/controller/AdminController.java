@@ -1,10 +1,18 @@
 package com.kinoarena.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kinoarena.controller.manager.AdminManager;
 import com.kinoarena.controller.manager.UserManager;
@@ -22,10 +31,12 @@ import com.kinoarena.model.dao.UserDao;
 import com.kinoarena.model.pojo.Broadcast;
 import com.kinoarena.model.pojo.Cinema;
 import com.kinoarena.model.pojo.Hall;
+import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.model.pojo.User;
 import com.kinoarena.utilities.exceptions.IlligalAdminActionException;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.NotAnAdminException;
+
 
 
 
@@ -34,7 +45,6 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 public class AdminController {
 
 	/// make more readable all remove jsp TODO
-	
 	
 //    @Autowired
 //    private HallDao hallDao;
@@ -50,6 +60,9 @@ public class AdminController {
 //	private AdminManager adminManager;
 	@Autowired
 	ServletContext context;
+	private static final String COVER_FILE_SUFFIX = "-cover";
+	private static final String SERVER_FILES_LOCATION = "D:\\kinoarenaMovieCovers\\";
+
 	
 	//adminPanel.jsp->removeBroadcast.jsp
 	@RequestMapping(value = "/removeBroadcastPage", method = RequestMethod.GET)
@@ -282,6 +295,82 @@ public class AdminController {
 		}
 		return "adminMain";
 	}
+
+	//adminPanel.jsp -> addMovie.jsp
+	@RequestMapping(value = "/addMoviePage", method = RequestMethod.GET)
+	public String getToAddMovie() {
+		return "addMovie";
+	}
 	
 
+	@RequestMapping(value = "/addMovie", method = RequestMethod.POST)
+	public String addMovie(@RequestParam("title") String title, @RequestParam("description") String description,
+			@RequestParam("duration") double duration, @RequestParam("file") MultipartFile uploadedFile
+			, HttpSession session, Model model) {
+	
+
+		User admin = (User) session.getAttribute("admin");
+		try {
+	
+			Double rating = 0.0;
+			Movie movie = new Movie(title, description, rating, duration);
+			String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;
+			movie.setFile_location(file_location);
+			
+			File serverFile = new File(file_location);
+			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			
+			AdminManager.getInstance().addNewMovie(movie, admin);
+			
+			return "adminMain";
+		
+			
+
+		} catch (SQLException e) {
+			System.out.println("SQL Exception in /admin/confirmed");
+			e.printStackTrace();
+			return "error";
+		} catch (NotAnAdminException e) {
+			return "error";
+		} catch (InvalidDataException e) {
+			e.printStackTrace();
+			return "error";
+		} catch (IOException e) {
+			e.printStackTrace();
+			e.getMessage();
+			return "error";
+		}
+		
+    }
+
+	//adminPanel.jsp -> removeMovie.jsp
+		@RequestMapping(value = "/removeMoviePage", method = RequestMethod.GET)
+		public String getToRemoveMovie() {
+			return "removeMovie";
+		}
+		
+
+		@RequestMapping(value = "/removeMovie", method = RequestMethod.POST)
+		public String removeMovie(@RequestParam("movieSelect") int movieId ,
+			HttpSession session, Model model) {
+
+			User admin = (User) session.getAttribute("admin");
+			try {
+			    Movie movieToDelete=MovieDao.getInstance().getMovieById(movieId);
+				AdminManager.getInstance().removeMovie(movieToDelete, admin);
+				
+			} catch (SQLException e) {
+				System.out.println("SQL Exception in /admin/confirmed");
+				e.printStackTrace();
+				return "error";
+			} catch (NotAnAdminException e) {
+				return "error";
+			} catch (InvalidDataException e) {
+				e.printStackTrace();
+				return "error";
+			}
+			return "adminMain";
+	    }
+	
+		
 }
