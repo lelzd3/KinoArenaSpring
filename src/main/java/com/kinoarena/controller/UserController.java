@@ -54,10 +54,7 @@ public class UserController {
 				
 				context.setAttribute("users", UserDao.getInstance().getAllUsers());
 				context.setAttribute("usersButNotAdmins", UserDao.getInstance().GetAllUsersButNoAdmins());
-				ArrayList<User> users = (ArrayList<User>) UserDao.getInstance().GetAllUsersButNoAdmins();
-				for(int i = 0 ; i < users.size() ; i++) {
-					System.out.println(users.get(i).getUsername());
-				}
+				
 				return "adminMain";
 				
 			}
