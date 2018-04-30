@@ -29,12 +29,12 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 
 
 
+
 @Controller
 //@RequestMapping("/admin")
 public class AdminController {
 
 	/// make more readable all remove jsp TODO
-	
 	
 //    @Autowired
 //    private HallDao hallDao;
@@ -282,6 +282,64 @@ public class AdminController {
 		}
 		return "adminMain";
 	}
+
+	//adminPanel.jsp -> addMovie.jsp
+	@RequestMapping(value = "/addMoviePage", method = RequestMethod.GET)
+	public String getToAddMovie() {
+		return "addMovie";
+	}
 	
 
+	@RequestMapping(value = "/addMovie", method = RequestMethod.POST)
+	public String addMovie(@RequestParam("address") String address, @RequestParam("name") String name,
+			HttpSession session, Model model) {
+
+		User admin = (User) session.getAttribute("admin");
+		try {
+			Cinema newCinema = new Cinema(name, address);
+			AdminManager.getInstance().addNewCinema(newCinema, admin);
+
+		} catch (SQLException e) {
+			System.out.println("SQL Exception in /admin/confirmed");
+			e.printStackTrace();
+			return "error";
+		} catch (NotAnAdminException e) {
+			return "error";
+		} catch (InvalidDataException e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "adminMain";
+    }
+
+	//adminPanel.jsp -> removeMovie.jsp
+		@RequestMapping(value = "/removeMoviePage", method = RequestMethod.GET)
+		public String getToRemoveMovie() {
+			return "removeMovie";
+		}
+		
+
+		@RequestMapping(value = "/removeMovie", method = RequestMethod.POST)
+		public String removeMovie(@RequestParam("movieSelect") int movieId ,
+				HttpSession session, Model model) {
+
+			User admin = (User) session.getAttribute("admin");
+			try {
+				com.kinoarena.model.pojo.Movie movieToDelete=MovieDao.getInstance().getMovieById(movieId);
+				AdminManager.getInstance().removeMovie(movieToDelete, admin);
+				
+			} catch (SQLException e) {
+				System.out.println("SQL Exception in /admin/confirmed");
+				e.printStackTrace();
+				return "error";
+			} catch (NotAnAdminException e) {
+				return "error";
+			} catch (InvalidDataException e) {
+				e.printStackTrace();
+				return "error";
+			}
+			return "adminMain";
+	    }
+	
+		
 }
