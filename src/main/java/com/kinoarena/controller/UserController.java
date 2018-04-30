@@ -1,7 +1,5 @@
 package com.kinoarena.controller;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +20,16 @@ import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 
 
 @Controller
-//@RequestMapping(value = "/user")
 public class UserController {
 
 	@Autowired
 	ServletContext context;
+	
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public String sendIndex() {
+		return "index2";
+	}
 	
 	//from index,error and register.jsp -> login.jsp
 	@RequestMapping(value = "loginPage", method = RequestMethod.GET)

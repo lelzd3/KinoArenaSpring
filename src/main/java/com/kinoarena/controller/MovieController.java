@@ -16,9 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kinoarena.controller.manager.AdminManager;
@@ -109,7 +111,6 @@ public class MovieController {
 			Cinema cinema = CinemaDao.getInstance().getCinemaById(broadcast.getCinemaId());
 			Movie movie = MovieDao.getInstance().getMovieById(broadcast.getMovieId());
 			
-			//<%=broadcast.getPrice()%>
 	
 			springModel.addAttribute("cinemaName",cinema.getName());
 			springModel.addAttribute("hallId",broadcast.getHallId());
@@ -118,8 +119,8 @@ public class MovieController {
 			springModel.addAttribute("broadcastPrice",broadcast.getPrice());
 			springModel.addAttribute("broadcastId",broadcastId);
 			
-			ArrayList<String> allSeatsForBroadcast = ReservationDao.getInstance().getAllOccupiedSeatsForABroadcast(broadcast);
-			response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
+//			ArrayList<String> allSeatsForBroadcast = ReservationDao.getInstance().getAllOccupiedSeatsForABroadcast(broadcast);
+//			response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
 			
 			return "reservationHall";
 		} catch (Exception e) {
@@ -129,7 +130,7 @@ public class MovieController {
 
 	}
 	
-	@RequestMapping(value="/reserve", method=RequestMethod.POST)
+	@RequestMapping(value="/reserveSubmit", method=RequestMethod.POST)
 	public String reserve(HttpServletRequest request,HttpServletResponse response,Model springModel) {
 		try {
 			User user = (User) request.getSession().getAttribute("user");
@@ -160,4 +161,20 @@ public class MovieController {
 			return "error";
 		}
 	}
+	
+	@RequestMapping(value="/getReservedSeats/{broadcastId}", method=RequestMethod.GET)
+	@ResponseBody
+	public String reserveSubmit(HttpServletRequest request,HttpServletResponse response,@PathVariable(value="broadcastId") Integer broadcastId) {
+		try {
+			Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
+			ArrayList<String> allSeatsForBroadcast = ReservationDao.getInstance().getAllOccupiedSeatsForABroadcast(broadcast);
+			//response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
+			return allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1);
+		} catch (Exception e) {
+			return e.getMessage();
+//			request.setAttribute("exception", e);
+//			return "error";
+		}
+	}
+
 }

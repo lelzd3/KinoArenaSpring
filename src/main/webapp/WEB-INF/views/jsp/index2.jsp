@@ -14,5 +14,6 @@
 		<form action="loginPage" method="get">	
 			<button type="submit">Login</button>
 		</form>
+	
 	</body>
 </html>
