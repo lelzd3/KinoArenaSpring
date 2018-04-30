@@ -49,7 +49,7 @@ public class BroadcastDao implements IBroadcastDao {
 
 	@Override
 	public void deleteBroadcast(Broadcast b) throws InvalidDataException, SQLException {
-		PreparedStatement ps = connection.prepareStatement("DELETE FROM broadcasts WHERE id = ?");
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM `broadcasts` WHERE id = ?");
 		ps.setInt(1, b.getId());
 		ps.executeUpdate();
 	}

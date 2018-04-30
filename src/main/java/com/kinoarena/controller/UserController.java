@@ -1,6 +1,7 @@
 package com.kinoarena.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,11 @@ public class UserController {
 				//TODO USE USER MANAGER
 				
 				context.setAttribute("users", UserDao.getInstance().getAllUsers());
+				context.setAttribute("usersButNotAdmins", UserDao.getInstance().GetAllUsersButNoAdmins());
+				ArrayList<User> users = (ArrayList<User>) UserDao.getInstance().GetAllUsersButNoAdmins();
+				for(int i = 0 ; i < users.size() ; i++) {
+					System.out.println(users.get(i).getUsername());
+				}
 				return "adminMain";
 				
 			}

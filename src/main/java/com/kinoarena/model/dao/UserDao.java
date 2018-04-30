@@ -285,6 +285,29 @@ public class UserDao implements IUserDao{
 		}
 		return users;
 	}
+
+	public Collection<User> GetAllUsersButNoAdmins() throws SQLException, InvalidDataException {
+		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin FROM users  WHERE is_Admin = 0");
+		ResultSet result = ps.executeQuery();
+		ArrayList<User> users = new ArrayList<User>();
+		
+		
+		while(result.next()) {
+			boolean isAdmin = result.getInt("is_Admin") == 1? true:false;
+			User user = new User(
+					result.getInt("id"),
+					result.getString("username"),
+					result.getString("password"),
+					result.getString("first_name"),
+					result.getString("last_name"),
+					result.getString("email"),
+					result.getString("phone_number"),
+					isAdmin
+					);
+			users.add(user);
+		}
+		return users;
+		}
 	
 	
 }

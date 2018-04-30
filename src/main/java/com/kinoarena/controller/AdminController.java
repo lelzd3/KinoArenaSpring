@@ -3,6 +3,7 @@ package com.kinoarena.controller;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +30,28 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 
 
 @Controller
-@RequestMapping("/admin")
+//@RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private HallDao hallDao;
+//    @Autowired
+//    private HallDao hallDao;
+//	@Autowired
+//	private UserManager userManager;
+//	@Autowired
+//	private UserDao userDao;
+//	@Autowired
+//	private MovieDao movieDao;
+//	@Autowired
+//	private BroadcastDao broadcastDao;
+//	@Autowired
+//	private AdminManager adminManager;
 	@Autowired
-	private UserManager userManager;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private MovieDao movieDao;
-	@Autowired
-	private BroadcastDao broadcastDao;
-	@Autowired
-	private AdminManager adminManager;
-
+	ServletContext context;
+	
+	//adminPanel.jsp->removeBroadcast.jsp
 	@RequestMapping(value = "/removeBroadcastPage", method = RequestMethod.GET)
 	public String getToRemoveBroadcast() {
+		System.out.println("Stignah pone do tyka");
 		return "removeBroadcast";
 	}
 	
@@ -54,20 +59,21 @@ public class AdminController {
 	@RequestMapping(value = "/removeBroadcast", method = RequestMethod.POST)
 	public String removeBroadcast(@RequestParam("broadcastSelect") int broadcastId, HttpSession session) {
 		// maybe here should change int to long cuz of id in db
+		System.out.println("Stignah do tyka");
 		try {
 			User admin = (User) session.getAttribute("admin");
 			try {
-				Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
-				adminManager.removeBroadcast(broadcast, admin);
-				;
-
+				Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
+				AdminManager.getInstance().removeBroadcast(broadcast, admin);
 			} catch (NotAnAdminException e) {
 				e.printStackTrace();
 				// should we check if its right to redirect error page here
+				System.out.println(e.getMessage());
 				return "error";
 			} catch (InvalidDataException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println(e.getMessage());
 				return "adminMain";
 			}
 
@@ -76,26 +82,27 @@ public class AdminController {
 			e.printStackTrace();
 			return "error";
 		}
+		System.out.println("itso k");
 		return "adminMain";
 	}
 
+	//adminPanel.jsp -> addBroadcast.jsp
 	@RequestMapping(value = "/addBroadcastPage", method = RequestMethod.GET)
 	public String getToAddBroadcast() {
 		return "addBroadcast";
 	}
 	
-	
 	@RequestMapping(value = "/addBroadcast", method = RequestMethod.POST)
-	public String addBroadcast(@RequestParam("movieId") int movieId, @RequestParam("cinemaId") int cinemaId,
-			@RequestParam("hallId") int hallId, @RequestParam("projectionTime") String time,
-			@RequestParam("freeSits") int freeSits, @RequestParam("price") double price, HttpSession session) {
+	public String addBroadcast(@RequestParam("movieSelect") int movieId, @RequestParam("cinemaSelect") int cinemaId,
+			@RequestParam("hallSelect") int hallId, @RequestParam("projection_time") String time,
+			@RequestParam("free_sits") int freeSits, @RequestParam("price") double price, HttpSession session) {
 		// maybe here should change int to long cuz of id in db
 		try {
 			User admin = (User) session.getAttribute("admin");
 			try {
 				LocalDateTime projectionTime = LocalDateTime.parse(time);
 				Broadcast newBroadcast = new Broadcast(cinemaId, movieId, hallId, projectionTime, price);
-				adminManager.addNewBroadcast(newBroadcast, admin);
+				AdminManager.getInstance().addNewBroadcast(newBroadcast, admin);
 
 			} catch (NotAnAdminException e) {
 				e.printStackTrace();
@@ -115,6 +122,7 @@ public class AdminController {
 		return "adminMain";
 	}
 
+	//adminPanel.jsp -> makeAdmin.jsp
 	@RequestMapping(value = "/makeAdminPage", method = RequestMethod.GET)
 	public String getToMakeAdmin() {
 		return "makeAdmin";
@@ -128,11 +136,11 @@ public class AdminController {
 		if (user != null && user.getIsAdmin()) {
 			try {
 
-				if (!userManager.verifyEmail(email)) {
+				if (!UserManager.getInstance().verifyEmail(email)) {
 					model.addAttribute("invalidEmail", true);
-					return "admin_create_admin";
+					return "error";
 				}
-				adminManager.changeUserIsAdminStatus(user, email.trim());
+				AdminManager.getInstance().changeUserIsAdminStatus(user, email.trim());
 			} catch (SQLException e) {
 				System.out.println("SQLException /createAdmin ");
 				e.printStackTrace();
@@ -140,7 +148,7 @@ public class AdminController {
 			} catch (InvalidDataException e) {
 				e.printStackTrace();
 				model.addAttribute("invalidEmail", true);
-				return "admin_create_admin";
+				return "error";
 			} catch (NotAnAdminException e) {
 				model.addAttribute("notAdmin", true);
 				e.printStackTrace();
@@ -148,7 +156,7 @@ public class AdminController {
 			}
 		}
 		model.addAttribute("create", "Admin is create");
-		return "admin_create_admin";
+		return "adminMain";
 	}
 	
 	@RequestMapping(value = "/addCinemaPage", method = RequestMethod.GET)
@@ -164,7 +172,7 @@ public class AdminController {
 		User admin = (User) session.getAttribute("admin");
 		try {
 			Cinema newCinema = new Cinema(name, address);
-			adminManager.addNewCinema(newCinema, admin);
+			AdminManager.getInstance().addNewCinema(newCinema, admin);
 
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /admin/confirmed");
@@ -178,7 +186,8 @@ public class AdminController {
 		}
 		return "adminMain";
     }
-	
+
+	//adminPanel.jsp->addHall.jsp
 	@RequestMapping(value = "/addHallPage", method = RequestMethod.GET)
 	public String getToAddHall() {
 		return "addHall";
@@ -192,7 +201,7 @@ public class AdminController {
 		User admin = (User) session.getAttribute("admin");
 		try {
 			Hall newHall = new Hall(seats, cinemaId);
-			adminManager.addNewHall(newHall, admin);
+			AdminManager.getInstance().addNewHall(newHall, admin);
 			
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /admin/confirmed");
@@ -221,7 +230,7 @@ public class AdminController {
 			User admin = (User) session.getAttribute("admin");
 			try {
 				Broadcast broadcastForDiscount = BroadcastDao.getInstance().getBroadcastById(broadcastId);
-				adminManager.setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
+				AdminManager.getInstance().setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
 
 			} catch (NotAnAdminException e) {
 				e.printStackTrace();
@@ -252,8 +261,8 @@ public class AdminController {
 
 		User admin = (User) session.getAttribute("admin");
 		try {
-			Hall hallToDelete = hallDao.getHallById(hallId);
-			adminManager.removeHall(hallToDelete, admin);
+			Hall hallToDelete = HallDao.getInstance().getHallById(hallId);
+			AdminManager.getInstance().removeHall(hallToDelete, admin);
 			
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /admin/confirmed");
