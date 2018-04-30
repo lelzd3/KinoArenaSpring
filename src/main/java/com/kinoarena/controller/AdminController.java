@@ -159,6 +159,7 @@ public class AdminController {
 		return "adminMain";
 	}
 	
+	
 	@RequestMapping(value = "/addCinemaPage", method = RequestMethod.GET)
 	public String getToAddCinema() {
 		return "addCinema";

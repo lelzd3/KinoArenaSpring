@@ -9,7 +9,7 @@
 		<title>Remove Broadcast page</title>
 		
 		<%
-		
+			// maybe make a select query in controller and add to Model
 			ArrayList<Broadcast> broadcasts = (ArrayList<Broadcast>) application.getAttribute("broadcasts");
 		%>
 	</head>
