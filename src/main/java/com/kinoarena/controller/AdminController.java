@@ -33,6 +33,9 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 //@RequestMapping("/admin")
 public class AdminController {
 
+	/// make more readable all remove jsp TODO
+	
+	
 //    @Autowired
 //    private HallDao hallDao;
 //	@Autowired
@@ -159,7 +162,7 @@ public class AdminController {
 		return "adminMain";
 	}
 	
-	
+	//adminPanel.jsp -> addCinema.jsp
 	@RequestMapping(value = "/addCinemaPage", method = RequestMethod.GET)
 	public String getToAddCinema() {
 		return "addCinema";
@@ -217,6 +220,7 @@ public class AdminController {
 		return "adminMain";
 	}
 
+	//adminPanel.jsp -> setDiscount.jsp	
 	@RequestMapping(value = "/setDiscountPage", method = RequestMethod.GET)
 	public String getToSetDiscount() {
 		return "setDiscount";
@@ -250,6 +254,7 @@ public class AdminController {
 		return "adminMain";
 	}
 
+	//adminPanel.jsp -> removeHall.jsp
 	@RequestMapping(value = "/removeHallPage", method = RequestMethod.GET)
 	public String getToRemoveHall() {
 		return "removeHall";
