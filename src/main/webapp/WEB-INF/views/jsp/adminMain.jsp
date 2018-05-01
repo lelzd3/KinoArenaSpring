@@ -57,7 +57,7 @@ response.setHeader("Cache-Control", "no-cache");
 		</form>
 		<br>
 		
-		<form action="removeCinema.jsp" method="get">
+		<form action="removeCinemaPage" method="get">
 			<button type="submit">Remove Cinema</button>
 		</form>
 		<br>
