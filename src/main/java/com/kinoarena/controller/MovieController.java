@@ -113,7 +113,6 @@ public class MovieController {
 	}
 
 	@RequestMapping(value = "/reserveInterim", method = RequestMethod.POST)
-	@ResponseBody
 	public String reserveInterim(HttpServletRequest request, HttpServletResponse response, Model springModel) {
 		try {
 			int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));

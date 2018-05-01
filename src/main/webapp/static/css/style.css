@@ -32,7 +32,9 @@ img{max-width:100%;}
 body{
 	padding:0;
 	margin:0;
-    background:url(img/banner2.jpg) no-repeat center;
+    /*background:url(img/banner2.jpg) no-repeat center;*/
+    background-color: khaki;
+  /*	background-image: url("img/banner2.jpg"); */
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
