@@ -82,13 +82,9 @@
 				<option value="10">10</option>
 			</select> <input type="submit" value="rateMovie">
 		</form>
-		
-<<<<<<< HEAD
 
-			<c:if test="${isMovieInFavourite == false}">
-=======
 		        <% if(UserDao.getInstance().isMovieInFavourite(user.getId() , movie.getId())){ %>
->>>>>>> 5c79bc933f4e103daff68aafade1f2970d24bbf3
+
 				<form action = "<c:url value='/favourite/addInFavorite'/>" method = "get">
 					<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
 					<input type = "submit" value = "Add in favorites"/>
@@ -98,11 +94,8 @@
 				<input type = "submit" value = "Remove from favroites">
 				<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
 			</form> 
-<<<<<<< HEAD
-			</c:if>
-=======
+
 			<% }  %>
->>>>>>> 5c79bc933f4e103daff68aafade1f2970d24bbf3
 		
 		<br> <br>
 		<form action="reserveInterim" method="post">
