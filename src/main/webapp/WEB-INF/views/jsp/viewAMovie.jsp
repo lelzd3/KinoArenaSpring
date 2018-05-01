@@ -1,3 +1,4 @@
+<%@page import="com.kinoarena.model.dao.UserDao"%>
 <%@page import="com.kinoarena.model.dao.BroadcastDao"%>
 <%@page import="com.kinoarena.model.pojo.Broadcast"%>
 <%@page import="com.kinoarena.model.pojo.Movie"%>
@@ -55,6 +56,34 @@
 					<input type="submit" value="rateMovie">
 				</form>
 				<br>
+				
+				  <% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
+
+			<form action = "addInFavorite" method = "get">
+				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+				<input type = "submit" value = "Add in favorites"/>
+			</form>
+			<% } else{ %>
+			<form action = "removeFromFavorite" method="post">
+				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+				<input type = "submit" value = "Remove from favourites">
+			</form> 
+
+			<% }  %>
+			
+			 <% if(!UserDao.getInstance().isMovieInWatchlist(user.getId(),movie.getId())){ %>
+
+			<form action = "addInWatchlist" method = "get">
+				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+				<input type = "submit" value = "Add in watchlist"/>
+			</form>
+			<% } else{ %>
+			<form action = "removeFromWatchlist" method="post">
+				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+				<input type = "submit" value = "Remove from watchlist">
+			</form> 
+
+			<% }  %>
 				
 				<br>
 				<form action="reserveInterim" method="post">
