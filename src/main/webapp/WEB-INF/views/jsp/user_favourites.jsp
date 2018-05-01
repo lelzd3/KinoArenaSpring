@@ -74,7 +74,7 @@
 			<br><br>
 			<form action = "<c:url value='/favourite/removeFromFavorite'/>" method="post">
 				<input type = "submit"  value = "Remove from favorite">
-				<input type = "hidden" name = "value" value = "${ movie.id }"/>
+				<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
 			</form> 
 		
 		<br> <br>

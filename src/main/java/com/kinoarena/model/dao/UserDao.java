@@ -353,10 +353,10 @@ public class UserDao implements IUserDao{
 			return movies;
 		}
 
-		public boolean isMovieInFavourite(String userId, int movieId) throws SQLException {
+		public boolean isMovieInFavourite(int userId, int movieId) throws SQLException {
 			
 			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?;");
-			ps.setString(1, userId);
+			ps.setInt(1, userId);
 			ps.setInt(2, movieId);
 			ResultSet rs = ps.executeQuery();
 			boolean isThere = rs.next();
