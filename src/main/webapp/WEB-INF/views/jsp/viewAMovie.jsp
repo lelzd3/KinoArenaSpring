@@ -31,7 +31,7 @@
 			<div class="one">
 				<strong><%= movie.getTitle() %></strong>
 				<br><br>
-				<img src="getPic?title=<%=movie.getTitle()%>" height="250" width="250">
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250">
 				<br><br>
 				<p><%= movie.getDescription() %></p>
 				<br>

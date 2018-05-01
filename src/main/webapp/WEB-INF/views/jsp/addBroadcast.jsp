@@ -4,23 +4,14 @@
 <%@page import="com.kinoarena.model.pojo.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Add Broadcast page</title>
-		<%
-			//can also be User user = (User) session.getAttribute("user")
-			//no need for that now but left it here.
-			User admin = (User) request.getSession().getAttribute("admin");
-			//List<Broadcast> broadcasts = (List<Broadcast>) application.getAttribute("broadcasts");
-			ArrayList<Movie> movies = (ArrayList<Movie>) application.getAttribute("movies");
-			ArrayList<Cinema> cinemas = (ArrayList<Cinema>) application.getAttribute("cinemas");
-			ArrayList<Hall> halls = (ArrayList<Hall>) application.getAttribute("halls");
-			//TODO make getAllHallsForCinema() so we can show all halls for the specific cinema chosen in the select
-			//good idea tricky to do
-		%>
+
 	</head>
 	
 	<body>
@@ -30,23 +21,23 @@
 			<br>
 			Select Movie
 			<select name="movieSelect">
-				<% for( Movie movie : movies){ %>
-			 		 <option value="<%= movie.getId() %>"><%= movie.getTitle()  %></option>
-				<% } %>
+				<c:forEach var="movie" items="${movies}"  >
+			 		 <option value="${movie.id}">${movie.title}</option>
+				</c:forEach>
 			</select>
 			<br>
 			Select Cinema
 			<select name="cinemaSelect">
-				<% for( Cinema cinema : cinemas){ %>
-			 		 <option value="<%= cinema.getId() %>"> <%= cinema.getName()  %></option>
-				<% } %>
+				<c:forEach var="cinema" items="${cinemas}"  >
+			 		 <option value="${cinema.id}">${cinema.name} , ${cinema.id}</option>
+				</c:forEach>
 			</select>
 			<br>
 			Select Hall
 			<select name="hallSelect">
-				<% for( Hall hall : halls){ %>
-			 		 <option value="<%= hall.getId()  %>"><%= hall.getId()  %></option>
-				<% } %>
+				<c:forEach var="hall" items="${halls}"  >
+			 		 <option value="${hall.id}">${hall.id} , ${hall.cinema_id}</option>
+				</c:forEach>
 			</select>
 			<br>
 			Date and Time <input type="datetime-local" name="projection_time" required>

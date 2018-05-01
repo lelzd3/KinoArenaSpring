@@ -47,27 +47,5 @@ public class UserManager {
 	public void rateMovie(User u, Movie m,int rating) throws SQLException, InvalidDataException {
 		UserDao.getInstance().rateMovie(u, m, rating);
 	}
-	
-
-	public static boolean verifyEmail(String email) throws InvalidDataException {
-	    if(!validation(email)) {
-	    	 throw new InvalidDataException("Invalid e-mail");
-	    }
-	    
-	    if(!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-	    	 throw new InvalidDataException("Invalid e-mail");
-	    }   
-	    return true;
-	}
-	
-	public static boolean validation(String text)  throws InvalidDataException {
-		if( text != null && !text.trim().isEmpty()){
-			return true;
-		}
-		else {
-			throw new InvalidDataException("Invalid User name or password");
-		}
-	}
-	
 
 }
