@@ -74,7 +74,11 @@
 			<br><br>
 			<form action ="removeFromFavorite" method="post">
 				<input type = "submit"  value = "Remove from favorite">
+<<<<<<< HEAD
 				<input type = "hidden" name = "value" value = "<%=movie.getId()%>"/>
+=======
+				<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
+>>>>>>> 5c79bc933f4e103daff68aafade1f2970d24bbf3
 			</form> 
 		
 		<br> <br>

@@ -1,3 +1,4 @@
+<%@page import="com.kinoarena.model.dao.UserDao"%>
 <%@page import="com.kinoarena.model.dao.BroadcastDao"%>
 <%@page import="com.kinoarena.model.pojo.Broadcast"%>
 <%@page import="com.kinoarena.model.dao.MovieDao"%>
@@ -82,19 +83,26 @@
 			</select> <input type="submit" value="rateMovie">
 		</form>
 		
+<<<<<<< HEAD
 
 			<c:if test="${isMovieInFavourite == false}">
+=======
+		        <% if(UserDao.getInstance().isMovieInFavourite(user.getId() , movie.getId())){ %>
+>>>>>>> 5c79bc933f4e103daff68aafade1f2970d24bbf3
 				<form action = "<c:url value='/favourite/addInFavorite'/>" method = "get">
-					<input type = "hidden" name = "value" value = "${ movie.id }"/>
+					<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
 					<input type = "submit" value = "Add in favorites"/>
 				</form>
-			</c:if>
-			<c:if test="${isMovieInFavourite == true}">
+				<% } else{ %>
 			<form action = "<c:url value='/favourite/removeFromFavorite'/>" method="post">
 				<input type = "submit" value = "Remove from favroites">
-				<input type = "hidden" name = "value" value = "${ movie.id }"/>
+				<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
 			</form> 
+<<<<<<< HEAD
 			</c:if>
+=======
+			<% }  %>
+>>>>>>> 5c79bc933f4e103daff68aafade1f2970d24bbf3
 		
 		<br> <br>
 		<form action="reserveInterim" method="post">

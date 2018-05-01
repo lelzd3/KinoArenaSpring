@@ -48,10 +48,9 @@ public class UserFavoriteController {
 			Model model,	HttpSession session){
 		User user = (User) session.getAttribute("user");
 		try {
-		
 			boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(user.getId(), movieId);
 			model.addAttribute("isMovieInFavourite", isMovieInFavourite);
-			
+
 			UserDao.getInstance().addInFavorite(user.getId(), movieId);
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /info/addInFavorite");
@@ -70,7 +69,7 @@ public class UserFavoriteController {
 		try {
 			boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(user.getId(), movieId);
 			model.addAttribute("isMovieInFavourite", isMovieInFavourite);
-			
+
      		UserDao.getInstance().removeFavouriteProduct(user.getId(), movieId);
      		ArrayList<Movie> movie = UserDao.getInstance().viewFavourite(user);
 			model.addAttribute("movie", movie);
