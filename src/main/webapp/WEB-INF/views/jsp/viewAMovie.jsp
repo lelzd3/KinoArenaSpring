@@ -59,12 +59,12 @@
 				
 				  <% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
 
-			<form action = "addInFavorite" method = "get">
+			<form action = "addInFavorite3" method = "get">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Add in favorites"/>
 			</form>
 			<% } else{ %>
-			<form action = "removeFromFavorite" method="post">
+			<form action = "removeFromFavorite3" method="post">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Remove from favourites">
 			</form> 
@@ -73,12 +73,12 @@
 			
 			 <% if(!UserDao.getInstance().isMovieInWatchlist(user.getId(),movie.getId())){ %>
 
-			<form action = "addInWatchlist" method = "get">
+			<form action = "addInWatchlist3" method = "get">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Add in watchlist"/>
 			</form>
 			<% } else{ %>
-			<form action = "removeFromWatchlist" method="post">
+			<form action = "removeFromWatchlist3" method="post">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Remove from watchlist">
 			</form> 

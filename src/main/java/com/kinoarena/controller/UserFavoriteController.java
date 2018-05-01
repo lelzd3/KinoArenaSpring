@@ -27,7 +27,7 @@ public class UserFavoriteController {
 //	
 	
 	@RequestMapping(value = "/viewUserFavourites", method = RequestMethod.GET)
-	public String infoUserFavourites(HttpSession session,
+	public String viewUserFavourites(HttpSession session,
 			Model model,HttpServletRequest request){
 		User user = (User) session.getAttribute("user");
 		try {
@@ -93,4 +93,36 @@ public class UserFavoriteController {
 		}
 	}
 
+	
+	@RequestMapping(value = "/addInFavorite3", method = RequestMethod.GET)
+	public String addInFavorite3(@RequestParam("hiddenMovieId") Integer movieId,
+			Model model,	HttpSession session,HttpServletRequest request){
+		try {
+			User user = (User) session.getAttribute("user");
+			
+			UserDao.getInstance().addInFavorite(user.getId(), movieId);
+			
+			return "viewAMovie";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+	}
+	
+	@RequestMapping(value = "/removeFromFavorite3", method = RequestMethod.POST)
+	public String removeFromFavorite3(@RequestParam("hiddenMovieId") Integer movieId,
+			Model model,
+			HttpSession session,HttpServletRequest request){
+
+		try {
+			
+			User user = (User) session.getAttribute("user");
+     		UserDao.getInstance().removeFavouriteMovie(user.getId(), movieId);
+
+			return "viewAMovie";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+	}
 }

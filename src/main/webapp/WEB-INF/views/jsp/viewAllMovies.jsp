@@ -68,8 +68,8 @@
 		<%=movie.getRating()%>
 		<br>
 		<form action="rateMovie" method="post">
-			<input type="hidden" name="movieIdToBeRated"
-				value="<%=movie.getId()%>"> <select name="ratingSelect">
+			<input type="hidden" name="movieIdToBeRated"value="<%=movie.getId()%>">
+			 <select name="ratingSelect">
 				<option value="1">1</option>
 				<option value="2">2</option>
 				<option value="3">3</option>
@@ -80,7 +80,8 @@
 				<option value="8">8</option>
 				<option value="9">9</option>
 				<option value="10">10</option>
-			</select> <input type="submit" value="rateMovie">
+			</select>
+			 <input type="submit" value="rateMovie">
 		</form>
 
 		    <% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>

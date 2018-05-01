@@ -19,6 +19,12 @@
 	ArrayList<Movie> movies = (ArrayList<Movie>) UserDao.getInstance().viewWatchlist(user);
 
 %>
+	<style>
+		.one{
+			border: 1px solid darkslategray;
+			font-size: 150%;
+		}
+	</style>
 </head>
 <body>
 
@@ -71,7 +77,7 @@
 		
 		
 			<br><br>
-			<form action ="removeFromWatchlist" method="post">
+			<form action ="removeFromWatchlist2" method="post">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit"  value = "Remove from watchlist">
 			</form> 

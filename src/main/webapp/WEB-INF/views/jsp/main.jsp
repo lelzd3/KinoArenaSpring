@@ -26,7 +26,7 @@ response.setHeader("Cache-Control", "no-cache");
 			<input type="submit" value="Movies"><br>
 		</form>
 		<br>
-		<form action="viewAllWatchlisterMoviesPage" method="get">
+		<form action="viewUserWatchlist" method="get">
 			<input type="submit" value="Movies in watchlist"><br>
 		</form>
 		<br>

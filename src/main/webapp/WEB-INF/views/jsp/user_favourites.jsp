@@ -19,6 +19,12 @@
 	ArrayList<Movie> movies = (ArrayList<Movie>) UserDao.getInstance().viewFavourite(user);
 
 %>
+	<style>
+		.one{
+			border: 1px solid darkslategray;
+			font-size: 150%;
+		}
+	</style>
 </head>
 <body>
 

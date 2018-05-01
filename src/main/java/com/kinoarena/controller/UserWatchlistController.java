@@ -20,6 +20,8 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 @Controller
 public class UserWatchlistController {
 	
+	
+	
 	@RequestMapping(value = "/viewUserWatchlist", method = RequestMethod.GET)
 	public String infoUserFavourites(HttpSession session,
 			Model model,HttpServletRequest request){
@@ -78,10 +80,42 @@ public class UserWatchlistController {
 			User user = (User) session.getAttribute("user");
      		UserDao.getInstance().removeFavouriteWatchlist(user.getId(), movieId);
 
-			return "viewAllMovies";
+			return "user_watchlist";
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
-			return "user_watchlist";
+			return "error";
+		}
+	}
+	
+	@RequestMapping(value = "/addInWatchlist3", method = RequestMethod.GET)
+	public String addInFavorite3(@RequestParam("hiddenMovieId") Integer movieId,
+			Model model,	HttpSession session,HttpServletRequest request){
+		try {
+			User user = (User) session.getAttribute("user");
+			
+			UserDao.getInstance().addInWatchlist(user.getId(), movieId);
+			
+			return "viewAMovie";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+	}
+	
+	@RequestMapping(value = "/removeFromWatchlist3", method = RequestMethod.POST)
+	public String removeFromFavorite3(@RequestParam("hiddenMovieId") Integer movieId,
+			Model model,
+			HttpSession session,HttpServletRequest request){
+
+		try {
+			
+			User user = (User) session.getAttribute("user");
+     		UserDao.getInstance().removeFavouriteWatchlist(user.getId(), movieId);
+
+			return "viewAMovie";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
 		}
 	}
 
