@@ -46,45 +46,6 @@ public class MovieController {
 	private static final String COVER_FILE_SUFFIX = "-cover";
 	private static final String SERVER_FILES_LOCATION = "D:\\kinoarenaMovieCovers\\";
 
-	// TODO admin Add/remove movie
-	// this needs to be tested
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	@ResponseBody
-	public String saveImage(HttpServletRequest request, @RequestParam("file") MultipartFile uploadedFile)
-			throws IOException {
-
-		try {
-			// String extension =
-			// FilenameUtils.getExtension(uploadedFile.getOriginalFilename());
-			// //(gif|jpg|jpeg|tiff|png)
-			//
-			// if(extension != "gif" || extension != "jgp" || extension != "jpeg" ||
-			// extension != "tiff" ||extension != "png") {
-			// //throw smthing
-			// }
-
-			// maybe put all req params in signature?
-			User admin = (User) request.getSession().getAttribute("admin");
-			String title = request.getParameter("title");
-			String description = request.getParameter("description");
-			Double duration = Double.parseDouble(request.getParameter("duration"));
-			Double rating = 0.0;
-
-			Movie movie = new Movie(title, description, rating, duration);
-			String file_location = SERVER_FILES_LOCATION + movie.getTitle() + ";" + movie.getId() + COVER_FILE_SUFFIX;
-			movie.setFile_location(file_location);
-
-			File serverFile = new File(file_location);
-			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-			AdminManager.getInstance().addNewMovie(movie, admin);
-
-			return "adminMain";
-		} catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-	}
 
 	@RequestMapping(value = "/getCover", method = RequestMethod.GET)
 	@ResponseBody
