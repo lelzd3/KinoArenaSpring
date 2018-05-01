@@ -16,7 +16,7 @@
 <title>Favorite movies</title>
 <%
 	User user = (User) request.getSession().getAttribute("user");
-	LinkedHashSet<Movie> movies = (LinkedHashSet<Movie>) UserDao.getInstance().viewFavourite(user);
+	ArrayList<Movie> movies = (ArrayList<Movie>) UserDao.getInstance().viewFavourite(user);
 	//TODO SEARCH ONLY IN FAVORITES NOT EVERY MOVIE;
 	
 %>
@@ -71,13 +71,11 @@
 		</form>
 		
 		
-			
-		   <c:if test="${isMovieInFavourite == true}">
+			<br><br>
 			<form action = "<c:url value='/favourite/removeFromFavorite'/>" method="post">
-				<input type = "submit" class="btn-favourites" value = "Remove from favorite">
+				<input type = "submit"  value = "Remove from favorite">
 				<input type = "hidden" name = "value" value = "${ movie.id }"/>
 			</form> 
-			</c:if>
 		
 		<br> <br>
 		<form action="reserveInterim" method="post">

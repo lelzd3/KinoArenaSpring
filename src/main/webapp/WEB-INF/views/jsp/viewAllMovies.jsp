@@ -86,12 +86,12 @@
 			<c:if test="${isMovieInFavourite == false}">
 				<form action = "<c:url value='/favourite/addInFavorite'/>" method = "get">
 					<input type = "hidden" name = "value" value = "${ movie.id }"/>
-					<input type = "submit" class="btn-favourites" value = "Add in favorites"/>
+					<input type = "submit" value = "Add in favorites"/>
 				</form>
 			</c:if>
 			<c:if test="${isMovieInFavourite == true}">
 			<form action = "<c:url value='/favourite/removeFromFavorite'/>" method="post">
-				<input type = "submit" class="btn-favourites" value = "Remove from favroites">
+				<input type = "submit" value = "Remove from favroites">
 				<input type = "hidden" name = "value" value = "${ movie.id }"/>
 			</form> 
 			</c:if>

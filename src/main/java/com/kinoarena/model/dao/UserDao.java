@@ -330,13 +330,13 @@ public class UserDao implements IUserDao{
 		
 		}
 
-		public LinkedHashSet<Movie> viewFavourite(User user) throws InvalidDataException, SQLException {
+		public ArrayList<Movie> viewFavourite(User user) throws InvalidDataException, SQLException {
 			String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_favorite_movies AS f"
 					+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
 			
 			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet result = statement.executeQuery();
-			LinkedHashSet<Movie> movies = new LinkedHashSet<>();
+			ArrayList<Movie> movies = new ArrayList<>();
 			while (result.next()) {
 				Movie m = new Movie(
 						result.getInt("id"),
@@ -353,11 +353,11 @@ public class UserDao implements IUserDao{
 			return movies;
 		}
 
-		public boolean isMovieInFavourite(String userId, String movieId) throws SQLException {
+		public boolean isMovieInFavourite(String userId, int movieId) throws SQLException {
 			
 			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?;");
 			ps.setString(1, userId);
-			ps.setString(2, movieId);
+			ps.setInt(2, movieId);
 			ResultSet rs = ps.executeQuery();
 			boolean isThere = rs.next();
 			ps.close();

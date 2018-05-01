@@ -1,6 +1,7 @@
 package com.kinoarena.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 import javax.servlet.http.HttpSession;
@@ -29,7 +30,7 @@ public class UserFavoriteController {
 			Model model){
 		User user = (User) session.getAttribute("user");
 		try {
-			LinkedHashSet<Movie> movie = UserDao.getInstance().viewFavourite(user);
+			ArrayList<Movie> movie = UserDao.getInstance().viewFavourite(user);
 			model.addAttribute("movie", movie);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -51,6 +52,10 @@ public class UserFavoriteController {
 		}
 		User user = (User) session.getAttribute("user");
 		try {
+			if(user != null){
+				boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(String.valueOf(user.getId()), movieId);
+			    model.addAttribute("isMovieInFavourite", isMovieInFavourite);
+			}
 			UserDao.getInstance().addInFavorite(user.getId(), movieId);
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /info/addInFavorite");
@@ -61,14 +66,18 @@ public class UserFavoriteController {
 	}
 	
 	@RequestMapping(value = "/removeFromFavorite", method = RequestMethod.POST)
-	public String removeFromFavorite(@RequestParam(value = "value") int movieId,
+	public String removeFromFavorite(@RequestParam("value") int movieId,
 			Model model,
 			HttpSession session){
 		
 		User user = (User) session.getAttribute("user");
 		try {
+			if(user != null){
+				boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(String.valueOf(user.getId()), movieId);
+			    model.addAttribute("isMovieInFavourite", isMovieInFavourite);
+			}
      		UserDao.getInstance().removeFavouriteProduct(user.getId(), movieId);
-			LinkedHashSet<Movie> movie = UserDao.getInstance().viewFavourite(user);
+     		ArrayList<Movie> movie = UserDao.getInstance().viewFavourite(user);
 			model.addAttribute("movie", movie);
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in info/removeFromFavorite");
