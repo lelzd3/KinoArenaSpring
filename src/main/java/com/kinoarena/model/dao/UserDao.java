@@ -369,6 +369,62 @@ public class UserDao implements IUserDao{
 			}
 		}
 
+		public ArrayList<Movie> viewWatchlist(User user) throws InvalidDataException, SQLException {
+			String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_watchlist_movies AS f"
+					+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
+			
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet result = statement.executeQuery();
+			ArrayList<Movie> movies = new ArrayList<>();
+			while (result.next()) {
+				Movie m = new Movie(
+						result.getInt("id"),
+						result.getString("title"),
+						result.getString("description"),
+						result.getDouble("rating"),
+						result.getDouble("duration"),
+						result.getString("file_location")
+						);
+				movies.add(m);
+			}
+			
+			statement.close();
+			return movies;
+		}
+
+		public void addInWatchlist(int userId, Integer movieId) throws SQLException {
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO users_watchlist_movies (users_id, movies_id) VALUES (?,?)");
+			statement.setLong(1, userId);
+			statement.setLong(2, movieId);
+			statement.executeUpdate();
+			statement.close();
+		}
+
+		public void removeFavouriteWatchlist(int userId, Integer movieId) throws SQLException {
+			PreparedStatement statment = connection.prepareStatement("DELETE FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
+			statment.setInt(1, userId);
+			statment.setInt(2, movieId);
+			statment.executeUpdate();
+			statment.close();
+		}
+		
+public boolean isMovieInWatchlist(int userId, int movieId) throws SQLException {
+			
+			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
+			ps.setInt(1, userId);
+			ps.setInt(2, movieId);
+			ResultSet rs = ps.executeQuery();
+			boolean isThere = rs.next();
+			ps.close();
+			rs.close();
+			if(isThere){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+
 
 
 		

@@ -1,43 +1,29 @@
-<%@page import="com.kinoarena.model.dao.UserDao"%>
 <%@page import="com.kinoarena.model.dao.BroadcastDao"%>
 <%@page import="com.kinoarena.model.pojo.Broadcast"%>
+<%@page import="java.util.LinkedHashSet"%>
+<%@page import="com.kinoarena.model.dao.UserDao"%>
 <%@page import="com.kinoarena.model.dao.MovieDao"%>
 <%@page import="com.kinoarena.model.pojo.Movie"%>
-<%@page import="com.kinoarena.model.pojo.User"%>
 <%@page import="java.util.ArrayList"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@page import="com.kinoarena.model.pojo.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-	<link rel="stylesheet" 
-	  href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"><title>All Movies page</title>
-
-<style>
-.one {
-	border: 1px solid darkslategray;
-	font-size: 150%;
-}
-</style>
-
-
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Watchlisted movies</title>
 <%
-	//can also be User user = (User) session.getAttribute("user")
 	User user = (User) request.getSession().getAttribute("user");
-	//
-	//	ArrayList<Movie> movies = (ArrayList<Movie>) application.getAttribute("movies");
-	ArrayList<Movie> movies = (ArrayList<Movie>) MovieDao.getInstance().getAllMovies();
+	ArrayList<Movie> movies = (ArrayList<Movie>) UserDao.getInstance().viewWatchlist(user);
+
 %>
 </head>
-
 <body>
 
 
+ 
 	<form action="search" method="post">
 		<button type="submit"
 			class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
@@ -82,41 +68,19 @@
 				<option value="10">10</option>
 			</select> <input type="submit" value="rateMovie">
 		</form>
-
-		    <% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
-
-			<form action = "addInFavorite" method = "get">
+		
+		
+			<br><br>
+			<form action ="removeFromWatchlist" method="post">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Add in favorites"/>
-			</form>
-			<% } else{ %>
-			<form action = "removeFromFavorite" method="post">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Remove from favourites">
+				<input type = "submit"  value = "Remove from watchlist">
 			</form> 
-
-			<% }  %>
-			
-			 <% if(!UserDao.getInstance().isMovieInWatchlist(user.getId(),movie.getId())){ %>
-
-			<form action = "addInWatchlist" method = "get">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Add in watchlist"/>
-			</form>
-			<% } else{ %>
-			<form action = "removeFromWatchlist" method="post">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Remove from watchlist">
-			</form> 
-
-			<% }  %>
 		
 		<br> <br>
 		<form action="reserveInterim" method="post">
 			<select name="broadcastSelect">
 				<%
 					//TODO make it to show Cinema Name and Movie Name
-						//and make it to redirect to servlet
 						for (Broadcast broadcast : (ArrayList<Broadcast>) BroadcastDao.getInstance()
 								.getAllBroadcastsForAMovie(movie)) {
 				%>
@@ -126,7 +90,7 @@
 					}
 				%>
 			</select> <input type="submit" value="Choose Broadcast to book seats for">
-			
+
 		</form>
 		<br>
 
@@ -163,5 +127,4 @@
 	</script>
 
 </body>
-
 </html>
