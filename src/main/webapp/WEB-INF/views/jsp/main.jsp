@@ -30,7 +30,7 @@ response.setHeader("Cache-Control", "no-cache");
 			<input type="submit" value="Movies in watchlist"><br>
 		</form>
 		<br>
-		<form action = "<c:url value='/favourite/infoUserFavourites'/>" method="get">
+		<form action ="infoUserFavourites" method="get">
 			<input type="submit" value="Favorite movies"><br>
 		</form>
 		

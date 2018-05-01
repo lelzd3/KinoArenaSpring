@@ -82,7 +82,7 @@
 			</select> <input type="submit" value="rateMovie">
 		</form>
 		
-		<c:if test="${sessionScope.user != null}">
+
 			<c:if test="${isMovieInFavourite == false}">
 				<form action = "<c:url value='/favourite/addInFavorite'/>" method = "get">
 					<input type = "hidden" name = "value" value = "${ movie.id }"/>
@@ -95,7 +95,6 @@
 				<input type = "hidden" name = "value" value = "${ movie.id }"/>
 			</form> 
 			</c:if>
-		</c:if>
 		
 		<br> <br>
 		<form action="reserveInterim" method="post">

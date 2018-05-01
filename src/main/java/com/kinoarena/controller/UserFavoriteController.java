@@ -18,7 +18,6 @@ import com.kinoarena.model.pojo.User;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 @Controller
-@RequestMapping(value = "/favourite")
 public class UserFavoriteController {
 	
 //	@Autowired
@@ -47,15 +46,12 @@ public class UserFavoriteController {
 	@RequestMapping(value = "/addInFavorite", method = RequestMethod.GET)
 	public String addInFavorite(@RequestParam("value") int movieId,
 			Model model,	HttpSession session){
-		if(session.getAttribute("user") == null){
-			return "login";
-		}
 		User user = (User) session.getAttribute("user");
 		try {
-			if(user != null){
-				boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(String.valueOf(user.getId()), movieId);
-			    model.addAttribute("isMovieInFavourite", isMovieInFavourite);
-			}
+		
+			boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(user.getId(), movieId);
+			model.addAttribute("isMovieInFavourite", isMovieInFavourite);
+			
 			UserDao.getInstance().addInFavorite(user.getId(), movieId);
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /info/addInFavorite");
@@ -72,10 +68,9 @@ public class UserFavoriteController {
 		
 		User user = (User) session.getAttribute("user");
 		try {
-			if(user != null){
-				boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(String.valueOf(user.getId()), movieId);
-			    model.addAttribute("isMovieInFavourite", isMovieInFavourite);
-			}
+			boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(user.getId(), movieId);
+			model.addAttribute("isMovieInFavourite", isMovieInFavourite);
+			
      		UserDao.getInstance().removeFavouriteProduct(user.getId(), movieId);
      		ArrayList<Movie> movie = UserDao.getInstance().viewFavourite(user);
 			model.addAttribute("movie", movie);
