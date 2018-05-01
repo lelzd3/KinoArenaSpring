@@ -321,10 +321,10 @@ public class UserDao implements IUserDao{
 		}
 		
 		// Remove favourite product:
-		public void removeFavouriteProduct(int userId, int  movieId) throws SQLException {
+		public void removeFavouriteMovie(int userId, int  movieId) throws SQLException {
 			PreparedStatement statment = connection.prepareStatement("DELETE FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
-			statment.setLong(1, userId);
-			statment.setLong(2, movieId);
+			statment.setInt(1, userId);
+			statment.setInt(2, movieId);
 			statment.executeUpdate();
 			statment.close();
 		
@@ -355,7 +355,7 @@ public class UserDao implements IUserDao{
 
 		public boolean isMovieInFavourite(int userId, int movieId) throws SQLException {
 			
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?;");
+			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
 			ps.setInt(1, userId);
 			ps.setInt(2, movieId);
 			ResultSet rs = ps.executeQuery();
@@ -368,6 +368,7 @@ public class UserDao implements IUserDao{
 				return false;
 			}
 		}
+
 
 
 		

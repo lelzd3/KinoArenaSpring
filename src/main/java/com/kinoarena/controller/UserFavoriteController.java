@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.kinoarena.model.dao.UserDao;
 import com.kinoarena.model.pojo.Movie;
@@ -24,66 +26,71 @@ public class UserFavoriteController {
 //	private UserDAO userDAO;
 //	
 	
-	@RequestMapping(value = "/infoUserFavourites", method = RequestMethod.GET)
+	@RequestMapping(value = "/viewUserFavourites", method = RequestMethod.GET)
 	public String infoUserFavourites(HttpSession session,
-			Model model){
+			Model model,HttpServletRequest request){
 		User user = (User) session.getAttribute("user");
 		try {
 			ArrayList<Movie> movie = UserDao.getInstance().viewFavourite(user);
-			model.addAttribute("movie", movie);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("SQL Exception in /info/infoUserFavourites");
+			request.setAttribute("exception", e);
 			return "error";
 		} catch (InvalidDataException e) {
-			e.printStackTrace();
-			System.out.println("InvalidData exception");
+			request.setAttribute("exception", e);
 			return "error";
 		}
 		return "user_favourites";
 	}
 	
 	@RequestMapping(value = "/addInFavorite", method = RequestMethod.GET)
-	public String addInFavorite(@RequestParam("value") int movieId,
-			Model model,	HttpSession session){
-		User user = (User) session.getAttribute("user");
+	public String addInFavorite(@RequestParam("hiddenMovieId") Integer movieId,
+			Model model,	HttpSession session,HttpServletRequest request){
 		try {
-			boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(user.getId(), movieId);
-			model.addAttribute("isMovieInFavourite", isMovieInFavourite);
-
+			User user = (User) session.getAttribute("user");
+			
 			UserDao.getInstance().addInFavorite(user.getId(), movieId);
+			
+			return "viewAllMovies";
 		} catch (SQLException e) {
-			System.out.println("SQL Exception in /info/addInFavorite");
-			e.printStackTrace();
+			request.setAttribute("exception", e);
 			return "error";
 		}
-		return "forward:/favourite/infoUserFavourites";
 	}
 	
 	@RequestMapping(value = "/removeFromFavorite", method = RequestMethod.POST)
-	public String removeFromFavorite(@RequestParam("value") int movieId,
+	public String removeFromFavorite(@RequestParam("hiddenMovieId") Integer movieId,
 			Model model,
-			HttpSession session){
-		
-		User user = (User) session.getAttribute("user");
-		try {
-			boolean isMovieInFavourite = UserDao.getInstance().isMovieInFavourite(user.getId(), movieId);
-			model.addAttribute("isMovieInFavourite", isMovieInFavourite);
+			HttpSession session,HttpServletRequest request){
 
-     		UserDao.getInstance().removeFavouriteProduct(user.getId(), movieId);
-     		ArrayList<Movie> movie = UserDao.getInstance().viewFavourite(user);
-			model.addAttribute("movie", movie);
-		} catch (SQLException e) {
-			System.out.println("SQL Exception in info/removeFromFavorite");
-			e.printStackTrace();
-			return "errorPage";
-		} catch (InvalidDataException e) {
-			e.printStackTrace();
-			System.out.println("InvalidData exception");
-			return "error";
+		try {
 			
+			User user = (User) session.getAttribute("user");
+     		UserDao.getInstance().removeFavouriteMovie(user.getId(), movieId);
+
+			return "viewAllMovies";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
 		}
-		return "user_favourites";
+	}
+	
+
+	
+	@RequestMapping(value = "/removeFromFavorite2", method = RequestMethod.POST)
+	public String removeFromFavorite2(@RequestParam("hiddenMovieId") Integer movieId,
+			Model model,
+			HttpSession session,HttpServletRequest request){
+
+		try {
+			
+			User user = (User) session.getAttribute("user");
+     		UserDao.getInstance().removeFavouriteMovie(user.getId(), movieId);
+
+			return "user_favourites";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
 	}
 
 }

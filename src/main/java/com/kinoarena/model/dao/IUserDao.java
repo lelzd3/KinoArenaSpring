@@ -28,7 +28,7 @@ public interface IUserDao {
 	
 	public void addInFavorite(int userId, int productId) throws SQLException;
 	
-	public void removeFavouriteProduct(int userId, int  productId) throws SQLException;
+	public void removeFavouriteMovie(int userId, int movieId) throws SQLException;
 
 
 

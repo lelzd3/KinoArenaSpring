@@ -30,11 +30,8 @@ response.setHeader("Cache-Control", "no-cache");
 			<input type="submit" value="Movies in watchlist"><br>
 		</form>
 		<br>
-<<<<<<< HEAD
-		<form action ="infoUserFavourites" method="get">
-=======
-		<form action = "infoUserFavourites" method="get">
->>>>>>> 5c79bc933f4e103daff68aafade1f2970d24bbf3
+
+		<form action = "viewUserFavourites" method="get">
 			<input type="submit" value="Favorite movies"><br>
 		</form>
 		

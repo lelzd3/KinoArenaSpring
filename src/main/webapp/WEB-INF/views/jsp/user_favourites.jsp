@@ -17,8 +17,7 @@
 <%
 	User user = (User) request.getSession().getAttribute("user");
 	ArrayList<Movie> movies = (ArrayList<Movie>) UserDao.getInstance().viewFavourite(user);
-	//TODO SEARCH ONLY IN FAVORITES NOT EVERY MOVIE;
-	
+
 %>
 </head>
 <body>
@@ -72,10 +71,9 @@
 		
 		
 			<br><br>
-			<form action ="removeFromFavorite" method="post">
-				<input type = "hidden" name = "value" value = "<% movie.getId();%>"/>
+			<form action ="removeFromFavorite2" method="post">
+				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit"  value = "Remove from favorite">
-
 			</form> 
 		
 		<br> <br>
@@ -83,7 +81,6 @@
 			<select name="broadcastSelect">
 				<%
 					//TODO make it to show Cinema Name and Movie Name
-						//and make it to redirect to servlet
 						for (Broadcast broadcast : (ArrayList<Broadcast>) BroadcastDao.getInstance()
 								.getAllBroadcastsForAMovie(movie)) {
 				%>
@@ -93,7 +90,7 @@
 					}
 				%>
 			</select> <input type="submit" value="Choose Broadcast to book seats for">
-			
+
 		</form>
 		<br>
 
