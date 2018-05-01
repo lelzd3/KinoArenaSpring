@@ -73,7 +73,7 @@ public class UserController {
 			return "error";
 		}
 	}
-	@RequestMapping(value = "/register", method = RequestMethod.GET )
+	@RequestMapping(value = "/register", method = RequestMethod.POST )
 	public String register(HttpServletRequest request,HttpSession s){
 		try {
 			String username = request.getParameter("username");
@@ -133,4 +133,19 @@ public class UserController {
 	public String getRegisterPage(){
 		return "register";
 	}
+	
+	//main.jsp -> viewAllWatchlistedMovies.jsp
+	@RequestMapping(value = "viewAllWatchlisterMoviesPage", method = RequestMethod.GET)
+	public String viewAllWatchlisterMoviesPage(){
+		return "viewAllWatchlisterMovies";
+	}
+	
+	//main.jsp -> viewAllWatchlistedMovies.jsp
+	@RequestMapping(value = "viewAllFavoritesMoviesPage", method = RequestMethod.GET)
+	public String viewAllFavoritesMoviesPage(){
+		return "viewAllFavoritesMovies";
+	}
+	
+	
+
 }

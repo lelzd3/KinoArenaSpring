@@ -321,10 +321,6 @@ public class AdminController {
 			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			
 			AdminManager.getInstance().addNewMovie(movie, admin);
-			
-			return "adminMain";
-		
-			
 
 		} catch (SQLException e) {
 			System.out.println("SQL Exception in /admin/confirmed");
@@ -340,6 +336,8 @@ public class AdminController {
 			e.getMessage();
 			return "error";
 		}
+
+		return "adminMain";
 		
     }
 

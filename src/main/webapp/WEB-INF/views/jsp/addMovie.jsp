@@ -9,7 +9,7 @@
 	
 	<body>
 		
-		<form method="post" action="upload" enctype="multipart/form-data">
+		<form method="post" action="addMovie" enctype="multipart/form-data">
 			Title <input type="text" name="title" required>
 			<br><br>
 			Description <input type="text" name="description" required>

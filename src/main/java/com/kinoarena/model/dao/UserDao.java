@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Movie;
@@ -308,6 +309,68 @@ public class UserDao implements IUserDao{
 		}
 		return users;
 		}
+	
+	// Adding favourite product to user account:
+		public void addInFavorite(int userId, int movieId) throws SQLException {
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO users_favorite_movies (users_id, movies_id) VALUES (?,?)");
+			statement.setLong(1, userId);
+			statement.setLong(2, movieId);
+			statement.executeUpdate();
+			statement.close();
+			
+		}
+		
+		// Remove favourite product:
+		public void removeFavouriteProduct(int userId, int  movieId) throws SQLException {
+			PreparedStatement statment = connection.prepareStatement("DELETE FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
+			statment.setLong(1, userId);
+			statment.setLong(2, movieId);
+			statment.executeUpdate();
+			statment.close();
+		
+		}
+
+		public LinkedHashSet<Movie> viewFavourite(User user) throws InvalidDataException, SQLException {
+			String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_favorite_movies AS f"
+					+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
+			
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet result = statement.executeQuery();
+			LinkedHashSet<Movie> movies = new LinkedHashSet<>();
+			while (result.next()) {
+				Movie m = new Movie(
+						result.getInt("id"),
+						result.getString("title"),
+						result.getString("description"),
+						result.getDouble("rating"),
+						result.getDouble("duration"),
+						result.getString("file_location")
+						);
+				movies.add(m);
+			}
+			
+			statement.close();
+			return movies;
+		}
+
+		public boolean isMovieInFavourite(String userId, String movieId) throws SQLException {
+			
+			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?;");
+			ps.setString(1, userId);
+			ps.setString(2, movieId);
+			ResultSet rs = ps.executeQuery();
+			boolean isThere = rs.next();
+			ps.close();
+			rs.close();
+			if(isThere){
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+
+		
 	
 	
 }
