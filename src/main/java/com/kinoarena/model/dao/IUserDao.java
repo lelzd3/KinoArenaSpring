@@ -25,6 +25,10 @@ public interface IUserDao {
 	//TODO add phone number method
 
 	public Collection<User> getAllUsers() throws Exception;
+	
+	public void addInFavorite(int userId, int productId) throws SQLException;
+	
+	public void removeFavouriteProduct(int userId, int  productId) throws SQLException;
 
 
 

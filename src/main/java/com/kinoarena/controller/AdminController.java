@@ -337,11 +337,12 @@ public class AdminController {
 			
 			File serverFile = new File(file_location);
 			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			
-			
+
+			AdminManager.getInstance().addNewMovie(movie, admin);
+
 			return "adminMain";
 		
-			
+
 
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
@@ -356,6 +357,8 @@ public class AdminController {
 			request.setAttribute("exception", e);
 			return "error";
 		}
+
+		return "adminMain";
 		
     }
 
