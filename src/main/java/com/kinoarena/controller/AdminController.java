@@ -358,8 +358,6 @@ public class AdminController {
 			return "error";
 		}
 
-		return "adminMain";
-		
     }
 
 	//adminPanel.jsp -> removeMovie.jsp

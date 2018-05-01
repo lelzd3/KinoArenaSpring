@@ -57,7 +57,6 @@ public class MovieController {
 	}
 
 	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
-	@ResponseBody
 	public String rateMovie(HttpServletRequest request) {
 		try {
 			User user = (User) request.getSession().getAttribute("user");
