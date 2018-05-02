@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -82,10 +83,11 @@ public class MovieController {
 			Cinema cinema = CinemaDao.getInstance().getCinemaById(broadcast.getCinemaId());
 			Movie movie = MovieDao.getInstance().getMovieById(broadcast.getMovieId());
 
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd EE HH:mm");
 			springModel.addAttribute("cinemaName",cinema.getName());
 			springModel.addAttribute("hallId",broadcast.getHallId());
 			springModel.addAttribute("movieTitle", movie.getTitle());
-			springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime());
+			springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
 			springModel.addAttribute("broadcastId",broadcastId);
 			double totalPrice = broadcast.getPrice();
 			 
