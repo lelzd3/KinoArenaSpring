@@ -91,13 +91,13 @@ public class MovieController {
 			springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
 			springModel.addAttribute("broadcastId",broadcastId);
 			double totalPrice = broadcast.getPrice();
-			 
+			double amountToDecrease = totalPrice * 0.2;
 			//20% off on Thursday
 			if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
-				totalPrice = totalPrice - (totalPrice*0.2);
+				totalPrice = totalPrice - amountToDecrease;
 			}
 			if(user.getAge() <= 18) {
-				totalPrice = totalPrice - (totalPrice*0.2);
+				totalPrice = totalPrice - amountToDecrease;
 			}
 			//should check user ages and if they are under 18 another 20% off
 			springModel.addAttribute("broadcastPrice",totalPrice);
