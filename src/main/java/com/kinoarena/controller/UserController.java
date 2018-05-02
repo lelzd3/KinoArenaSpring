@@ -155,13 +155,14 @@ public class UserController {
 	}
 	
 	//main.jsp -> viewAllReseravtions.jsp
-	@RequestMapping(value = "ReservationsPage", method = RequestMethod.GET)
+	//this method is not used?
+	@RequestMapping(value = "/reservationsPage", method = RequestMethod.GET)
 	public String viewAllReservations(){
 		return "viewAllReservations";
 	}
-	
-	@RequestMapping(value = "/Reservations", method = RequestMethod.GET)
-	public String viewUserFavourites(HttpSession session,
+
+	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
+	public String viewUserReservations(HttpSession session,
 			Model model,HttpServletRequest request){
 		
 		User user = (User) session.getAttribute("user");
@@ -176,7 +177,7 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value = "/Reservations", method = RequestMethod.POST)
+	@RequestMapping(value = "/reservations", method = RequestMethod.POST)
 	public String cancelReservation(HttpSession session, HttpServletRequest request){
 		System.out.println("stignah tyk");
 		User user = (User) session.getAttribute("user");

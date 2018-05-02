@@ -54,7 +54,7 @@ table {
 	    </form>
     </td>
     <td align='center'>
-	    <form action="Reservations" method="post">
+	    <form action="reservations" method="post">
 	        <input type = "hidden" name = "selectedReservation" value = "<%=reservationId%>"/>
 	    	<input type=submit value="cancel reservation" style="width:100%">	    	
 	    </form>
