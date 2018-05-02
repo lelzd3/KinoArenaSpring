@@ -8,24 +8,22 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>View a movie</title>
-<%
-
-
-	User user = (User) request.getSession().getAttribute("user"); 
-	Movie movie =(Movie) request.getSession().getAttribute("selectedMovie");
-	
-%>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>View a movie</title>
+		<%
+			User user = (User) request.getSession().getAttribute("user"); 
+			Movie movie =(Movie) request.getSession().getAttribute("selectedMovie");
+		%>
 		<style>
 		.one{
 			border: 1px solid darkslategray;
 			font-size: 150%;
 		}
 		</style>
+	
+	</head>
 
-</head>
 <body>
 
 <br><br>
@@ -53,18 +51,21 @@
 						<option value="9">9</option>
 						<option value="10">10</option>
 					</select>
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 					<input type="submit" value="rateMovie">
 				</form>
 				<br>
 				
-				  <% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
+			<% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
 
-			<form action = "addInFavorite3" method = "get">
+			<form action = "addInFavorite" method = "post">
+				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Add in favorites"/>
 			</form>
 			<% } else{ %>
-			<form action = "removeFromFavorite3" method="post">
+			<form action = "removeFromFavorite" method="post">
+				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Remove from favourites">
 			</form> 
@@ -73,12 +74,14 @@
 			
 			 <% if(!UserDao.getInstance().isMovieInWatchlist(user.getId(),movie.getId())){ %>
 
-			<form action = "addInWatchlist3" method = "get">
+			<form action = "addInWatchlist" method = "post">
+				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Add in watchlist"/>
 			</form>
 			<% } else{ %>
-			<form action = "removeFromWatchlist3" method="post">
+			<form action = "removeFromWatchlist" method="post">
+				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Remove from watchlist">
 			</form> 

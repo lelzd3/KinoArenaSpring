@@ -61,12 +61,15 @@ public class MovieController {
 	public String rateMovie(HttpServletRequest request) {
 		try {
 			User user = (User) request.getSession().getAttribute("user");
+			
+			String jspName = request.getParameter("hiddenJspName");
+			
 			int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
 			int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
 
 			Movie movie = MovieDao.getInstance().getMovieById(movieIdToBeRated);
 			UserDao.getInstance().rateMovie(user, movie, newRating);
-			return "viewAllMovies";
+			return jspName;
 		} catch (Exception e) {
 			request.setAttribute("exception", e);
 			return "error";
@@ -78,28 +81,31 @@ public class MovieController {
 		try {
             //here we need user due to check his ages for discount
 			User user = (User) request.getSession().getAttribute("user");
-			
+	
 			int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
 			Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
 			Cinema cinema = CinemaDao.getInstance().getCinemaById(broadcast.getCinemaId());
 			Movie movie = MovieDao.getInstance().getMovieById(broadcast.getMovieId());
 
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd EE HH:mm");
+			
+			double totalPrice = broadcast.getPrice();
+			double amountToDecrease = totalPrice * 0.2;
+			
+			//20% off on Thursday
+			if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
+				totalPrice = totalPrice - amountToDecrease;
+			}
+			//20% more if under 18
+			if(user.getAge() <= 18) {
+				totalPrice = totalPrice - amountToDecrease;
+			}
+			
 			springModel.addAttribute("cinemaName",cinema.getName());
 			springModel.addAttribute("hallId",broadcast.getHallId());
 			springModel.addAttribute("movieTitle", movie.getTitle());
 			springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
 			springModel.addAttribute("broadcastId",broadcastId);
-			double totalPrice = broadcast.getPrice();
-			double amountToDecrease = totalPrice * 0.2;
-			//20% off on Thursday
-			if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
-				totalPrice = totalPrice - amountToDecrease;
-			}
-			if(user.getAge() <= 18) {
-				totalPrice = totalPrice - amountToDecrease;
-			}
-			//should check user ages and if they are under 18 another 20% off
 			springModel.addAttribute("broadcastPrice",totalPrice);
 
 			return "reservationHall";

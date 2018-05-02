@@ -31,13 +31,9 @@
 
  
 	<form action="search" method="post">
-		<button type="submit"
-			class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
-		<input type="text" id="search" name="movie"
-			class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4"
-			required>
+		<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
+		<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
 	</form>
-
 
 
 	<%
@@ -47,9 +43,8 @@
 	<br>
 	<div class="one">
 		<strong><%=movie.getTitle()%></strong> <br>
-		<br> <img
-			src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>"
-			height="250" width="250"> <br>
+		<br>
+		<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250"> <br>
 		<br>
 		<p><%=movie.getDescription()%></p>
 		<br>
@@ -72,12 +67,15 @@
 				<option value="8">8</option>
 				<option value="9">9</option>
 				<option value="10">10</option>
-			</select> <input type="submit" value="rateMovie">
+			</select>
+			<input type="hidden" name="hiddenJspName" value ="user_watchlist">
+			<input type="submit" value="rateMovie">
 		</form>
 		
 		
 			<br><br>
-			<form action ="removeFromWatchlist2" method="post">
+			<form action ="removeFromWatchlist" method="post">
+				<input type="hidden" name="hiddenJspName" value ="user_watchlist">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit"  value = "Remove from watchlist">
 			</form> 

@@ -81,17 +81,20 @@
 				<option value="9">9</option>
 				<option value="10">10</option>
 			</select>
-			 <input type="submit" value="rateMovie">
+			<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
+			<input type="submit" value="rateMovie">
 		</form>
 
 		    <% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
 
-			<form action = "addInFavorite" method = "get">
+			<form action = "addInFavorite" method = "post">
+				<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Add in favorites"/>
 			</form>
 			<% } else{ %>
 			<form action = "removeFromFavorite" method="post">
+				<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Remove from favourites">
 			</form> 
@@ -100,12 +103,14 @@
 			
 			 <% if(!UserDao.getInstance().isMovieInWatchlist(user.getId(),movie.getId())){ %>
 
-			<form action = "addInWatchlist" method = "get">
+			<form action = "addInWatchlist" method = "post">
+				<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Add in watchlist"/>
 			</form>
 			<% } else{ %>
 			<form action = "removeFromWatchlist" method="post">
+				<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 				<input type = "submit" value = "Remove from watchlist">
 			</form> 
@@ -126,7 +131,9 @@
 				<%
 					}
 				%>
-			</select> <input type="submit" value="Choose Broadcast to book seats for">
+			</select>
+			<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
+			<input type="submit" value="Choose Broadcast to book seats for">
 			
 		</form>
 		<br>

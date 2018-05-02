@@ -42,15 +42,17 @@ public class UserFavoriteController {
 		return "user_favourites";
 	}
 	
-	@RequestMapping(value = "/addInFavorite", method = RequestMethod.GET)
+	@RequestMapping(value = "/addInFavorite", method = RequestMethod.POST)
 	public String addInFavorite(@RequestParam("hiddenMovieId") Integer movieId,
 			Model model,	HttpSession session,HttpServletRequest request){
 		try {
 			User user = (User) session.getAttribute("user");
 			
+			String jspName = request.getParameter("hiddenJspName");
+			
 			UserDao.getInstance().addInFavorite(user.getId(), movieId);
 			
-			return "viewAllMovies";
+			return jspName;
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
 			return "error";
@@ -63,66 +65,17 @@ public class UserFavoriteController {
 			HttpSession session,HttpServletRequest request){
 
 		try {
-			
 			User user = (User) session.getAttribute("user");
+			
+			String jspName = request.getParameter("hiddenJspName");
+			
      		UserDao.getInstance().removeFavouriteMovie(user.getId(), movieId);
 
-			return "viewAllMovies";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-	}
-	
-
-	
-	@RequestMapping(value = "/removeFromFavorite2", method = RequestMethod.POST)
-	public String removeFromFavorite2(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,
-			HttpSession session,HttpServletRequest request){
-
-		try {
-			
-			User user = (User) session.getAttribute("user");
-     		UserDao.getInstance().removeFavouriteMovie(user.getId(), movieId);
-
-			return "user_favourites";
+			return jspName;
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
 			return "error";
 		}
 	}
 
-	
-	@RequestMapping(value = "/addInFavorite3", method = RequestMethod.GET)
-	public String addInFavorite3(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,	HttpSession session,HttpServletRequest request){
-		try {
-			User user = (User) session.getAttribute("user");
-			
-			UserDao.getInstance().addInFavorite(user.getId(), movieId);
-			
-			return "viewAMovie";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-	}
-	
-	@RequestMapping(value = "/removeFromFavorite3", method = RequestMethod.POST)
-	public String removeFromFavorite3(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,
-			HttpSession session,HttpServletRequest request){
-
-		try {
-			
-			User user = (User) session.getAttribute("user");
-     		UserDao.getInstance().removeFavouriteMovie(user.getId(), movieId);
-
-			return "viewAMovie";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-	}
 }

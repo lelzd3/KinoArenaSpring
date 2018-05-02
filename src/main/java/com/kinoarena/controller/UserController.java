@@ -125,36 +125,25 @@ public class UserController {
 	
 	
 	//logout
-	@RequestMapping(value = "logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpServletRequest request,HttpSession s){
 		s.invalidate();
 		return "login";
 	}
 	
 	//main.jsp -> viewAllMovies.jsp
-	@RequestMapping(value = "viewAllMoviesPage", method = RequestMethod.GET)
+	@RequestMapping(value = "/viewAllMoviesPage", method = RequestMethod.GET)
 	public String viewAllMoviesPage(){
 		return "viewAllMovies";
 	}
 	
 	
 	//login.jsp -> register.jsp
-	@RequestMapping(value = "getRegisterPage", method = RequestMethod.GET)
+	@RequestMapping(value = "/getRegisterPage", method = RequestMethod.GET)
 	public String getRegisterPage(){
 		return "register";
 	}
 	
-	//main.jsp -> viewAllWatchlistedMovies.jsp
-	@RequestMapping(value = "viewAllWatchlisterMoviesPage", method = RequestMethod.GET)
-	public String viewAllWatchlisterMoviesPage(){
-		return "viewAllWatchlisterMovies";
-	}
-	
-	//main.jsp -> viewAllWatchlistedMovies.jsp
-	@RequestMapping(value = "viewAllFavoritesMoviesPage", method = RequestMethod.GET)
-	public String viewAllFavoritesMoviesPage(){
-		return "viewAllFavoritesMovies";
-	}
 	
 	//main.jsp -> viewAllReseravtions.jsp
 	//this method is not used?
@@ -181,11 +170,9 @@ public class UserController {
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.POST)
 	public String cancelReservation(HttpSession session, HttpServletRequest request){
-		System.out.println("stignah tyk");
 		User user = (User) session.getAttribute("user");
 		try {
 			String reservationSelected = request.getParameter("selectedReservation");
-			System.out.println(reservationSelected);
 			ReservationDao.getInstance().deleteReservation(reservationSelected);
 			return "viewAllReservations";
 		} catch (SQLException e) {
