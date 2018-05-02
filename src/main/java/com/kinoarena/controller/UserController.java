@@ -1,12 +1,16 @@
 package com.kinoarena.controller;
 
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,8 +18,12 @@ import com.kinoarena.model.dao.BroadcastDao;
 import com.kinoarena.model.dao.CinemaDao;
 import com.kinoarena.model.dao.HallDao;
 import com.kinoarena.model.dao.MovieDao;
+import com.kinoarena.model.dao.ReservationDao;
 import com.kinoarena.model.dao.UserDao;
+import com.kinoarena.model.pojo.Movie;
+import com.kinoarena.model.pojo.Reservation;
 import com.kinoarena.model.pojo.User;
+import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 
 
@@ -144,6 +152,44 @@ public class UserController {
 	@RequestMapping(value = "viewAllFavoritesMoviesPage", method = RequestMethod.GET)
 	public String viewAllFavoritesMoviesPage(){
 		return "viewAllFavoritesMovies";
+	}
+	
+	//main.jsp -> viewAllReseravtions.jsp
+	@RequestMapping(value = "ReservationsPage", method = RequestMethod.GET)
+	public String viewAllReservations(){
+		return "viewAllReservations";
+	}
+	
+	@RequestMapping(value = "/Reservations", method = RequestMethod.GET)
+	public String viewUserFavourites(HttpSession session,
+			Model model,HttpServletRequest request){
+		
+		User user = (User) session.getAttribute("user");
+		try {
+			ArrayList<String> reservations = ReservationDao.getInstance().getAllReservationsForUser(user);
+			model.addAttribute("reservations", reservations);
+			return "viewAllReservations";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "/Reservations", method = RequestMethod.POST)
+	public String cancelReservation(HttpSession session, HttpServletRequest request){
+		System.out.println("stignah tyk");
+		User user = (User) session.getAttribute("user");
+		try {
+			String reservationSelected = request.getParameter("selectedReservation");
+			System.out.println(reservationSelected);
+			ReservationDao.getInstance().deleteReservation(reservationSelected);
+			return "viewAllReservations";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+		
 	}
 	
 	

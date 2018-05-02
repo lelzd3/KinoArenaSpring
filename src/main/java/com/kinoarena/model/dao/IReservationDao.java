@@ -12,7 +12,7 @@ public interface IReservationDao {
 
 	public void addReservation(Reservation r,ArrayList<Seat> seats) throws Exception;
 	
-	public void deleteReservation(Reservation r) throws Exception;
+	public void deleteReservation(String reservationId) throws Exception;
 	
 	public Collection<Reservation> getAllReservationsForABroadcast(Broadcast b) throws Exception;
 

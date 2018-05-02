@@ -35,6 +35,10 @@ response.setHeader("Cache-Control", "no-cache");
 			<input type="submit" value="Favorite movies"><br>
 		</form>
 		
+		<form action = "Reservations" method="get">
+			<input type="submit" value="All reservations"><br>
+		</form>
+		
 		<br>
 		<form action=logout method="get">
 			<input type="submit" value="Logout"><br>

@@ -14,6 +14,7 @@ import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Broadcast;
 import com.kinoarena.model.pojo.Reservation;
 import com.kinoarena.model.pojo.Seat;
+import com.kinoarena.model.pojo.User;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public class ReservationDao implements IReservationDao {
@@ -71,20 +72,24 @@ public class ReservationDao implements IReservationDao {
 
 	@SuppressWarnings("resource")
 	@Override
-	public void deleteReservation(Reservation r) throws SQLException {
+	public void deleteReservation(String reservationId) throws SQLException {
 		// Transaction remove from reservations table
 		// then remove all from reservations_seats where id = reservation id
-
+        //here we use string due to cancelReservation in UserController
 		PreparedStatement s = null;
 		try {
 			connection.setAutoCommit(false);
+			
+			s = connection.prepareStatement("DELETE FROM reservations_seats WHERE ticket_reservations_id = ?");
+			s.setString(1,reservationId);
+			s.executeUpdate();
+			
+			
 			s = connection.prepareStatement("DELETE FROM reservations WHERE id = ?");
-			s.setInt(1, r.getId());
+			s.setString(1,reservationId);
 			s.executeUpdate();
 
-			s = connection.prepareStatement("DELETE FROM reservation_seats WHERE ticket_reservations_id = ?");
-			s.setInt(1, r.getId());
-			s.executeUpdate();
+			
 			connection.commit();
 		} catch (SQLException e) {
 			connection.rollback();
@@ -171,5 +176,32 @@ public class ReservationDao implements IReservationDao {
 		} finally {
 			ps.close();
 		}
+	}
+
+	public ArrayList<String> getAllReservationsForUser(User user) throws SQLException {
+		ArrayList<String> allReservations = new ArrayList<String>();
+		PreparedStatement ps = null;
+		try {
+				ps = connection.prepareStatement(
+						"Select r.id, u.username , m.title , c.name, seats_number , time from reservations AS r"
+						+ " JOIN users AS u on r.users_id = u.id"
+						+ " JOIN broadcasts as b on b.id = r.broadcasts_id"
+						+ " JOIN movies as m  on b.movies_id = m.id"
+						+ " JOIN cinemas as c on b.cinemas_id = c.id WHERE r.users_id = ?;");
+				ps.setInt(1, user.getId());
+				ResultSet result = ps.executeQuery();
+				while (result.next()) {
+					allReservations.add("Reservation id: "+result.getInt("id")+", Username: "+result.getString("u.username")
+					+", Movie title: "+result.getString("m.title")+ ", Cinema name: "+result.getString("c.name")
+					+", Seats reserved "+result.getInt("r.seats_number")+", Reservation made: "+result.getTimestamp("time"));
+				}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			ps.close();
+
+		}
+		return allReservations;
+
 	}
 }
