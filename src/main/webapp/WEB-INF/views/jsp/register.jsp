@@ -39,6 +39,10 @@ response.setHeader("Cache-Control", "no-cache");
 	              	<td>Last Name:</td>
 	              	<td><input type="text" class="w3-border w3-padding" name="lastName" required value="Kaliparski"></td>
 	            </tr>
+	            <tr>
+	              	<td>Ages: </td>
+	              	<td><input type="number" class="w3-border w3-padding" name="age" required value="22"></td>
+	            </tr>
 	           </table>
 	           <button style="margin:auto;display:block" type="submit">Register</button><br>
 	           <a href="loginPage">Already have an account? Click here to login.</a>

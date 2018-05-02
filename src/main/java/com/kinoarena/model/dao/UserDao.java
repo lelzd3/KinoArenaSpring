@@ -55,7 +55,7 @@ public class UserDao implements IUserDao{
 	@Override
 	public void addUser(User u) throws SQLException {
 		
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO users(username, password, email, first_name, last_name , is_Admin) VALUES(?, ?, ?, ?, ?, ?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO users(username, password, email, first_name, last_name , is_Admin, age) VALUES(?, ?, ?, ?, ?, ?, ?)");
 		ps.setString(1, u.getUsername());
 		String hashedPassword = BCrypt.hashpw(u.getPassword(), BCrypt.gensalt()); // TODO encryption but in SERVLET!
 		ps.setString(2, hashedPassword);
@@ -63,6 +63,7 @@ public class UserDao implements IUserDao{
 		ps.setString(4, u.getFirstname());
 		ps.setString(5, u.getLastname());
 		ps.setInt(6, 0);
+		ps.setInt(7, u.getAge());
 		ps.executeUpdate();
 		ps.close();
 	}
@@ -177,16 +178,18 @@ public class UserDao implements IUserDao{
 	}
 
 	public User getUser(String username) throws InvalidDataException, SQLException {
-		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin FROM users WHERE username = ?";
+		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users WHERE username = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, username);
 		ResultSet result = ps.executeQuery();
 		result.next();
 		
+		//TODO 
 		boolean isAdmin = result.getInt("is_Admin") == 1? true:false;
 		
 		return new User(
 					result.getInt("id"),
+					result.getInt("age"),
 					result.getString("username"),
 					result.getString("password"),
 					result.getString("first_name"),
@@ -252,6 +255,7 @@ public class UserDao implements IUserDao{
 		
 		return new User(
 					result.getInt("id"),
+					result.getInt("age"),
 					result.getString("username"),
 					result.getString("password"),
 					result.getString("first_name"),
@@ -274,6 +278,7 @@ public class UserDao implements IUserDao{
 			boolean isAdmin = result.getInt("is_Admin") == 1? true:false;
 			User user = new User(
 					result.getInt("id"),
+					result.getInt("age"),
 					result.getString("username"),
 					result.getString("password"),
 					result.getString("first_name"),
@@ -297,6 +302,7 @@ public class UserDao implements IUserDao{
 			boolean isAdmin = result.getInt("is_Admin") == 1? true:false;
 			User user = new User(
 					result.getInt("id"),
+					result.getInt("age"),
 					result.getString("username"),
 					result.getString("password"),
 					result.getString("first_name"),

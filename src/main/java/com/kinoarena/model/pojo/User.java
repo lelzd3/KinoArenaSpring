@@ -1,5 +1,7 @@
 package com.kinoarena.model.pojo;
 
+import javax.xml.bind.DataBindingException;
+
 import com.kinoarena.utilities.Validations;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
@@ -17,8 +19,12 @@ public class User {
 	protected boolean isAdmin;
 	//add into db
 	protected boolean isBanned;
+	protected int age;
 	
-	public User(String username,String password,String firstname,String lastname,String email) throws InvalidDataException {
+	
+
+	public User(int age ,String username,String password,String firstname,String lastname,String email) throws InvalidDataException {
+		setAge(age);
 		setUsername(username);
 		setPassword(password);
 		setFirstName(firstname);
@@ -27,8 +33,8 @@ public class User {
 		isAdmin=false;
 	}
 	
-	public User(int id,String username,String password, String firstname,String lastname, String email, String phoneNumber,boolean isAdmin) throws InvalidDataException {
-		this(username, password, firstname, lastname, email);
+	public User(int id,int age, String username,String password, String firstname,String lastname, String email, String phoneNumber,boolean isAdmin) throws InvalidDataException {
+		this(age , username, password, firstname, lastname, email);
 		this.phone=phoneNumber;
 		setId(id);
 		this.isAdmin= isAdmin;
@@ -125,6 +131,19 @@ public class User {
 			this.phone = phone;
 		}
 	
+	}
+	
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) throws InvalidDataException {
+		if(age>=0 && age<=120) {
+		this.age = age;
+		}
+		else {
+			throw new InvalidDataException("Invalid age entered!");
+		}
 	}
 
 	@Override

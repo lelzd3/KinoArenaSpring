@@ -76,7 +76,8 @@ public class MovieController {
 	@RequestMapping(value = "/reserveInterim", method = RequestMethod.POST)
 	public String reserveInterim(HttpServletRequest request, HttpServletResponse response, Model springModel) {
 		try {
-			
+            //here we need user due to check his ages for discount
+			User user = (User) request.getSession().getAttribute("user");
 			
 			int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
 			Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
@@ -93,6 +94,9 @@ public class MovieController {
 			 
 			//20% off on Thursday
 			if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
+				totalPrice = totalPrice - (totalPrice*0.2);
+			}
+			if(user.getAge() <= 18) {
 				totalPrice = totalPrice - (totalPrice*0.2);
 			}
 			//should check user ages and if they are under 18 another 20% off

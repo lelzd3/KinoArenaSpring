@@ -90,6 +90,8 @@ public class UserController {
 			String email = request.getParameter("email");
 			String firstName = request.getParameter("firstName");
 			String lastName = request.getParameter("lastName");
+			Integer age = Integer.valueOf(request.getParameter("age"));
+			System.out.println(age);
 			
 			if (username.isEmpty() || username.length() < 5) {
 				throw new WrongCredentialsException("username must be at least 5 chars long");
@@ -107,7 +109,7 @@ public class UserController {
 				throw new WrongCredentialsException("Invalid entered last name");
 			}
 			// creating new user with these details
-			User user = new User(username, pass1, firstName, lastName, email);
+			User user = new User(age , username, pass1, firstName, lastName, email);
 			// adding to db
 			UserDao.getInstance().addUser(user);
 			
