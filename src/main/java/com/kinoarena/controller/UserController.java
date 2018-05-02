@@ -46,7 +46,7 @@ public class UserController {
 			context.setAttribute("halls", HallDao.getInstance().getAllHalls());
 			context.setAttribute("cinemas", CinemaDao.getInstance().getAllCinemas());
 			String username = request.getParameter("username");
-			String password = request.getParameter("password");
+			String password = request.getParameter("password"); 
 			
 			UserDao.getInstance().loginCheck(username, password);
 			User user = UserDao.getInstance().getUser(username);

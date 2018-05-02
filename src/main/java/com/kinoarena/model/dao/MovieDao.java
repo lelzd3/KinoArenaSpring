@@ -145,4 +145,15 @@ public class MovieDao implements IMovieDao{
 	}
 	
 	
+	public void updateFileLocaiton(Movie movie,String file_location) throws SQLException {
+		String query = "UPDATE movies SET file_location = ? WHERE id = ?";
+		//System.out.println("movie");
+		PreparedStatement ps = connection.prepareStatement(query);
+		ps.setString(1, file_location);
+		ps.setInt(2, movie.getId());
+		ps.executeUpdate();
+		ps.close();
+	
+	}
+	
 }

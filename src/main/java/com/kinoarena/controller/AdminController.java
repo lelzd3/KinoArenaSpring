@@ -232,11 +232,12 @@ public class AdminController {
 	
 	@RequestMapping(value = "/addHall", method = RequestMethod.POST)
 	public String addHall(@RequestParam("cinemaSelect") int cinemaId , @RequestParam("seats") int seats,
-			HttpSession session,HttpServletRequest request, Model model) {
+			HttpSession session,HttpServletRequest request, Model springModel) {
 
 		User admin = (User) session.getAttribute("admin");
 		try {
 			Hall newHall = new Hall(seats, cinemaId);
+			springModel.addAttribute("cinemas", CinemaDao.getInstance().getAllCinemas());
 			AdminManager.getInstance().addNewHall(newHall, admin);
 			
 		} catch (SQLException e) {
@@ -330,20 +331,20 @@ public class AdminController {
 		try {
 	
 			Double rating = 0.0;
+			
 			Movie movie = new Movie(title, description, rating, duration);
 			AdminManager.getInstance().addNewMovie(movie, admin);
+			
 			String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;
 			movie.setFile_location(file_location);
+			
+			MovieDao.getInstance().updateFileLocaiton(movie,file_location);	
 			
 			File serverFile = new File(file_location);
 			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-			AdminManager.getInstance().addNewMovie(movie, admin);
-
 			return "adminMain";
 		
-
-
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
 			return "error";
