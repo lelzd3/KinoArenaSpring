@@ -19,6 +19,9 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	<body>
 		<h1 align="center">Hello, <%= user.getUsername()  %></h1>
+		<h1 align="center">Dont miss our new promo! -20% off for every broadcast on Thursday</h1>
+		<h2 align="center">You have extra -20% if you are under 18!</h2>
+				
 		<h2 align="center">Session id is <%= s %></h2>
 		<br>
 		

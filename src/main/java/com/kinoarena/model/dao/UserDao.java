@@ -269,7 +269,7 @@ public class UserDao implements IUserDao{
 
 	@Override
 	public Collection<User> getAllUsers() throws SQLException, InvalidDataException   {
-		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin FROM users");
+		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users");
 		ResultSet result = ps.executeQuery();
 		ArrayList<User> users = new ArrayList<User>();
 		

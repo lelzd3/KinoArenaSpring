@@ -29,13 +29,25 @@ table {
 
 
 	<h1 align="center">My reservations</h2>
-
+	
+	<%
+	
+	if(reservations.size()==0){
+		%>
+		<h1 align="center">You dont have any reservations yet!</h1>	
+		
+	<%
+	}
+	else{
+%>
 <table>
   <tr>
     <td>Reservation No</td>
     <td>Reservation info</td>
   </tr>
 	<%
+		
+	
 		for (String string : reservations) {
 			int count = 1;
 			String[] arr = string.split(",");
@@ -62,7 +74,7 @@ table {
   </tr>
 	
 	<%
-		}
+		}}
 	%>
 
 </body>
