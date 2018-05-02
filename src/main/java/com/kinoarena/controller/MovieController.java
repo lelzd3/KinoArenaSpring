@@ -75,6 +75,8 @@ public class MovieController {
 	@RequestMapping(value = "/reserveInterim", method = RequestMethod.POST)
 	public String reserveInterim(HttpServletRequest request, HttpServletResponse response, Model springModel) {
 		try {
+			
+			
 			int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
 			Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
 			Cinema cinema = CinemaDao.getInstance().getCinemaById(broadcast.getCinemaId());
@@ -84,8 +86,15 @@ public class MovieController {
 			springModel.addAttribute("hallId",broadcast.getHallId());
 			springModel.addAttribute("movieTitle", movie.getTitle());
 			springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime());
-			springModel.addAttribute("broadcastPrice",broadcast.getPrice());
 			springModel.addAttribute("broadcastId",broadcastId);
+			double totalPrice = broadcast.getPrice();
+			 
+			//20% off on Thursday
+			if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
+				totalPrice = totalPrice - (totalPrice*0.2);
+			}
+			//should check user ages and if they are under 18 another 20% off
+			springModel.addAttribute("broadcastPrice",totalPrice);
 
 			return "reservationHall";
 		} catch (Exception e) {
