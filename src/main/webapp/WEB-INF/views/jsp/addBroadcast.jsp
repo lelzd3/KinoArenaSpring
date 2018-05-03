@@ -1,7 +1,8 @@
-<%@page import="com.kinoarena.model.pojo.Hall"%>
-<%@page import="com.kinoarena.model.pojo.Cinema"%>
-<%@page import="com.kinoarena.model.pojo.Movie"%>
-<%@page import="com.kinoarena.model.pojo.User"%>
+<%
+response.setHeader("Pragma", "No-cache");
+response.setDateHeader("Expires", 0);
+response.setHeader("Cache-Control", "no-cache");
+%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>

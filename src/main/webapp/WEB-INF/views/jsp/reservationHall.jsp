@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<%
+response.setHeader("Pragma", "No-cache");
+response.setDateHeader("Expires", 0);
+response.setHeader("Cache-Control", "no-cache");
+%>
 <%@page import="com.kinoarena.model.dao.MovieDao"%>
 <%@page import="com.kinoarena.model.dao.CinemaDao"%>
 <%@page import="com.kinoarena.model.dao.BroadcastDao"%>

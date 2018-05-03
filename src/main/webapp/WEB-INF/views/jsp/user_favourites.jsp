@@ -1,3 +1,8 @@
+<%
+response.setHeader("Pragma", "No-cache");
+response.setDateHeader("Expires", 0);
+response.setHeader("Cache-Control", "no-cache");
+%>
 <%@page import="com.kinoarena.model.dao.BroadcastDao"%>
 <%@page import="com.kinoarena.model.pojo.Broadcast"%>
 <%@page import="java.util.LinkedHashSet"%>
