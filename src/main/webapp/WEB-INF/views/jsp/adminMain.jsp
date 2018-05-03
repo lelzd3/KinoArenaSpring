@@ -70,11 +70,15 @@ response.setHeader("Cache-Control", "no-cache");
 		</form>
 		<br>
 		
-		<form action="setDiscountPage" method="get">
-			<button type="submit">Make discount on a broadcast </button>
+		<form action="changeBroadcastPricePage" method="get">
+			<button type="submit">Change price on a broadcast</button>
 		</form>
 		<br>
 		
+		<form action="changeBroadcastProjectionTimePage" method="get">
+			<button type="submit">Change price on a broadcast</button>
+		</form>
+		<br>
 		
 		<form action="logout" method="get">
 			<input type="submit" value="Logout"><br>

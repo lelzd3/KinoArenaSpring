@@ -10,7 +10,7 @@ public interface IBroadcastDao {
 
 	public void deleteBroadcast(Broadcast b) throws Exception;
 	
-	public void changeBroadcastProjectionTime(Broadcast b,LocalDateTime projectionTime) throws Exception;
+	public void changeBroadcastProjectionTime(int broadcastId,LocalDateTime projectionTime) throws Exception;
 
 	void addBroadcast(Broadcast b) throws Exception;
 
@@ -21,4 +21,8 @@ public interface IBroadcastDao {
 	public Collection<Broadcast> getAllBroadcasts() throws Exception;
 	
 	public Broadcast getBroadcastById(int id) throws Exception;
+	
+	public void changeBroadcastPrice(int id,double newPrice) throws Exception;
+	
+	
 }

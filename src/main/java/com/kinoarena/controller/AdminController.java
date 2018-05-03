@@ -199,24 +199,28 @@ public class AdminController {
 		return "adminMain";
 	}
 
-	//adminPanel.jsp -> setDiscount.jsp	
-	@RequestMapping(value = "/setDiscountPage", method = RequestMethod.GET)
-	public String getToSetDiscount() {
-		return "setDiscount";
+	//adminPanel.jsp -> changeBroadcastPrice.jsp	
+	@RequestMapping(value = "/changeBroadcastPricePage", method = RequestMethod.GET)
+	public String getToSetDiscount(Model springModel) throws InvalidDataException, SQLException {
+
+		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
+		return "changeBroadcastPrice";
 	}
 	
 	
-	@RequestMapping(value = "/setDiscount", method = RequestMethod.POST)
+	@RequestMapping(value = "/changeBroadcastPrice", method = RequestMethod.POST)
 	public String setDiscount(
 			@RequestParam("broadcastSelect") int broadcastId,
-			@RequestParam("percent") double percentForDiscount,
+			@RequestParam("newPrice") double newPrice,
 			HttpSession session,HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
+		
+		if(newPrice < 0) {
+			throw new InvalidDataException("New price is lower than 0");
+		}
 		
 		User admin = (User) session.getAttribute("admin");
 		
-		Broadcast broadcastForDiscount = broadcastDao.getBroadcastById(broadcastId);
-		adminManager.setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
-
+		adminManager.changeBroadcastPrice(admin, broadcastId, newPrice);
 		return "adminMain";
 	}
 
@@ -297,5 +301,22 @@ public class AdminController {
 		return "adminMain";
 	}
 	
+	//adminMain.jsp -> changeBroadcastProjectionTimePage.jsp
+	@RequestMapping(value = "/changeBroadcastProjectionTimePage")
+	public String getToChangeProjectionTimePage(Model springModel) throws InvalidDataException, SQLException {
+		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
+		return "changeBroadcastProjectionTime";
+	}
+	
+	@RequestMapping(value = "/changeBroadcastProjectionTime", method = RequestMethod.POST)
+	public String changeBroadcastProjectionTime(
+			@RequestParam("broadcastSelect") int broadcastId,
+			@RequestParam("newProjectionTime") String newTime,
+			HttpSession session,HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 		
+		User admin = (User) session.getAttribute("admin");
+		LocalDateTime newProjectionTime = LocalDateTime.parse(newTime);
+		adminManager.changeBroadcastProjectionTime(admin, broadcastId, newProjectionTime);
+		return "adminMain";
+	}
 }

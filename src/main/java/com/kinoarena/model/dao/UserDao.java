@@ -219,6 +219,8 @@ public class UserDao implements IUserDao{
 		
 	}
 
+	
+	//notused
 	public void changeUserIsBannedStatus(User u, boolean isBanned) throws IlligalAdminActionException, SQLException {
 		
 		if (u.getIsBanned() && isBanned) {

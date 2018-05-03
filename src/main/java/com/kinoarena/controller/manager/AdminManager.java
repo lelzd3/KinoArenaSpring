@@ -2,6 +2,7 @@ package com.kinoarena.controller.manager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -130,9 +131,17 @@ public class AdminManager {
 	}
 
 
-	public void setPromoPercent(User admin, Broadcast b, double promoPercent) throws SQLException, NotAnAdminException, InvalidDataException {
+	public void changeBroadcastPrice(User admin,int broadcastId, double newPrice) throws SQLException, NotAnAdminException, InvalidDataException {
 		if(admin.getIsAdmin()){
-			broadcastDao.setPromoPercent(b, promoPercent);
+			broadcastDao.changeBroadcastPrice(broadcastId, newPrice);
+		}else{
+			throw new NotAnAdminException();
+		}
+	}
+	
+	public void changeBroadcastProjectionTime(User admin,int broadcastId,LocalDateTime newProjectionTime) throws SQLException, NotAnAdminException {
+		if(admin.getIsAdmin()){
+			broadcastDao.changeBroadcastProjectionTime(broadcastId, newProjectionTime);
 		}else{
 			throw new NotAnAdminException();
 		}

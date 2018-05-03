@@ -48,12 +48,13 @@ public class BroadcastDao implements IBroadcastDao {
 	}
 
 	@Override
-	public void changeBroadcastProjectionTime(Broadcast b, LocalDateTime projectionTime) throws SQLException   {
+	public void changeBroadcastProjectionTime(int broadcastId, LocalDateTime projectionTime) throws SQLException   {
 		PreparedStatement ps = connection.prepareStatement("UPDATE broadcasts SET projection_time = ? WHERE id = ?");
 		Timestamp time = Timestamp.valueOf(projectionTime);
 		ps.setTimestamp(1, time);
-		ps.setInt(2, b.getId());
+		ps.setInt(2, broadcastId);
 		ps.executeUpdate();
+		ps.close();
 	}
 
 	@Override
@@ -134,6 +135,15 @@ public class BroadcastDao implements IBroadcastDao {
 		}
 		return null;
 
+	}
+
+	@Override
+	public void changeBroadcastPrice(int id,double newPrice) throws SQLException{
+		PreparedStatement ps = connection.prepareStatement("UPDATE broadcasts SET price= ? WHERE id = ?");
+		ps.setDouble(1, newPrice);
+		ps.setInt(2, id);
+		ps.executeUpdate();
+		ps.close();
 	}
 	
 
