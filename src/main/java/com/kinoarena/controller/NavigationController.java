@@ -13,5 +13,10 @@ public class NavigationController {
 		return "adminMain";
 	}
 	
+	//user main
+	@RequestMapping(value="/main", method = RequestMethod.GET)
+	public String returnToUserMain() {
+		return "main";
+	}
 	
 }

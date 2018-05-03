@@ -31,6 +31,11 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	
 	<body>
+		<form action="main" method="get">
+				<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
+		
 		<h1 align="center">My reservations</h2>
 			
 		<%

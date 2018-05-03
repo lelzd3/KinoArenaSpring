@@ -34,6 +34,11 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	<body>
 
+		<form action="main" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
+
 		<form action="search" method="post">
 			<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
 			<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>

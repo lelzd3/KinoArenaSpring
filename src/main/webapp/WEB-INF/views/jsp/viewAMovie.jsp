@@ -31,38 +31,43 @@ response.setHeader("Cache-Control", "no-cache");
 	
 	</head>
 
-<body>
+	<body>
 
-<br><br>
-			<div class="one">
-				<strong><%= movie.getTitle() %></strong>
-				<br><br>
-				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250">
-				<br><br>
-				<p><%= movie.getDescription() %></p>
-				<br>
-				<p>Duration: <%=movie.getDuration() %></p>
-				Rating: <%=movie.getRating() %>
-				<br>
-				<form action="rateMovie" method="post">
-					<input type="hidden" name="movieIdToBeRated" value="<%= movie.getId() %>">
-					<select name="ratingSelect">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-					</select>
-					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
-					<input type="submit" value="rateMovie">
-				</form>
-				<br>
-				
+		<form action="viewAllMoviesPage" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
+		
+		<br><br>
+		<div class="one">
+			<strong><%= movie.getTitle() %></strong>
+			<br><br>
+			<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250">
+			<br><br>
+			<p><%= movie.getDescription() %></p>
+			<br>
+			<p>Duration: <%=movie.getDuration() %></p>
+			Rating: <%=movie.getRating() %>
+			<br>
+			<form action="rateMovie" method="post">
+				<input type="hidden" name="movieIdToBeRated" value="<%= movie.getId() %>">
+				<select name="ratingSelect">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+				<input type="submit" value="rateMovie">
+			</form>
+			<br>
+			
 			<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
 
 			<form action = "addInFavorite" method = "post">
@@ -104,10 +109,10 @@ response.setHeader("Cache-Control", "no-cache");
 				<%} %>
 			</select>
 			<input type="submit" value="Choose Broadcast to book seats for">
-		</form>
-		<br>
-				
+			</form>
+			<br>
 		</div>
-	<br><br>
-</body>
+		
+		<br><br>
+	</body>
 </html>

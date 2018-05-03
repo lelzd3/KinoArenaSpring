@@ -32,12 +32,13 @@ response.setHeader("Cache-Control", "no-cache");
 		<form action="viewUserWatchlist" method="get">
 			<input type="submit" value="Movies in watchlist"><br>
 		</form>
+		
 		<br>
-
 		<form action = "viewUserFavourites" method="get">
 			<input type="submit" value="Favorite movies"><br>
 		</form>
 		
+		<br>
 		<form action = "reservations" method="get">
 			<input type="submit" value="All reservations"><br>
 		</form>
