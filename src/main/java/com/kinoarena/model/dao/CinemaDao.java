@@ -8,22 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.springframework.stereotype.Component;
+
 import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Cinema;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
-
+@Component
 public class CinemaDao implements ICinemaDao{
 
-	private static CinemaDao instance;
 	private Connection connection;
-	
-	public synchronized static CinemaDao getInstance() {
-		if(instance == null) {
-			instance = new CinemaDao();
-		}
-		return instance;
-	}
 	
 	private CinemaDao() {
 		connection = DBManager.getInstance().getConnection();

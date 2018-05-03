@@ -12,7 +12,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>View a movie</title>
 		<%
-			User user = (User) request.getSession().getAttribute("user"); 
+			User user = (User) request.getSession().getAttribute("user");
+			UserDao userDao = (UserDao)session.getAttribute("userDao");
+			BroadcastDao broadcastDao = (BroadcastDao)session.getAttribute("broadcastDao");
 			Movie movie =(Movie) request.getSession().getAttribute("selectedMovie");
 		%>
 		<style>
@@ -56,7 +58,7 @@
 				</form>
 				<br>
 				
-			<% if(!UserDao.getInstance().isMovieInFavourite(user.getId(),movie.getId())){ %>
+			<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
 
 			<form action = "addInFavorite" method = "post">
 				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
@@ -72,7 +74,7 @@
 
 			<% }  %>
 			
-			 <% if(!UserDao.getInstance().isMovieInWatchlist(user.getId(),movie.getId())){ %>
+			 <% if(!userDao.isMovieInWatchlist(user.getId(),movie.getId())){ %>
 
 			<form action = "addInWatchlist" method = "post">
 				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
@@ -88,21 +90,19 @@
 
 			<% }  %>
 				
-				<br>
-				<form action="reserveInterim" method="post">
-					<select name="broadcastSelect">
-						<% //TODO make it to show Cinema Name and Movie Name
-						//and make it to redirect to servlet
-						for(Broadcast broadcast : (ArrayList<Broadcast>)BroadcastDao.getInstance().getAllBroadcastsForAMovie(movie)) { %>
-							<option value="<%= broadcast.getId() %>"><%="Cinema_id: "+  broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: "+ broadcast.getMovieId() %></option>
-						<%} %>
-					</select>
-					<input type="submit" value="Choose Broadcast to book seats for">
-				</form>
-				<br>
+			<br>
+			<form action="reserveInterim" method="post">
+				<select name="broadcastSelect">
+				<%
+				for(Broadcast broadcast : (ArrayList<Broadcast>)broadcastDao.getAllBroadcastsForAMovie(movie)) { %>
+					<option value="<%= broadcast.getId() %>"><%="Cinema_id: "+  broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: "+ broadcast.getMovieId() %></option>
+				<%} %>
+			</select>
+			<input type="submit" value="Choose Broadcast to book seats for">
+		</form>
+		<br>
 				
-			</div>
-		<br><br>
-
+		</div>
+	<br><br>
 </body>
 </html>

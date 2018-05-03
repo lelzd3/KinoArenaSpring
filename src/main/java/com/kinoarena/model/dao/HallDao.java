@@ -8,23 +8,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.springframework.stereotype.Component;
+
 import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Cinema;
 import com.kinoarena.model.pojo.Hall;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
-
+@Component
 public class HallDao implements IHallDao{
 
-	private static HallDao instance;
 	private Connection connection;
-	
-	public synchronized static HallDao getInstance() {
-		if(instance == null) {
-			instance = new HallDao();
-		}
-		return instance;
-	}
 	
 	private HallDao() {
 		connection = DBManager.getInstance().getConnection();
@@ -36,7 +30,7 @@ public class HallDao implements IHallDao{
 		
 		PreparedStatement s = connection.prepareStatement("INSERT INTO halls (seats, cinemas_id) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
 		s.setInt(1, h.getSeats());
-		s.setInt(2, h.getCinema_id());
+		s.setInt(2, h.getCinemaId());
 		s.executeUpdate();
 		
 		// set the ID for the instance of Hall h

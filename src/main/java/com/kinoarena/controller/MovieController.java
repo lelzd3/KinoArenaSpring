@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.kinoarena.controller.manager.AdminManager;
 import com.kinoarena.model.dao.BroadcastDao;
 import com.kinoarena.model.dao.CinemaDao;
+import com.kinoarena.model.dao.HallDao;
 import com.kinoarena.model.dao.MovieDao;
 import com.kinoarena.model.dao.ReservationDao;
 import com.kinoarena.model.dao.UserDao;
@@ -44,9 +46,23 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 @MultipartConfig
 public class MovieController {
 
+	@Autowired
+	private MovieDao movieDao;
+	
+	@Autowired	
+	private BroadcastDao broadcastDao;
+	
+	@Autowired
+	private CinemaDao cinemaDao;
+	
+	@Autowired
+	private ReservationDao reservationDao;
+	
+	@Autowired 
+	private UserDao userDao; 
+	
 	private static final String COVER_FILE_SUFFIX = "-cover";
 	private static final String SERVER_FILES_LOCATION = "D:\\kinoarenaMovieCovers\\";
-
 
 	@RequestMapping(value = "/getCover", method = RequestMethod.GET)
 	@ResponseBody
@@ -67,8 +83,8 @@ public class MovieController {
 			int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
 			int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
 
-			Movie movie = MovieDao.getInstance().getMovieById(movieIdToBeRated);
-			UserDao.getInstance().rateMovie(user, movie, newRating);
+			Movie movie = movieDao.getMovieById(movieIdToBeRated);
+			userDao.rateMovie(user, movie, newRating);
 			return jspName;
 		} catch (Exception e) {
 			request.setAttribute("exception", e);
@@ -83,9 +99,9 @@ public class MovieController {
 			User user = (User) request.getSession().getAttribute("user");
 	
 			int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
-			Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
-			Cinema cinema = CinemaDao.getInstance().getCinemaById(broadcast.getCinemaId());
-			Movie movie = MovieDao.getInstance().getMovieById(broadcast.getMovieId());
+			Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
+			Cinema cinema = cinemaDao.getCinemaById(broadcast.getCinemaId());
+			Movie movie = movieDao.getMovieById(broadcast.getMovieId());
 
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd EE HH:mm");
 			
@@ -141,7 +157,7 @@ public class MovieController {
 			}
 
 			Reservation reservation = new Reservation(user.getId(), broadcast_id, selectedSeats);
-			ReservationDao.getInstance().addReservation(reservation, selectedSeats);
+			reservationDao.addReservation(reservation, selectedSeats);
 			return "viewAllMovies";
 		} catch (Exception e) {
 			request.setAttribute("exception", e);
@@ -153,14 +169,13 @@ public class MovieController {
 	@ResponseBody
 	public String reserveSubmit(HttpServletRequest request,HttpServletResponse response,@PathVariable(value="broadcastId") Integer broadcastId) {
 		try {
-			Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
-			ArrayList<String> allSeatsForBroadcast = ReservationDao.getInstance().getAllOccupiedSeatsForABroadcast(broadcast);
+			Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
+			ArrayList<String> allSeatsForBroadcast = reservationDao.getAllOccupiedSeatsForABroadcast(broadcast);
 			//response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
 			return allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1);
 		} catch (Exception e) {
-			return e.getMessage();
-//			request.setAttribute("exception", e);
-//			return "error";
+			request.setAttribute("exception", e);
+			return "error";
 		}
 	}
 
@@ -169,7 +184,7 @@ public class MovieController {
 	public String search(HttpServletRequest request, HttpServletResponse response) {
 		String name = request.getParameter("movie");
 		try {
-			Movie selectedMovie = MovieDao.getInstance().getMovieByName(name);
+			Movie selectedMovie = movieDao.getMovieByName(name);
 			request.getSession().setAttribute("selectedMovie", selectedMovie);
 		} catch (Exception e) {
 			System.out.println("SQL Bug: " + e.getMessage());
@@ -186,7 +201,7 @@ public class MovieController {
         try {
             String term = request.getParameter("term");
             System.out.println("Data from ajax call " + term);
-            ArrayList<String> allMovies = (ArrayList<String>) MovieDao.getInstance().getMoviesContains(term);
+            ArrayList<String> allMovies = (ArrayList<String>) movieDao.getMoviesContains(term);
             System.out.println(allMovies.toString());
             return allMovies;
         } catch (Exception e) {

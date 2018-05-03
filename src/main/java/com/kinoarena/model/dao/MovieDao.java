@@ -9,23 +9,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
-
+@Component
 public class MovieDao implements IMovieDao{
 
-	private static MovieDao instance;
 	private Connection connection;
-	
-	public synchronized static MovieDao getInstance() {
-		if(instance == null) {
-			instance = new MovieDao();
-		}
-		return instance;
-	}
-	
+
 	private MovieDao() {
 		connection = DBManager.getInstance().getConnection();
 	}

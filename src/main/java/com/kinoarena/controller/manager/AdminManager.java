@@ -3,6 +3,9 @@ package com.kinoarena.controller.manager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.kinoarena.model.dao.BroadcastDao;
 import com.kinoarena.model.dao.CinemaDao;
 import com.kinoarena.model.dao.HallDao;
@@ -17,19 +20,26 @@ import com.kinoarena.utilities.exceptions.IlligalAdminActionException;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.NotAnAdminException;
 
+@Component
 public class AdminManager {
 
-
+	@Autowired
+	private MovieDao movieDao;
+	
+	@Autowired	
+	private BroadcastDao broadcastDao;
+	
+	@Autowired
+	private HallDao hallDao;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	private CinemaDao cinemaDao;
+	
 	//Singleton and DBconnection
 	private static Connection connection;
-	private static AdminManager instance;
-
-	public synchronized static  AdminManager getInstance() {
-		if (instance == null) {
-			instance = new AdminManager();
-		}
-		return instance;
-	}
 
 	private AdminManager() {
 		connection = DBManager.getInstance().getConnection();
@@ -37,7 +47,7 @@ public class AdminManager {
 	
 	public void addNewMovie(Movie m, User admin) throws SQLException, NotAnAdminException {
 		if(admin.getIsAdmin()){
-			MovieDao.getInstance().addMovie(m);
+			movieDao.addMovie(m);
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -46,7 +56,7 @@ public class AdminManager {
 
 	public void addNewBroadcast(Broadcast b,User admin) throws SQLException, NotAnAdminException, InvalidDataException {
 		if(admin.getIsAdmin()){
-			BroadcastDao.getInstance().addBroadcast(b);
+			broadcastDao.addBroadcast(b);
 		}else{
 			throw new NotAnAdminException();
 		}	
@@ -54,7 +64,7 @@ public class AdminManager {
 
 	public void addNewHall(Hall h, User admin) throws SQLException, NotAnAdminException {
 		if(admin.getIsAdmin()){
-			HallDao.getInstance().addHall(h);
+			hallDao.addHall(h);
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -62,7 +72,7 @@ public class AdminManager {
 	
 	public void addNewCinema(Cinema c, User admin) throws SQLException, NotAnAdminException {
 		if(admin.getIsAdmin()){
-			CinemaDao.getInstance().addCinema(c);
+			cinemaDao.addCinema(c);
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -71,7 +81,7 @@ public class AdminManager {
 
 	public void removeMovie(Movie m, User admin) throws SQLException, NotAnAdminException {
 		if(admin.getIsAdmin()){
-			MovieDao.getInstance().deleteMovie(m);;
+			movieDao.deleteMovie(m);;
 		}else{
 			throw new NotAnAdminException();
 		}	
@@ -80,7 +90,7 @@ public class AdminManager {
 
 	public void removeBroadcast(Broadcast b, User admin) throws SQLException, NotAnAdminException, InvalidDataException {	
 		if(admin.getIsAdmin()){
-			BroadcastDao.getInstance().deleteBroadcast(b);;
+			broadcastDao.deleteBroadcast(b);;
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -88,7 +98,7 @@ public class AdminManager {
 	
 	public void removeCinema(Cinema c, User admin) throws SQLException, NotAnAdminException, InvalidDataException {	
 		if(admin.getIsAdmin()){
-			CinemaDao.getInstance().deleteCinema(c);
+			cinemaDao.deleteCinema(c);
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -96,7 +106,7 @@ public class AdminManager {
 
 	public void removeHall(Hall h, User admin) throws SQLException, NotAnAdminException, InvalidDataException {	
 		if(admin.getIsAdmin()){
-			HallDao.getInstance().deleteHall(h);
+			hallDao.deleteHall(h);
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -104,7 +114,7 @@ public class AdminManager {
 
 	public void changeUserIsAdminStatus(User admin, String email) throws NotAnAdminException, SQLException, InvalidDataException {
 		if(admin.getIsAdmin()){
-			UserDao.getInstance().createAdmin(email.trim());
+			userDao.createAdmin(email.trim());
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -113,7 +123,7 @@ public class AdminManager {
 	//not used
 	public void changeUserIsBannedStatus(User admin, User u, boolean isBanned) throws NotAnAdminException, SQLException, IlligalAdminActionException {
 		if(admin.getIsAdmin()){
-			UserDao.getInstance().changeUserIsBannedStatus(u, isBanned);
+			userDao.changeUserIsBannedStatus(u, isBanned);
 		}else{
 			throw new NotAnAdminException();
 		}
@@ -122,7 +132,7 @@ public class AdminManager {
 
 	public void setPromoPercent(User admin, Broadcast b, double promoPercent) throws SQLException, NotAnAdminException {
 		if(admin.getIsAdmin()){
-			BroadcastDao.getInstance().setPromoPercent(b, promoPercent);
+			broadcastDao.setPromoPercent(b, promoPercent);
 		}else{
 			throw new NotAnAdminException();
 		}

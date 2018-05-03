@@ -7,26 +7,26 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 public class Broadcast {
 
 	private int id;
-	private int cinema_id;
-    private int movie_id;
-    private int hall_id;
+	private int cinemaId;
+    private int movieId;
+    private int hallId;
     private LocalDateTime projectionTime;
 	private int freePlaces;
 	private double price;
 	
-	private static final int TOTAL_PLACES_IN_HALL=100;
+	private static final int TOTAL_PLACES_IN_HALL=80;
 
-	public Broadcast(int cinema_id, int movie_id, int hall_id, LocalDateTime projectionTime,double price) throws InvalidDataException {
-		setCinemaId(cinema_id);
-		setMovieId(movie_id);
-		setHallId(hall_id);
+	public Broadcast(int cinemaId, int movieId, int hallId, LocalDateTime projectionTime,double price) throws InvalidDataException {
+		setCinemaId(cinemaId);
+		setMovieId(movieId);
+		setHallId(hallId);
 		setProjectionTime(projectionTime);
 		setPrice(price);
 		this.freePlaces = TOTAL_PLACES_IN_HALL;
 	}
 	
-	public Broadcast(int id, int cinema_id, int movie_id, int hall_id, LocalDateTime projectionTime,double price) throws InvalidDataException {
-		this(cinema_id, movie_id, hall_id, projectionTime,price);
+	public Broadcast(int id, int cinemaId, int movieId, int hallId, LocalDateTime projectionTime,double price) throws InvalidDataException {
+		this(cinemaId, movieId, hallId, projectionTime,price);
 		setId(id);
 	}
 
@@ -35,12 +35,12 @@ public class Broadcast {
 		this.id = id;
 	}
 	
-	public void setMovieId(int movie_id) throws InvalidDataException  {
-		this.movie_id = movie_id;
+	public void setMovieId(int movieId) throws InvalidDataException  {
+		this.movieId = movieId;
 	}
 	
-	public void setCinemaId(int cinema_id) throws InvalidDataException {
-		this.cinema_id = cinema_id;
+	public void setCinemaId(int cinemaId) throws InvalidDataException {
+		this.cinemaId = cinemaId;
 	}
 
 	public void setFreePlaces(int freePlaces) throws InvalidDataException {
@@ -57,9 +57,9 @@ public class Broadcast {
 		this.projectionTime = projectionTime;
 	}
 
-	public void setHallId(int hall_id) throws InvalidDataException {
+	public void setHallId(int hallId) throws InvalidDataException {
 		
-		this.hall_id = hall_id;
+		this.hallId = hallId;
 	}
 	
 	public void setPrice(double price) throws InvalidDataException {
@@ -76,11 +76,11 @@ public class Broadcast {
 	}
 	
 	public int getCinemaId() {
-		return cinema_id;
+		return cinemaId;
 	}
 
 	public int getMovieId() {
-		return movie_id;
+		return movieId;
 	}
 
 	public int getFreePlaces() {
@@ -92,7 +92,7 @@ public class Broadcast {
 	}
 
 	public int getHallId() {
-		return hall_id;
+		return hallId;
 	}
 
 	public double getPrice() {
@@ -101,7 +101,7 @@ public class Broadcast {
 	
 	@Override
 	public String toString() {
-		return "Broadcast [id=" + id + ", cinema_id=" + cinema_id + ", movie_id=" + movie_id + ", hall_id=" + hall_id
+		return "Broadcast [id=" + id + ", cinemaId=" + cinemaId + ", movieId=" + movieId + ", hallId=" + hallId
 				+ ", projectionTime=" + projectionTime + ", freePlaces=" + freePlaces + "]";
 	}
 

@@ -30,8 +30,27 @@ import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 @Controller
 public class UserController {
 
+	//remove later with login 
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	private MovieDao movieDao;
+	
+	@Autowired	
+	private BroadcastDao broadcastDao;
+	
+	@Autowired
+	private HallDao hallDao;
+	
+	@Autowired
+	private CinemaDao cinemaDao;
+	
+	@Autowired
+	private ReservationDao reservationDao;
+	
+	@Autowired 
+	private UserDao userDao; // change later all UserDao to UserManager (add methods in manager)
 	
 	
 	@RequestMapping(value="/index.html", method=RequestMethod.GET)
@@ -46,37 +65,45 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpSession s){
+	public String login(HttpServletRequest request,HttpSession session){
 
 		try {
-			context.setAttribute("broadcasts", BroadcastDao.getInstance().getAllBroadcasts());
-			context.setAttribute("movies", MovieDao.getInstance().getAllMovies());
-			context.setAttribute("halls", HallDao.getInstance().getAllHalls());
-			context.setAttribute("cinemas", CinemaDao.getInstance().getAllCinemas());
+			context.setAttribute("broadcasts", broadcastDao.getAllBroadcasts());
+			context.setAttribute("movies", movieDao.getAllMovies());
+			context.setAttribute("halls", hallDao.getAllHalls());
+			context.setAttribute("cinemas", cinemaDao.getAllCinemas());
+			
+			session.setAttribute("movieDao",movieDao);
+			session.setAttribute("userDao",userDao);
+			session.setAttribute("broadcastDao",broadcastDao);
+			session.setAttribute("reservationDao", reservationDao);
+			session.setAttribute("cinemaDao", cinemaDao);
+			session.setAttribute("hallDao", hallDao);
+			
 			String username = request.getParameter("username");
 			String password = request.getParameter("password"); 
 			
-			UserDao.getInstance().loginCheck(username, password);
-			User user = UserDao.getInstance().getUser(username);
+			userDao.loginCheck(username, password);
+			User user = userDao.getUser(username);
 			if(user.getIsAdmin()) {
 
-				s.setAttribute("admin", user);
+				session.setAttribute("admin", user);
 			
 				//TODO USE USER MANAGER
 				
-				context.setAttribute("users", UserDao.getInstance().getAllUsers());
-				context.setAttribute("usersButNotAdmins", UserDao.getInstance().GetAllUsersButNoAdmins());
+				context.setAttribute("users", userDao.getAllUsers());
+				context.setAttribute("usersButNotAdmins", userDao.GetAllUsersButNoAdmins());
 				
 				return "adminMain";
-				
 			}
 			else {
-				s.setAttribute("user", user);
+				session.setAttribute("user", user);
 				return "main";
 			}
 			
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			request.setAttribute("exception", e);
 			return "error";
 		}
@@ -111,7 +138,7 @@ public class UserController {
 			// creating new user with these details
 			User user = new User(age , username, pass1, firstName, lastName, email);
 			// adding to db
-			UserDao.getInstance().addUser(user);
+			userDao.addUser(user);
 			
 			s.setAttribute("user", user);
 			return "login";
@@ -133,7 +160,7 @@ public class UserController {
 	
 	//main.jsp -> viewAllMovies.jsp
 	@RequestMapping(value = "/viewAllMoviesPage", method = RequestMethod.GET)
-	public String viewAllMoviesPage(){
+	public String viewAllMoviesPage(HttpServletRequest request,HttpSession session){
 		return "viewAllMovies";
 	}
 	
@@ -158,7 +185,7 @@ public class UserController {
 		
 		User user = (User) session.getAttribute("user");
 		try {
-			ArrayList<String> reservations = ReservationDao.getInstance().getAllReservationsForUser(user);
+			ArrayList<String> reservations = reservationDao.getAllReservationsForUser(user);
 			model.addAttribute("reservations", reservations);
 			return "viewAllReservations";
 		} catch (SQLException e) {
@@ -173,7 +200,7 @@ public class UserController {
 		User user = (User) session.getAttribute("user");
 		try {
 			String reservationSelected = request.getParameter("selectedReservation");
-			ReservationDao.getInstance().deleteReservation(reservationSelected);
+			reservationDao.deleteReservation(reservationSelected);
 			return "viewAllReservations";
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);

@@ -25,6 +25,7 @@ import com.kinoarena.model.dao.BroadcastDao;
 import com.kinoarena.model.dao.CinemaDao;
 import com.kinoarena.model.dao.HallDao;
 import com.kinoarena.model.dao.MovieDao;
+import com.kinoarena.model.dao.UserDao;
 import com.kinoarena.model.pojo.Broadcast;
 import com.kinoarena.model.pojo.Cinema;
 import com.kinoarena.model.pojo.Hall;
@@ -36,25 +37,29 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 
 
 @Controller
-//@RequestMapping("/admin")
 public class AdminController {
 
-	/// make more readable all remove jsp TODO
-	
-//    @Autowired
-//    private HallDao hallDao;
-//	@Autowired
-//	private UserManager userManager;
-//	@Autowired
-//	private UserDao userDao;
-//	@Autowired
-//	private MovieDao movieDao;
-//	@Autowired
-//	private BroadcastDao broadcastDao;
-//	@Autowired
-//	private AdminManager adminManager;
+	//remove it later with the context in login
 	@Autowired
 	ServletContext context;
+	
+	@Autowired
+	private MovieDao movieDao;
+	
+	@Autowired	
+	private BroadcastDao broadcastDao;
+	
+	@Autowired
+	private HallDao hallDao;
+	
+	@Autowired
+	private CinemaDao cinemaDao;
+	
+	@Autowired
+	private AdminManager adminManager;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	private static final String COVER_FILE_SUFFIX = "-cover";
 	private static final String SERVER_FILES_LOCATION = "D:\\kinoarenaMovieCovers\\";
@@ -62,26 +67,31 @@ public class AdminController {
 	
 	//adminPanel.jsp->removeBroadcast.jsp
 	@RequestMapping(value = "/removeBroadcastPage", method = RequestMethod.GET)
-	public String getToRemoveBroadcast() {
-		System.out.println("Stignah pone do tyka");
-		return "removeBroadcast";
+	public String getToRemoveBroadcast(Model springModel,HttpServletRequest request) {
+		try {
+			springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
+			return "removeBroadcast";
+		} catch (InvalidDataException | SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+		
 	}
 	
 	
 	@RequestMapping(value = "/removeBroadcast", method = RequestMethod.POST)
 	public String removeBroadcast(@RequestParam("broadcastSelect") int broadcastId, HttpSession session,HttpServletRequest request) {
-
 		try {
 			User admin = (User) session.getAttribute("admin");
 			try {
-				Broadcast broadcast = BroadcastDao.getInstance().getBroadcastById(broadcastId);
-				AdminManager.getInstance().removeBroadcast(broadcast, admin);
+				Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
+				adminManager.removeBroadcast(broadcast, admin);
 			} catch (NotAnAdminException e) {
 				request.setAttribute("exception", e);
 				return "error";
 			} catch (InvalidDataException e) {
 				request.setAttribute("exception", e);
-				return "adminMain";
+				return "error";
 			}
 
 		} catch (SQLException e) {
@@ -97,12 +107,11 @@ public class AdminController {
 		
 		try {
 			User admin = (User) session.getAttribute("admin");
-			ArrayList<Movie> movies = (ArrayList<Movie>) MovieDao.getInstance().getAllMovies();
-			ArrayList<Cinema> cinemas = (ArrayList<Cinema>) CinemaDao.getInstance().getAllCinemas();
-			ArrayList<Hall> halls = (ArrayList<Hall>) HallDao.getInstance().getAllHalls();
-			springModel.addAttribute("movies", movies);
-			springModel.addAttribute("cinemas", cinemas);
-			springModel.addAttribute("halls", halls);
+
+			springModel.addAttribute("movies", movieDao.getAllMovies());
+			springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+			springModel.addAttribute("halls", hallDao.getAllHalls());
+			
 			return "addBroadcast";
 		}catch (SQLException e) {
 			request.setAttribute("exception", e);
@@ -115,16 +124,20 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/addBroadcast", method = RequestMethod.POST)
-	public String addBroadcast(@RequestParam("movieSelect") int movieId, @RequestParam("cinemaSelect") int cinemaId,
-			@RequestParam("hallSelect") int hallId, @RequestParam("projection_time") String time,
-			@RequestParam("free_sits") int freeSits, @RequestParam("price") double price, HttpSession session, HttpServletRequest request) {
-		// maybe here should change int to long cuz of id in db
+	public String addBroadcast(
+					@RequestParam("movieSelect") int movieId,
+					@RequestParam("cinemaSelect") int cinemaId,
+					@RequestParam("hallSelect") int hallId,
+					@RequestParam("projection_time") String time,
+					@RequestParam("free_sits") int freeSits,
+					@RequestParam("price") double price, HttpSession session, HttpServletRequest request) {
+		
 		try {
 			User admin = (User) session.getAttribute("admin");
 			try {
 				LocalDateTime projectionTime = LocalDateTime.parse(time);
 				Broadcast newBroadcast = new Broadcast(cinemaId, movieId, hallId, projectionTime, price);
-				AdminManager.getInstance().addNewBroadcast(newBroadcast, admin);
+				adminManager.addNewBroadcast(newBroadcast, admin);
 
 			} catch (NotAnAdminException e) {
 				request.setAttribute("exception", e);
@@ -144,8 +157,19 @@ public class AdminController {
 
 	//adminPanel.jsp -> makeAdmin.jsp
 	@RequestMapping(value = "/makeAdminPage", method = RequestMethod.GET)
-	public String getToMakeAdmin() {
-		return "makeAdmin";
+	public String getToMakeAdmin(Model springModel,HttpServletRequest request) {
+
+		try {
+			springModel.addAttribute("usersThatAreNotAdmin", userDao.GetAllUsersButNoAdmins());
+			return "makeAdmin";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		} catch (InvalidDataException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+	
 	}
 	
 	
@@ -157,7 +181,7 @@ public class AdminController {
 			try {
 
 				Validations.verifyEmail(email);
-				AdminManager.getInstance().changeUserIsAdminStatus(user, email.trim());
+				adminManager.changeUserIsAdminStatus(user, email.trim());
 			} catch (SQLException e) {
 				request.setAttribute("exception", e);
 				return "error";
@@ -181,13 +205,15 @@ public class AdminController {
 	
 
 	@RequestMapping(value = "/addCinema", method = RequestMethod.POST)
-	public String addCinema(@RequestParam("address") String address, @RequestParam("name") String name,
+	public String addCinema(
+			@RequestParam("address") String address,
+			@RequestParam("name") String name,
 			HttpSession session, Model model, HttpServletRequest request) {
 
 		User admin = (User) session.getAttribute("admin");
 		try {
 			Cinema newCinema = new Cinema(name, address);
-			AdminManager.getInstance().addNewCinema(newCinema, admin);
+			adminManager.addNewCinema(newCinema, admin);
 
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
@@ -203,18 +229,29 @@ public class AdminController {
     }
 	// adminMain.jsp -> removeCinema.jsp
 	@RequestMapping(value = "/removeCinemaPage", method = RequestMethod.GET)
-	public String getToRemoveCinema() {
-		return "removeCinema";
+	public String getToRemoveCinema(Model springModel,HttpServletRequest request) {
+		try {
+			springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+			return "removeCinema";
+		} catch (SQLException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		} catch (InvalidDataException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
+
 	}
 	
 	@RequestMapping(value = "/removeCinema",method = RequestMethod.POST)
-	public String removeCinema(@RequestParam("cinemaSelect") Integer cinemaId,
+	public String removeCinema(
+			@RequestParam("cinemaSelect") Integer cinemaId,
 			HttpSession session,HttpServletRequest request) {
 		try {
 			User admin = (User) session.getAttribute("admin");
-			Cinema cinemaToDelete = CinemaDao.getInstance().getCinemaById(cinemaId);
+			Cinema cinemaToDelete = cinemaDao.getCinemaById(cinemaId);
 
-			AdminManager.getInstance().removeCinema(cinemaToDelete,admin);
+			adminManager.removeCinema(cinemaToDelete,admin);
 			
 			return "adminMain";
 		} catch (Exception e) {
@@ -231,14 +268,16 @@ public class AdminController {
 	
 	
 	@RequestMapping(value = "/addHall", method = RequestMethod.POST)
-	public String addHall(@RequestParam("cinemaSelect") int cinemaId , @RequestParam("seats") int seats,
+	public String addHall(
+			@RequestParam("cinemaSelect") int cinemaId ,
+			@RequestParam("seats") int seats,
 			HttpSession session,HttpServletRequest request, Model springModel) {
 
 		User admin = (User) session.getAttribute("admin");
 		try {
 			Hall newHall = new Hall(seats, cinemaId);
-			springModel.addAttribute("cinemas", CinemaDao.getInstance().getAllCinemas());
-			AdminManager.getInstance().addNewHall(newHall, admin);
+			springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+			adminManager.addNewHall(newHall, admin);
 			
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
@@ -261,21 +300,23 @@ public class AdminController {
 	
 	
 	@RequestMapping(value = "/setDiscount", method = RequestMethod.POST)
-	public String setDiscount(@RequestParam("broadcastSelect") int broadcastId, @RequestParam("percent") double percentForDiscount,
+	public String setDiscount(
+			@RequestParam("broadcastSelect") int broadcastId,
+			@RequestParam("percent") double percentForDiscount,
 			HttpSession session,HttpServletRequest request) {
 		
 		try {
 			User admin = (User) session.getAttribute("admin");
 			try {
-				Broadcast broadcastForDiscount = BroadcastDao.getInstance().getBroadcastById(broadcastId);
-				AdminManager.getInstance().setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
+				Broadcast broadcastForDiscount = broadcastDao.getBroadcastById(broadcastId);
+				adminManager.setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
 
 			} catch (NotAnAdminException e) {
 				request.setAttribute("exception", e);
 				return "error";
 			} catch (InvalidDataException e) {
 				request.setAttribute("exception", e);
-				return "adminMain";
+				return "error";
 			}
 
 		} catch (SQLException e) {
@@ -287,19 +328,26 @@ public class AdminController {
 
 	//adminPanel.jsp -> removeHall.jsp
 	@RequestMapping(value = "/removeHallPage", method = RequestMethod.GET)
-	public String getToRemoveHall() {
-		return "removeHall";
+	public String getToRemoveHall(Model springModel, HttpServletRequest request) {
+		try {
+			springModel.addAttribute("halls",hallDao.getAllHalls());
+			return "removeHall";
+		} catch (SQLException | InvalidDataException e) {
+			request.setAttribute("exception", e);
+			return "error";
+		}
 	}
 	
 	
 	@RequestMapping(value = "/removeHall", method = RequestMethod.POST)
-	public String addHall(@RequestParam("hallSelect") int hallId ,
+	public String addHall(
+			@RequestParam("hallSelect") int hallId ,
 			HttpSession session,HttpServletRequest request) {
 
 		User admin = (User) session.getAttribute("admin");
 		try {
-			Hall hallToDelete = HallDao.getInstance().getHallById(hallId);
-			AdminManager.getInstance().removeHall(hallToDelete, admin);
+			Hall hallToDelete = hallDao.getHallById(hallId);
+			adminManager.removeHall(hallToDelete, admin);
 			
 		} catch (SQLException e) {
 			request.setAttribute("exception", e);
@@ -322,9 +370,12 @@ public class AdminController {
 	
 
 	@RequestMapping(value = "/addMovie", method = RequestMethod.POST)
-	public String addMovie(@RequestParam("title") String title, @RequestParam("description") String description,
-			@RequestParam("duration") double duration, @RequestParam("file") MultipartFile uploadedFile
-			, HttpSession session, Model model,HttpServletRequest request) {
+	public String addMovie(
+			@RequestParam("title") String title,
+			@RequestParam("description") String description,
+			@RequestParam("duration") double duration,
+			@RequestParam("file") MultipartFile uploadedFile,
+			HttpSession session, Model model,HttpServletRequest request) {
 	
 
 		User admin = (User) session.getAttribute("admin");
@@ -333,12 +384,12 @@ public class AdminController {
 			Double rating = 0.0;
 			
 			Movie movie = new Movie(title, description, rating, duration);
-			AdminManager.getInstance().addNewMovie(movie, admin);
+			adminManager.addNewMovie(movie, admin);
 			
 			String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;
 			movie.setFile_location(file_location);
 			
-			MovieDao.getInstance().updateFileLocaiton(movie,file_location);	
+			movieDao.updateFileLocaiton(movie,file_location);	
 			
 			File serverFile = new File(file_location);
 			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -363,8 +414,17 @@ public class AdminController {
 
 	//adminPanel.jsp -> removeMovie.jsp
 		@RequestMapping(value = "/removeMoviePage", method = RequestMethod.GET)
-		public String getToRemoveMovie() {
-			return "removeMovie";
+		public String getToRemoveMovie(Model springModel,HttpServletRequest request) {
+			try {
+				springModel.addAttribute("movies", movieDao.getAllMovies());
+				return "removeMovie";
+			} catch (SQLException e) {
+				request.setAttribute("exception", e);
+				return "error";
+			} catch (InvalidDataException e) {
+				request.setAttribute("exception", e);
+				return "error";
+			}
 		}
 		
 
@@ -374,8 +434,8 @@ public class AdminController {
 
 			User admin = (User) session.getAttribute("admin");
 			try {
-			    Movie movieToDelete=MovieDao.getInstance().getMovieById(movieId);
-				AdminManager.getInstance().removeMovie(movieToDelete, admin);
+			    Movie movieToDelete= movieDao.getMovieById(movieId);
+				adminManager.removeMovie(movieToDelete, admin);
 				
 			} catch (SQLException e) {
 				request.setAttribute("exception", e);

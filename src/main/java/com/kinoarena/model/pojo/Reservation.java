@@ -10,49 +10,47 @@ public class Reservation {
 	//TODO change later
 	private static final int MAX_SEATS_FOR_A_RESERVATIONS = 80000;
 	private int id;
-	private int user_id;
-	private int broadcast_id;
-	private int seats_number;
+	private int userId;
+	private int broadcastId;
+	private int seatsNumber;
 	private ArrayList<Seat> allSeatsReserved;
 	private LocalDateTime timeReservationIsMade;
 	
 	
-	public Reservation(int user_id, int broadcast_id) {
-		setUser_id(user_id);
-		setBroadcast_id(broadcast_id);
+	public Reservation(int userId, int broadcastId) {
+		setUserId(userId);
+		setBroadcastId(broadcastId);
 		this.allSeatsReserved = new ArrayList<Seat>();
 		this.timeReservationIsMade = LocalDateTime.now();
 	}
 	
-	public Reservation(int user_id, int broadcast_id, ArrayList<Seat> allSeatsReserved) throws InvalidDataException {
-		setUser_id(user_id);
-		setBroadcast_id(broadcast_id);
+	public Reservation(int userId, int broadcastId, ArrayList<Seat> allSeatsReserved) throws InvalidDataException {
+		setUserId(userId);
+		setBroadcastId(broadcastId);
 		setAllSeatsReserved(allSeatsReserved);
-		setSeats_number(allSeatsReserved.size());
+		setSeatsNumber(allSeatsReserved.size());
 		this.timeReservationIsMade = LocalDateTime.now();
 	}
 	
-	public Reservation(int id,int user_id, int broadcast_id, ArrayList<Seat> allSeatsReserved) throws InvalidDataException {
-		this(user_id, broadcast_id, allSeatsReserved);
+	public Reservation(int id,int userId, int broadcastId, ArrayList<Seat> allSeatsReserved) throws InvalidDataException {
+		this(userId, broadcastId, allSeatsReserved);
 		setId(id);
 	}
 
-	public Reservation(int id, int user_id, int broadcast_id, ArrayList<Seat> allSeatsReserved,
-			LocalDateTime timeReservationIsMade) throws InvalidDataException {
+	public Reservation(int id, int userId, int broadcastId, ArrayList<Seat> allSeatsReserved,LocalDateTime timeReservationIsMade) throws InvalidDataException {
 		setId(id);
-		setUser_id(user_id);
-		setBroadcast_id(broadcast_id);
+		setUserId(userId);
+		setBroadcastId(broadcastId);
 		setAllSeatsReserved(allSeatsReserved);
-		setSeats_number(allSeatsReserved.size());
+		setSeatsNumber(allSeatsReserved.size());
 		setTimeReservationIsMade(timeReservationIsMade);
 	}
 	
-	public Reservation(int id, int user_id, int broadcast_id,int seats_number,
-			LocalDateTime timeReservationIsMade) throws InvalidDataException {
+	public Reservation(int id, int userId, int broadcastId,int seats_number,LocalDateTime timeReservationIsMade) throws InvalidDataException {
 		setId(id);
-		setUser_id(user_id);
-		setBroadcast_id(broadcast_id);
-		setSeats_number(seats_number);
+		setUserId(userId);
+		setBroadcastId(broadcastId);
+		setSeatsNumber(seats_number);
 		setTimeReservationIsMade(timeReservationIsMade);
 	}
 
@@ -63,16 +61,14 @@ public class Reservation {
 	}
 	
 	
-	public int getUser_id() {
-		return user_id;
+	public int getUserId() {
+		return userId;
 	}
 	
-	
-	public int getBroadcast_id() {
-		return broadcast_id;
+	public int getBroadcastId() {
+		return broadcastId;
 	}
-	
-	
+
 	public LocalDateTime getTimeReservationIsMade() {
 		return timeReservationIsMade;
 	}
@@ -81,21 +77,22 @@ public class Reservation {
 		return allSeatsReserved;
 	}
 	
-	public int getSeats_number() {
-		return seats_number;
+	public int getSeatsNumber() {
+		return seatsNumber;
 	}
-	//setters:
 	
+	//setters:
+
 	public void setId(int id) {
 		this.id = id;
 	}
 	
-	public void setUser_id(int user_id) {
-		this.user_id = user_id;
+	public void setBroadcastId(int broadcastId) {
+		this.broadcastId = broadcastId;
 	}
-	
-	public void setBroadcast_id(int broadcast_id) {
-		this.broadcast_id = broadcast_id;
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 	public void setTimeReservationIsMade(LocalDateTime timeReservationIsMade) throws InvalidDataException {
@@ -113,19 +110,20 @@ public class Reservation {
 		this.allSeatsReserved = allSeatsReserved;
 	}
 	
-	public void setSeats_number(int seats_number) throws InvalidDataException {
-		if(seats_number < 0 || seats_number > MAX_SEATS_FOR_A_RESERVATIONS) {
+
+	public void setSeatsNumber(int seatsNumber) throws InvalidDataException {
+		if(seatsNumber < 0 || seatsNumber > MAX_SEATS_FOR_A_RESERVATIONS) {
 			throw new InvalidDataException("Invalid number of seats");
 		}
 		else {
-			this.seats_number = seats_number;
+			this.seatsNumber = seatsNumber;
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "Reservation [id=" + id + ", user_id=" + user_id + ", broadcast_id=" + broadcast_id + ", seats_number="
-				+ seats_number + ", timeReservationIsMade=" + timeReservationIsMade + "]";
+		return "Reservation [id=" + id + ", userId=" + userId + ", broadcast_id=" + broadcastId + ", seats_number="
+				+ seatsNumber + ", timeReservationIsMade=" + timeReservationIsMade + "]";
 	}
 
 

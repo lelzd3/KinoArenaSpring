@@ -9,23 +9,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.springframework.stereotype.Component;
+
 import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Broadcast;
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
-
+@Component
 public class BroadcastDao implements IBroadcastDao {
 
-	private static BroadcastDao instance;
 	private Connection connection;
-
-	public synchronized static BroadcastDao getInstance() {
-		if (instance == null) {
-			instance = new BroadcastDao();
-		}
-		return instance;
-	}
 
 	private BroadcastDao() {
 		connection = DBManager.getInstance().getConnection();
@@ -65,15 +59,19 @@ public class BroadcastDao implements IBroadcastDao {
 
 	@Override
 	public Collection<Broadcast> getAllBroadcastsForAMovie(Movie m) throws SQLException, InvalidDataException  {
-		PreparedStatement s = connection.prepareStatement(
-				"SELECT id,cinemas_id,movies_id,halls_id,projection_time,free_sits,price FROM broadcasts WHERE movies_id = ?");
+		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time,free_sits,price FROM broadcasts WHERE movies_id = ?");
 		s.setInt(1, m.getId());
 		ArrayList<Broadcast> broadcasts = new ArrayList<>();
 		ResultSet result = s.executeQuery();
 		while (result.next()) {
 			LocalDateTime time = result.getTimestamp("projection_time").toLocalDateTime();
-			Broadcast b = new Broadcast(result.getInt("id"), result.getInt("cinemas_id"), result.getInt("movies_id"),
-					result.getInt("halls_id"), time, result.getDouble("price"));
+			Broadcast b = new Broadcast(
+					result.getInt("id"),
+					result.getInt("cinemas_id"),
+					result.getInt("movies_id"),
+					result.getInt("halls_id"),
+					time,
+					result.getDouble("price"));
 			broadcasts.add(b);
 		}
 		return broadcasts;

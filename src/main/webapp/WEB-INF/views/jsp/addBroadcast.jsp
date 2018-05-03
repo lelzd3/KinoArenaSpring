@@ -36,7 +36,7 @@
 			Select Hall
 			<select name="hallSelect">
 				<c:forEach var="hall" items="${halls}"  >
-			 		 <option value="${hall.id}">${hall.id} , ${hall.cinema_id}</option>
+			 		 <option value="${hall.id}">${hall.id} , ${hall.cinemaId}</option>
 				</c:forEach>
 			</select>
 			<br>

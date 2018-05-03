@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
+
+import org.springframework.stereotype.Component;
 
 import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Movie;
@@ -17,19 +18,11 @@ import com.kinoarena.utilities.exceptions.IlligalAdminActionException;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 
-
+@Component
 public class UserDao implements IUserDao{
 	
-	private static UserDao instance;
 	private Connection connection;
-	
-	public synchronized static UserDao getInstance() {
-		if(instance == null) {
-			instance = new UserDao();
-		}
-		return instance;
-	}
-	
+
 	private UserDao() {
 		connection = DBManager.getInstance().getConnection();
 	}
@@ -233,8 +226,7 @@ public class UserDao implements IUserDao{
 		} else if (!u.getIsBanned() && !isBanned) {
 			throw new IlligalAdminActionException();
 		} else {
-			PreparedStatement ps = connection.prepareStatement("UPDATE users SET isBanned = ? WHERE user_id = ?",
-					Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = connection.prepareStatement("UPDATE users SET isBanned = ? WHERE user_id = ?",Statement.RETURN_GENERATED_KEYS);
 			ps.setBoolean(1, isBanned);
 			ps.setInt(2, u.getId());
 			ps.executeUpdate();
@@ -293,7 +285,7 @@ public class UserDao implements IUserDao{
 	}
 
 	public Collection<User> GetAllUsersButNoAdmins() throws SQLException, InvalidDataException {
-		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin FROM users  WHERE is_Admin = 0");
+		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin,age FROM users  WHERE is_Admin = 0");
 		ResultSet result = ps.executeQuery();
 		ArrayList<User> users = new ArrayList<User>();
 		
@@ -414,7 +406,7 @@ public class UserDao implements IUserDao{
 			statment.close();
 		}
 		
-public boolean isMovieInWatchlist(int userId, int movieId) throws SQLException {
+		public boolean isMovieInWatchlist(int userId, int movieId) throws SQLException {
 			
 			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
 			ps.setInt(1, userId);

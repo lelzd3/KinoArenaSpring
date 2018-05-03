@@ -34,8 +34,7 @@ public class DBManager {
 		System.out.println("Driver loaded");
 		// create connection
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://" + DB_IP + ":" + DB_PORT + "/" + DB_NAME, DB_USER,
-					DB_PASS);
+			connection = DriverManager.getConnection("jdbc:mysql://" + DB_IP + ":" + DB_PORT + "/" + DB_NAME, DB_USER, DB_PASS);
 
 			System.out.println("Connection created");
 
