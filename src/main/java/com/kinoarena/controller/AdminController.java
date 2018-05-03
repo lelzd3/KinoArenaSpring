@@ -67,60 +67,36 @@ public class AdminController {
 	
 	//adminPanel.jsp->removeBroadcast.jsp
 	@RequestMapping(value = "/removeBroadcastPage", method = RequestMethod.GET)
-	public String getToRemoveBroadcast(Model springModel,HttpServletRequest request) {
-		try {
-			springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
-			return "removeBroadcast";
-		} catch (InvalidDataException | SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+	public String getToRemoveBroadcast(Model springModel,HttpServletRequest request) throws InvalidDataException, SQLException {
 		
+		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
+		return "removeBroadcast";
+
 	}
 	
 	
 	@RequestMapping(value = "/removeBroadcast", method = RequestMethod.POST)
-	public String removeBroadcast(@RequestParam("broadcastSelect") int broadcastId, HttpSession session,HttpServletRequest request) {
-		try {
-			User admin = (User) session.getAttribute("admin");
-			try {
-				Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
-				adminManager.removeBroadcast(broadcast, admin);
-			} catch (NotAnAdminException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (InvalidDataException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			}
+	public String removeBroadcast(@RequestParam("broadcastSelect") int broadcastId, HttpSession session,HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		User admin = (User) session.getAttribute("admin");
+	
+		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
+		adminManager.removeBroadcast(broadcast, admin);
+
 		return "adminMain";
 	}
 
 	//adminPanel.jsp -> addBroadcast.jsp
 	@RequestMapping(value = "/addBroadcastPage", method = RequestMethod.GET)
-	public String getToAddBroadcast(Model springModel,HttpSession session,HttpServletRequest request) {
-		
-		try {
-			User admin = (User) session.getAttribute("admin");
+	public String getToAddBroadcast(Model springModel,HttpSession session,HttpServletRequest request) throws SQLException, InvalidDataException {
+	
+		User admin = (User) session.getAttribute("admin");
 
-			springModel.addAttribute("movies", movieDao.getAllMovies());
-			springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
-			springModel.addAttribute("halls", hallDao.getAllHalls());
-			
-			return "addBroadcast";
-		}catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		springModel.addAttribute("movies", movieDao.getAllMovies());
+		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+		springModel.addAttribute("halls", hallDao.getAllHalls());
 		
+		return "addBroadcast";
 	}
 	
 	@RequestMapping(value = "/addBroadcast", method = RequestMethod.POST)
@@ -130,68 +106,35 @@ public class AdminController {
 					@RequestParam("hallSelect") int hallId,
 					@RequestParam("projection_time") String time,
 					@RequestParam("free_sits") int freeSits,
-					@RequestParam("price") double price, HttpSession session, HttpServletRequest request) {
+					@RequestParam("price") double price, HttpSession session, HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 		
-		try {
-			User admin = (User) session.getAttribute("admin");
-			try {
-				LocalDateTime projectionTime = LocalDateTime.parse(time);
-				Broadcast newBroadcast = new Broadcast(cinemaId, movieId, hallId, projectionTime, price);
-				adminManager.addNewBroadcast(newBroadcast, admin);
+		User admin = (User) session.getAttribute("admin");
 
-			} catch (NotAnAdminException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (InvalidDataException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			}
+		LocalDateTime projectionTime = LocalDateTime.parse(time);
+		Broadcast newBroadcast = new Broadcast(cinemaId, movieId, hallId, projectionTime, price);
+		adminManager.addNewBroadcast(newBroadcast, admin);
 
-		} catch (SQLException e) {
-			System.out.println("SQL Exception in /admin/confirmed");
-			e.printStackTrace();
-			return "error";
-		}
+
 		return "adminMain";
 	}
 
 	//adminPanel.jsp -> makeAdmin.jsp
 	@RequestMapping(value = "/makeAdminPage", method = RequestMethod.GET)
-	public String getToMakeAdmin(Model springModel,HttpServletRequest request) {
+	public String getToMakeAdmin(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
 
-		try {
-			springModel.addAttribute("usersThatAreNotAdmin", userDao.GetAllUsersButNoAdmins());
-			return "makeAdmin";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-	
+		springModel.addAttribute("usersThatAreNotAdmin", userDao.GetAllUsersButNoAdmins());
+		return "makeAdmin";
 	}
 	
 	
 	@RequestMapping(value = "/makeAdmin", method = RequestMethod.POST)
-	public String infoAdminCreateAdmin(@RequestParam("usersSelect") String email, HttpSession session, Model model,HttpServletRequest request) {
+	public String infoAdminCreateAdmin(@RequestParam("usersSelect") String email, HttpSession session, Model model,HttpServletRequest request) throws NotAnAdminException, SQLException, InvalidDataException {
 
 		User user = (User) session.getAttribute("admin");
 		if (user != null && user.getIsAdmin()) {
-			try {
-
-				Validations.verifyEmail(email);
-				adminManager.changeUserIsAdminStatus(user, email.trim());
-			} catch (SQLException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (InvalidDataException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (NotAnAdminException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			}
+	
+			Validations.verifyEmail(email);
+			adminManager.changeUserIsAdminStatus(user, email.trim());
 		}
 		model.addAttribute("create", "Admin is create");
 		return "adminMain";
@@ -208,56 +151,32 @@ public class AdminController {
 	public String addCinema(
 			@RequestParam("address") String address,
 			@RequestParam("name") String name,
-			HttpSession session, Model model, HttpServletRequest request) {
+			HttpSession session, Model model, HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 
 		User admin = (User) session.getAttribute("admin");
-		try {
-			Cinema newCinema = new Cinema(name, address);
-			adminManager.addNewCinema(newCinema, admin);
+		Cinema newCinema = new Cinema(name, address);
+		adminManager.addNewCinema(newCinema, admin);
 
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (NotAnAdminException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
 		return "adminMain";
     }
 	// adminMain.jsp -> removeCinema.jsp
 	@RequestMapping(value = "/removeCinemaPage", method = RequestMethod.GET)
-	public String getToRemoveCinema(Model springModel,HttpServletRequest request) {
-		try {
-			springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
-			return "removeCinema";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-
+	public String getToRemoveCinema(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
+		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+		return "removeCinema";
 	}
 	
 	@RequestMapping(value = "/removeCinema",method = RequestMethod.POST)
 	public String removeCinema(
 			@RequestParam("cinemaSelect") Integer cinemaId,
-			HttpSession session,HttpServletRequest request) {
-		try {
-			User admin = (User) session.getAttribute("admin");
-			Cinema cinemaToDelete = cinemaDao.getCinemaById(cinemaId);
+			HttpSession session,HttpServletRequest request) throws SQLException, InvalidDataException, NotAnAdminException {
 
-			adminManager.removeCinema(cinemaToDelete,admin);
-			
-			return "adminMain";
-		} catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		User admin = (User) session.getAttribute("admin");
+		Cinema cinemaToDelete = cinemaDao.getCinemaById(cinemaId);
+
+		adminManager.removeCinema(cinemaToDelete,admin);
+		
+		return "adminMain";
 	}
 
 	//adminPanel.jsp->addHall.jsp
@@ -271,24 +190,14 @@ public class AdminController {
 	public String addHall(
 			@RequestParam("cinemaSelect") int cinemaId ,
 			@RequestParam("seats") int seats,
-			HttpSession session,HttpServletRequest request, Model springModel) {
+			HttpSession session,HttpServletRequest request, Model springModel) throws InvalidDataException, SQLException, NotAnAdminException {
 
 		User admin = (User) session.getAttribute("admin");
-		try {
-			Hall newHall = new Hall(seats, cinemaId);
-			springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
-			adminManager.addNewHall(newHall, admin);
-			
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (NotAnAdminException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+
+		Hall newHall = new Hall(seats, cinemaId);
+		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+		adminManager.addNewHall(newHall, admin);
+	
 		return "adminMain";
 	}
 
@@ -303,62 +212,34 @@ public class AdminController {
 	public String setDiscount(
 			@RequestParam("broadcastSelect") int broadcastId,
 			@RequestParam("percent") double percentForDiscount,
-			HttpSession session,HttpServletRequest request) {
+			HttpSession session,HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 		
-		try {
-			User admin = (User) session.getAttribute("admin");
-			try {
-				Broadcast broadcastForDiscount = broadcastDao.getBroadcastById(broadcastId);
-				adminManager.setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
+		User admin = (User) session.getAttribute("admin");
+		
+		Broadcast broadcastForDiscount = broadcastDao.getBroadcastById(broadcastId);
+		adminManager.setPromoPercent(admin , broadcastForDiscount, percentForDiscount);
 
-			} catch (NotAnAdminException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (InvalidDataException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			}
-
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
 		return "adminMain";
 	}
 
 	//adminPanel.jsp -> removeHall.jsp
 	@RequestMapping(value = "/removeHallPage", method = RequestMethod.GET)
-	public String getToRemoveHall(Model springModel, HttpServletRequest request) {
-		try {
-			springModel.addAttribute("halls",hallDao.getAllHalls());
-			return "removeHall";
-		} catch (SQLException | InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+	public String getToRemoveHall(Model springModel, HttpServletRequest request) throws SQLException, InvalidDataException {
+		
+		springModel.addAttribute("halls",hallDao.getAllHalls());
+		return "removeHall";
 	}
 	
 	
 	@RequestMapping(value = "/removeHall", method = RequestMethod.POST)
 	public String addHall(
 			@RequestParam("hallSelect") int hallId ,
-			HttpSession session,HttpServletRequest request) {
+			HttpSession session,HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 
 		User admin = (User) session.getAttribute("admin");
-		try {
-			Hall hallToDelete = hallDao.getHallById(hallId);
-			adminManager.removeHall(hallToDelete, admin);
-			
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (NotAnAdminException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		Hall hallToDelete = hallDao.getHallById(hallId);
+		adminManager.removeHall(hallToDelete, admin);
+
 		return "adminMain";
 	}
 
@@ -375,80 +256,48 @@ public class AdminController {
 			@RequestParam("description") String description,
 			@RequestParam("duration") double duration,
 			@RequestParam("file") MultipartFile uploadedFile,
-			HttpSession session, Model model,HttpServletRequest request) {
+			HttpSession session, Model model,HttpServletRequest request) throws InvalidDataException, SQLException, NotAnAdminException, IOException {
 	
 
 		User admin = (User) session.getAttribute("admin");
-		try {
 	
-			Double rating = 0.0;
-			
-			Movie movie = new Movie(title, description, rating, duration);
-			adminManager.addNewMovie(movie, admin);
-			
-			String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;
-			movie.setFile_location(file_location);
-			
-			movieDao.updateFileLocaiton(movie,file_location);	
-			
-			File serverFile = new File(file_location);
-			Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-			return "adminMain";
+		Double rating = 0.0;
 		
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (NotAnAdminException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (IOException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		Movie movie = new Movie(title, description, rating, duration);
+		adminManager.addNewMovie(movie, admin);
+		
+		String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;
+		movie.setFile_location(file_location);
+		
+		movieDao.updateFileLocaiton(movie,file_location);	
+		
+		File serverFile = new File(file_location);
+		Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+		return "adminMain";
 
     }
 
 	//adminPanel.jsp -> removeMovie.jsp
-		@RequestMapping(value = "/removeMoviePage", method = RequestMethod.GET)
-		public String getToRemoveMovie(Model springModel,HttpServletRequest request) {
-			try {
-				springModel.addAttribute("movies", movieDao.getAllMovies());
-				return "removeMovie";
-			} catch (SQLException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (InvalidDataException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			}
-		}
+	@RequestMapping(value = "/removeMoviePage", method = RequestMethod.GET)
+	public String getToRemoveMovie(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
+			
+		springModel.addAttribute("movies", movieDao.getAllMovies());
+		return "removeMovie";
+	}
 		
 
-		@RequestMapping(value = "/removeMovie", method = RequestMethod.POST)
-		public String removeMovie(@RequestParam("movieSelect") int movieId,
-			HttpSession session, Model model,HttpServletRequest request) {
+	@RequestMapping(value = "/removeMovie", method = RequestMethod.POST)
+	public String removeMovie(@RequestParam("movieSelect") int movieId,
+		HttpSession session, Model model,HttpServletRequest request) throws SQLException, InvalidDataException, NotAnAdminException {
 
-			User admin = (User) session.getAttribute("admin");
-			try {
-			    Movie movieToDelete= movieDao.getMovieById(movieId);
-				adminManager.removeMovie(movieToDelete, admin);
-				
-			} catch (SQLException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (NotAnAdminException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			} catch (InvalidDataException e) {
-				request.setAttribute("exception", e);
-				return "error";
-			}
-			return "adminMain";
-	    }
+		User admin = (User) session.getAttribute("admin");
+	
+		Movie movieToDelete= movieDao.getMovieById(movieId);
+		adminManager.removeMovie(movieToDelete, admin);
+	
+		return "adminMain";
+	}
 	
 		
 }

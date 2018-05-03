@@ -38,9 +38,10 @@ public class UserFavoriteController {
 	}
 	
 	@RequestMapping(value = "/addInFavorite", method = RequestMethod.POST)
-	public String addInFavorite(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,	HttpSession session,HttpServletRequest request){
-		try {
+	public String addInFavorite(
+			@RequestParam("hiddenMovieId") Integer movieId,
+			HttpSession session,HttpServletRequest request) throws SQLException{
+		
 			User user = (User) session.getAttribute("user");
 			
 			String jspName = request.getParameter("hiddenJspName");
@@ -48,18 +49,13 @@ public class UserFavoriteController {
 			userDao.addInFavorite(user.getId(), movieId);
 			
 			return jspName;
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
 	}
 	
 	@RequestMapping(value = "/removeFromFavorite", method = RequestMethod.POST)
-	public String removeFromFavorite(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,
-			HttpSession session,HttpServletRequest request){
+	public String removeFromFavorite(
+			@RequestParam("hiddenMovieId") Integer movieId,
+			HttpSession session,HttpServletRequest request) throws SQLException{
 
-		try {
 			User user = (User) session.getAttribute("user");
 			
 			String jspName = request.getParameter("hiddenJspName");
@@ -67,10 +63,6 @@ public class UserFavoriteController {
      		userDao.removeFavouriteMovie(user.getId(), movieId);
 
 			return jspName;
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
 	}
 
 }

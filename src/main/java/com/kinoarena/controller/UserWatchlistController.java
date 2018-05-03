@@ -30,55 +30,39 @@ public class UserWatchlistController {
 	private UserDao userDao;
 	
 	@RequestMapping(value = "/viewUserWatchlist", method = RequestMethod.GET)
-	public String infoUserFavourites(HttpSession session,
-			Model model,HttpServletRequest request){
-		User user = (User) session.getAttribute("user");
-		try {
-			ArrayList<Movie> movie = userDao.viewWatchlist(user);
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		} catch (InvalidDataException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+	public String infoUserFavourites() throws InvalidDataException, SQLException{
+
 		return "user_watchlist";
 	}
 	
 	@RequestMapping(value = "/addInWatchlist", method = RequestMethod.POST)
-	public String addInFavorite(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,	HttpSession session,HttpServletRequest request){
-		try {
-			User user = (User) session.getAttribute("user");
-			
-			String jspName = request.getParameter("hiddenJspName");
-			
-			userDao.addInWatchlist(user.getId(), movieId);
-			
-			return jspName;
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+	public String addInFavorite(
+			@RequestParam("hiddenMovieId") Integer movieId,
+			HttpSession session,HttpServletRequest request) throws SQLException{
+
+		User user = (User) session.getAttribute("user");
+		
+		String jspName = request.getParameter("hiddenJspName");
+		
+		userDao.addInWatchlist(user.getId(), movieId);
+		
+		return jspName;
+	
 	}
 	
 	@RequestMapping(value = "/removeFromWatchlist", method = RequestMethod.POST)
-	public String removeFromFavorite(@RequestParam("hiddenMovieId") Integer movieId,
-			Model model,
-			HttpSession session,HttpServletRequest request){
+	public String removeFromFavorite(
+			@RequestParam("hiddenMovieId") Integer movieId,
+			HttpSession session,HttpServletRequest request) throws SQLException{
 
-		try {
-			User user = (User) session.getAttribute("user");
-			
-			String jspName = request.getParameter("hiddenJspName");
-			
-     		userDao.removeFavouriteWatchlist(user.getId(), movieId);
+		User user = (User) session.getAttribute("user");
+		
+		String jspName = request.getParameter("hiddenJspName");
+		
+ 		userDao.removeFavouriteWatchlist(user.getId(), movieId);
 
-			return jspName;
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		return jspName;
+	
 	}
 	
 

@@ -65,89 +65,76 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpSession session){
+	public String login(HttpServletRequest request,HttpSession session) throws InvalidDataException, SQLException, WrongCredentialsException{
+		context.setAttribute("broadcasts", broadcastDao.getAllBroadcasts());
+		context.setAttribute("movies", movieDao.getAllMovies());
+		context.setAttribute("halls", hallDao.getAllHalls());
+		context.setAttribute("cinemas", cinemaDao.getAllCinemas());
+		
+		session.setAttribute("movieDao",movieDao);
+		session.setAttribute("userDao",userDao);
+		session.setAttribute("broadcastDao",broadcastDao);
+		session.setAttribute("reservationDao", reservationDao);
+		session.setAttribute("cinemaDao", cinemaDao);
+		session.setAttribute("hallDao", hallDao);
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password"); 
+		
+		userDao.loginCheck(username, password);
+		User user = userDao.getUser(username);
+		if(user.getIsAdmin()) {
 
-		try {
-			context.setAttribute("broadcasts", broadcastDao.getAllBroadcasts());
-			context.setAttribute("movies", movieDao.getAllMovies());
-			context.setAttribute("halls", hallDao.getAllHalls());
-			context.setAttribute("cinemas", cinemaDao.getAllCinemas());
+			session.setAttribute("admin", user);
+		
+			//TODO USE USER MANAGER
 			
-			session.setAttribute("movieDao",movieDao);
-			session.setAttribute("userDao",userDao);
-			session.setAttribute("broadcastDao",broadcastDao);
-			session.setAttribute("reservationDao", reservationDao);
-			session.setAttribute("cinemaDao", cinemaDao);
-			session.setAttribute("hallDao", hallDao);
+			context.setAttribute("users", userDao.getAllUsers());
+			context.setAttribute("usersButNotAdmins", userDao.GetAllUsersButNoAdmins());
 			
-			String username = request.getParameter("username");
-			String password = request.getParameter("password"); 
-			
-			userDao.loginCheck(username, password);
-			User user = userDao.getUser(username);
-			if(user.getIsAdmin()) {
-
-				session.setAttribute("admin", user);
-			
-				//TODO USE USER MANAGER
-				
-				context.setAttribute("users", userDao.getAllUsers());
-				context.setAttribute("usersButNotAdmins", userDao.GetAllUsersButNoAdmins());
-				
-				return "adminMain";
-			}
-			else {
-				session.setAttribute("user", user);
-				return "main";
-			}
-			
+			return "adminMain";
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("exception", e);
-			return "error";
+		else {
+			session.setAttribute("user", user);
+			return "main";
 		}
+	
 	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST )
-	public String register(HttpServletRequest request,HttpSession s){
-		try {
-			String username = request.getParameter("username");
-			String pass1 = request.getParameter("password1");
-			String pass2 = request.getParameter("password2");
-			String email = request.getParameter("email");
-			String firstName = request.getParameter("firstName");
-			String lastName = request.getParameter("lastName");
-			Integer age = Integer.valueOf(request.getParameter("age"));
-			System.out.println(age);
+	public String register(HttpServletRequest request,HttpSession s) throws WrongCredentialsException, InvalidDataException, SQLException{
+	
+		String username = request.getParameter("username");
+		String pass1 = request.getParameter("password1");
+		String pass2 = request.getParameter("password2");
+		String email = request.getParameter("email");
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		Integer age = Integer.valueOf(request.getParameter("age"));
+		System.out.println(age);
 			
-			if (username.isEmpty() || username.length() < 5) {
-				throw new WrongCredentialsException("username must be at least 5 chars long");
-			}
-			if (!pass1.equals(pass2)) {
-				throw new WrongCredentialsException("passwords missmatch");
-			}
-			if (!email.contains("@") || email.isEmpty()) {
-				throw new WrongCredentialsException("Invalid entered email");
-			}
-			if (firstName.isEmpty()) {
-				throw new WrongCredentialsException("Invalid entered first name");
-			}
-			if (lastName.isEmpty()) {
-				throw new WrongCredentialsException("Invalid entered last name");
-			}
-			// creating new user with these details
-			User user = new User(age , username, pass1, firstName, lastName, email);
-			// adding to db
-			userDao.addUser(user);
-			
-			s.setAttribute("user", user);
-			return "login";
+		if (username.isEmpty() || username.length() < 5) {
+			throw new WrongCredentialsException("username must be at least 5 chars long");
+		}
+		if (!pass1.equals(pass2)) {
+			throw new WrongCredentialsException("passwords missmatch");
+		}
+		if (!email.contains("@") || email.isEmpty()) {
+			throw new WrongCredentialsException("Invalid entered email");
+		}
+		if (firstName.isEmpty()) {
+			throw new WrongCredentialsException("Invalid entered first name");
+		}
+		if (lastName.isEmpty()) {
+			throw new WrongCredentialsException("Invalid entered last name");
+		}
+		// creating new user with these details
+		User user = new User(age , username, pass1, firstName, lastName, email);
+		// adding to db
+		userDao.addUser(user);
+		
+		s.setAttribute("user", user);
+		return "login";
 
-		}
-		catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
 	}
 	
 	
@@ -180,33 +167,24 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
-	public String viewUserReservations(HttpSession session,
-			Model model,HttpServletRequest request){
+	public String viewUserReservations(HttpSession session,Model model,HttpServletRequest request) throws SQLException{
 		
 		User user = (User) session.getAttribute("user");
-		try {
-			ArrayList<String> reservations = reservationDao.getAllReservationsForUser(user);
-			model.addAttribute("reservations", reservations);
-			return "viewAllReservations";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-		
+
+		ArrayList<String> reservations = reservationDao.getAllReservationsForUser(user);
+		model.addAttribute("reservations", reservations);
+		return "viewAllReservations";
+
 	}
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.POST)
-	public String cancelReservation(HttpSession session, HttpServletRequest request){
+	public String cancelReservation(HttpSession session, HttpServletRequest request) throws SQLException{
 		User user = (User) session.getAttribute("user");
-		try {
-			String reservationSelected = request.getParameter("selectedReservation");
-			reservationDao.deleteReservation(reservationSelected);
-			return "viewAllReservations";
-		} catch (SQLException e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
-		
+	
+		String reservationSelected = request.getParameter("selectedReservation");
+		reservationDao.deleteReservation(reservationSelected);
+		return "viewAllReservations";
+	
 	}
 	
 	

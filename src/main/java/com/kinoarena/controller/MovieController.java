@@ -74,140 +74,113 @@ public class MovieController {
 	}
 
 	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
-	public String rateMovie(HttpServletRequest request) {
-		try {
-			User user = (User) request.getSession().getAttribute("user");
-			
-			String jspName = request.getParameter("hiddenJspName");
-			
-			int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
-			int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
+	public String rateMovie(HttpServletRequest request) throws SQLException, InvalidDataException {
+		User user = (User) request.getSession().getAttribute("user");
+		
+		String jspName = request.getParameter("hiddenJspName");
+		
+		int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
+		int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
 
-			Movie movie = movieDao.getMovieById(movieIdToBeRated);
-			userDao.rateMovie(user, movie, newRating);
-			return jspName;
-		} catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+		Movie movie = movieDao.getMovieById(movieIdToBeRated);
+		userDao.rateMovie(user, movie, newRating);
+		return jspName;
 	}
 
 	@RequestMapping(value = "/reserveInterim", method = RequestMethod.POST)
-	public String reserveInterim(HttpServletRequest request, HttpServletResponse response, Model springModel) {
-		try {
-            //here we need user due to check his ages for discount
-			User user = (User) request.getSession().getAttribute("user");
-	
-			int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
-			Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
-			Cinema cinema = cinemaDao.getCinemaById(broadcast.getCinemaId());
-			Movie movie = movieDao.getMovieById(broadcast.getMovieId());
+	public String reserveInterim(HttpServletRequest request, HttpServletResponse response, Model springModel) throws SQLException, InvalidDataException {
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd EE HH:mm");
-			
-			double totalPrice = broadcast.getPrice();
-			double amountToDecrease = totalPrice * 0.2;
-			
-			//20% off on Thursday
-			if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
-				totalPrice = totalPrice - amountToDecrease;
-			}
-			//20% more if under 18
-			if(user.getAge() <= 18) {
-				totalPrice = totalPrice - amountToDecrease;
-			}
-			
-			springModel.addAttribute("cinemaName",cinema.getName());
-			springModel.addAttribute("hallId",broadcast.getHallId());
-			springModel.addAttribute("movieTitle", movie.getTitle());
-			springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
-			springModel.addAttribute("broadcastId",broadcastId);
-			springModel.addAttribute("broadcastPrice",totalPrice);
+        //here we need user due to check his ages for discount
+		User user = (User) request.getSession().getAttribute("user");
 
-			return "reservationHall";
-		} catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
+		int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
+		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
+		Cinema cinema = cinemaDao.getCinemaById(broadcast.getCinemaId());
+		Movie movie = movieDao.getMovieById(broadcast.getMovieId());
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd EE HH:mm");
+		
+		double totalPrice = broadcast.getPrice();
+		double amountToDecrease = totalPrice * 0.2;
+		
+		//20% off on Thursday
+		if(broadcast.getProjectionTime().getDayOfWeek().name().equalsIgnoreCase("Thursday")) {
+			totalPrice = totalPrice - amountToDecrease;
 		}
+		//20% more if under 18
+		if(user.getAge() <= 18) {
+			totalPrice = totalPrice - amountToDecrease;
+		}
+		
+		springModel.addAttribute("cinemaName",cinema.getName());
+		springModel.addAttribute("hallId",broadcast.getHallId());
+		springModel.addAttribute("movieTitle", movie.getTitle());
+		springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
+		springModel.addAttribute("broadcastId",broadcastId);
+		springModel.addAttribute("broadcastPrice",totalPrice);
+
+		return "reservationHall";
 
 	}
 
 	
 	@RequestMapping(value="/reserveSubmit", method=RequestMethod.POST)
-	public String reserve(HttpServletRequest request,HttpServletResponse response,Model springModel) {
-		try {
-			User user = (User) request.getSession().getAttribute("user");
-			int broadcast_id = Integer.parseInt(request.getParameter("hiddenBroadcastId"));
+	public String reserve(HttpServletRequest request,HttpServletResponse response,Model springModel) throws InvalidDataException, SQLException {
+		User user = (User) request.getSession().getAttribute("user");
+		int broadcast_id = Integer.parseInt(request.getParameter("hiddenBroadcastId"));
 
-			String s = (String) request.getParameter("hiddenSeats");
-			if (s == "") {
-				// try with isEmpty()
-				return "viewAllMovies";
-			}
-			String[] allSeats = s.split(",");
-			ArrayList<Seat> selectedSeats = new ArrayList<Seat>();
-
-			for (int i = 0; i < allSeats.length; i++) {
-				String[] rowAndCow = allSeats[i].split(" ");
-				int row = Integer.parseInt(rowAndCow[0].replaceAll("\\D+", ""));
-				int col = Integer.parseInt(rowAndCow[1].replaceAll("\\D+", ""));
-
-				Seat newSeat = new Seat(row, col);
-				selectedSeats.add(newSeat);
-			}
-
-			Reservation reservation = new Reservation(user.getId(), broadcast_id, selectedSeats);
-			reservationDao.addReservation(reservation, selectedSeats);
+		String s = (String) request.getParameter("hiddenSeats");
+		if (s == "") {
+			// try with isEmpty()
 			return "viewAllMovies";
-		} catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
 		}
+		String[] allSeats = s.split(",");
+		ArrayList<Seat> selectedSeats = new ArrayList<Seat>();
+
+		for (int i = 0; i < allSeats.length; i++) {
+			String[] rowAndCow = allSeats[i].split(" ");
+			int row = Integer.parseInt(rowAndCow[0].replaceAll("\\D+", ""));
+			int col = Integer.parseInt(rowAndCow[1].replaceAll("\\D+", ""));
+
+			Seat newSeat = new Seat(row, col);
+			selectedSeats.add(newSeat);
+		}
+
+		Reservation reservation = new Reservation(user.getId(), broadcast_id, selectedSeats);
+		reservationDao.addReservation(reservation, selectedSeats);
+		return "viewAllMovies";
 	}
 
 	@RequestMapping(value="/getReservedSeats/{broadcastId}", method=RequestMethod.GET)
 	@ResponseBody
-	public String reserveSubmit(HttpServletRequest request,HttpServletResponse response,@PathVariable(value="broadcastId") Integer broadcastId) {
-		try {
-			Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
-			ArrayList<String> allSeatsForBroadcast = reservationDao.getAllOccupiedSeatsForABroadcast(broadcast);
-			//response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
-			return allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1);
-		} catch (Exception e) {
-			request.setAttribute("exception", e);
-			return "error";
-		}
+	public String reserveSubmit(HttpServletRequest request,HttpServletResponse response,@PathVariable(value="broadcastId") Integer broadcastId) throws SQLException, InvalidDataException {
+		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
+		ArrayList<String> allSeatsForBroadcast = reservationDao.getAllOccupiedSeatsForABroadcast(broadcast);
+		//response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
+		
+		return allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1);
 	}
 
 
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public String search(HttpServletRequest request, HttpServletResponse response) {
+	public String search(HttpServletRequest request, HttpServletResponse response) throws InvalidDataException, SQLException {
 		String name = request.getParameter("movie");
-		try {
-			Movie selectedMovie = movieDao.getMovieByName(name);
-			request.getSession().setAttribute("selectedMovie", selectedMovie);
-		} catch (Exception e) {
-			System.out.println("SQL Bug: " + e.getMessage());
-			return "error";
-		}
+		Movie selectedMovie = movieDao.getMovieByName(name);
+		request.getSession().setAttribute("selectedMovie", selectedMovie);
+		
 		return "viewAMovie";
 	}
 	
 	//TODO put in the rest controller
 	@RequestMapping(value="/searchAutoComplete", method = RequestMethod.GET)
 	@ResponseBody
-	public ArrayList<String> searchAutoComplete(HttpServletResponse response, HttpServletRequest request) {
-		  response.setContentType("application/json");
-        try {
-            String term = request.getParameter("term");
-            System.out.println("Data from ajax call " + term);
-            ArrayList<String> allMovies = (ArrayList<String>) movieDao.getMoviesContains(term);
-            System.out.println(allMovies.toString());
-            return allMovies;
-        } catch (Exception e) {
-      	  System.out.println("Bug: " + e.getMessage());
-			  return null;
-        }
+	public ArrayList<String> searchAutoComplete(HttpServletResponse response, HttpServletRequest request) throws SQLException {
+		response.setContentType("application/json");
+        String term = request.getParameter("term");
+        System.out.println("Data from ajax call " + term);
+        ArrayList<String> allMovies = (ArrayList<String>) movieDao.getMoviesContains(term);
+        System.out.println(allMovies.toString());
+        return allMovies;
 	}
 
 	

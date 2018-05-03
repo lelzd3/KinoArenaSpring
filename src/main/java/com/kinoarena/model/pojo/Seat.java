@@ -18,7 +18,7 @@ public class Seat {
 	}
 
 	public void setRow(int row) throws InvalidDataException {
-		if (row < 0 || row > 10) {
+		if (row < 0 || row > 8) {
 			throw new InvalidDataException("Not a valid row");
 		}
 		this.row = row;
