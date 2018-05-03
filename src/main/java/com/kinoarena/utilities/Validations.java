@@ -1,7 +1,9 @@
 package com.kinoarena.utilities;
 
+import org.springframework.stereotype.Component;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
+@Component
 public class Validations {
 
 	private static final int MIN_LENGTH_OF_PASSWORD = 8;
