@@ -43,12 +43,6 @@ public class Broadcast {
 		this.cinemaId = cinemaId;
 	}
 
-	public void setFreePlaces(int freePlaces) throws InvalidDataException {
-		if(freePlaces<0) {
-			throw new InvalidDataException("Oops , exception in broadcast pojo");
-		}
-		this.freePlaces = freePlaces;
-	}
 
 	public void setProjectionTime(LocalDateTime projectionTime) throws InvalidDataException {
 		if(projectionTime == null) {

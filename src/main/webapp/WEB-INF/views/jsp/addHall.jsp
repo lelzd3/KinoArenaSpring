@@ -19,7 +19,6 @@
 				</c:forEach>
 			</select>
 			<br>
-			Seats <input type="number" required name="seats">
 			<input type="submit" value="addHall">
 		</form> 	
 		<br>

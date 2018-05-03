@@ -130,7 +130,7 @@ public class AdminManager {
 	}
 
 
-	public void setPromoPercent(User admin, Broadcast b, double promoPercent) throws SQLException, NotAnAdminException {
+	public void setPromoPercent(User admin, Broadcast b, double promoPercent) throws SQLException, NotAnAdminException, InvalidDataException {
 		if(admin.getIsAdmin()){
 			broadcastDao.setPromoPercent(b, promoPercent);
 		}else{

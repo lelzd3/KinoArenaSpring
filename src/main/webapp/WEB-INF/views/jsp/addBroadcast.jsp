@@ -42,8 +42,6 @@
 			<br>
 			Date and Time <input type="datetime-local" name="projection_time" required>
 			<br>
-			Free sits <input type="number" name= "free_sits" required>
-			<br>
 			Price <input type="number" name= "price" step="any" required>
 			<br>
 			<input type="submit" value="addBroadcast">

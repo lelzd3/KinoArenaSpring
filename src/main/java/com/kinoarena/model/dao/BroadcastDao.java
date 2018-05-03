@@ -27,15 +27,14 @@ public class BroadcastDao implements IBroadcastDao {
 
 	@Override
 	public void addBroadcast(Broadcast b) throws InvalidDataException, SQLException {
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO broadcasts(cinemas_id , movies_id, halls_id , projection_time , free_sits,price) VALUES(?, ?, ? , ? , ?,?)");
+		PreparedStatement ps = connection.prepareStatement("INSERT INTO broadcasts(cinemas_id , movies_id, halls_id , projection_time ,price) VALUES( ?, ? , ? , ?,?)");
 		ps.setInt(1, b.getCinemaId());
 		ps.setInt(2, b.getMovieId());
 		ps.setInt(3, b.getHallId());
 		Timestamp ts = Timestamp.valueOf(b.getProjectionTime());
 		// or Timestamp ts = Timestamp.valueOf(b.getProjectionTime());
 		ps.setTimestamp(4, ts);
-		ps.setInt(5, 100);
-		ps.setDouble(6, b.getPrice());
+		ps.setDouble(5, b.getPrice());
 		ps.executeUpdate();
 		ps.close();
 
@@ -59,7 +58,7 @@ public class BroadcastDao implements IBroadcastDao {
 
 	@Override
 	public Collection<Broadcast> getAllBroadcastsForAMovie(Movie m) throws SQLException, InvalidDataException  {
-		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time,free_sits,price FROM broadcasts WHERE movies_id = ?");
+		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time, price FROM broadcasts WHERE movies_id = ?");
 		s.setInt(1, m.getId());
 		ArrayList<Broadcast> broadcasts = new ArrayList<>();
 		ResultSet result = s.executeQuery();
@@ -78,8 +77,11 @@ public class BroadcastDao implements IBroadcastDao {
 	}
 
 	@Override
-	public void setPromoPercent(Broadcast b, double promoPercent) throws SQLException {
+	public void setPromoPercent(Broadcast b, double promoPercent) throws SQLException, InvalidDataException {
 
+		if(promoPercent <= 0) {
+			throw new InvalidDataException("Invalid entered percent. It should be a positive number!");
+		}
 		PreparedStatement ps = connection.prepareStatement("Select price FROM broadcasts WHERE id = ? ");
 		ps.setInt(1, b.getId());
 		ResultSet rs = ps.executeQuery();
@@ -97,7 +99,7 @@ public class BroadcastDao implements IBroadcastDao {
 
 	@Override
 	public Collection<Broadcast> getAllBroadcasts() throws InvalidDataException, SQLException  {
-		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time,free_sits,price FROM broadcasts");
+		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time, price FROM broadcasts");
 		ArrayList<Broadcast> broadcasts = new ArrayList<>();
 		ResultSet result = s.executeQuery();
 		while (result.next()) {
@@ -111,7 +113,7 @@ public class BroadcastDao implements IBroadcastDao {
 
 	public Broadcast getBroadcastById(int id) throws SQLException, InvalidDataException {
 		// should test this method
-		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time,free_sits,price FROM broadcasts WHERE id = ?");
+		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id,movies_id,halls_id,projection_time,price FROM broadcasts WHERE id = ?");
 		s.setInt(1, id);
 
 		ResultSet result = s.executeQuery();

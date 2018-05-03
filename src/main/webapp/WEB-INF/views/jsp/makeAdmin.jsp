@@ -19,7 +19,7 @@
 			<br>
 			<select name="usersSelect">
 				<c:forEach var="user" items="${usersThatAreNotAdmin}"  >
-			 		 <option value="${user.id}">${user.username}</option>
+			 		 <option value="${user.email}">${user.username}</option>
 				</c:forEach>
 			</select>
 			<br>

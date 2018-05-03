@@ -5,18 +5,18 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public class Hall {
 
-	private static int MAX_SEATS = 100;
+	private static int MAX_SEATS = 80;
 	private int id;
 	private int seats;
 	private int cinemaId;
 	
-	public Hall(int seats,int cinemaId) throws InvalidDataException{
-		setSeats(seats);
+	public Hall(int cinemaId) throws InvalidDataException{
+		setSeats(MAX_SEATS);
 		setCinemaId(cinemaId);
 	}
 	
-	public Hall(int id,int seats,int cinemaId) throws InvalidDataException{
-		this(seats,cinemaId);
+	public Hall(int id, int cinemaId) throws InvalidDataException{
+		this(cinemaId);
 		setId(id);
 	}
 

@@ -105,7 +105,6 @@ public class AdminController {
 					@RequestParam("cinemaSelect") int cinemaId,
 					@RequestParam("hallSelect") int hallId,
 					@RequestParam("projection_time") String time,
-					@RequestParam("free_sits") int freeSits,
 					@RequestParam("price") double price, HttpSession session, HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
 		
 		User admin = (User) session.getAttribute("admin");
@@ -189,12 +188,11 @@ public class AdminController {
 	@RequestMapping(value = "/addHall", method = RequestMethod.POST)
 	public String addHall(
 			@RequestParam("cinemaSelect") int cinemaId ,
-			@RequestParam("seats") int seats,
 			HttpSession session,HttpServletRequest request, Model springModel) throws InvalidDataException, SQLException, NotAnAdminException {
 
 		User admin = (User) session.getAttribute("admin");
 
-		Hall newHall = new Hall(seats, cinemaId);
+		Hall newHall = new Hall(cinemaId);
 		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
 		adminManager.addNewHall(newHall, admin);
 	
