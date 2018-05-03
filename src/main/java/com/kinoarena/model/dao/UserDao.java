@@ -426,14 +426,9 @@ public class UserDao implements IUserDao{
 
 		public void changeFirstName(User user, String validateName) throws SQLException, InvalidDataException {
 
-			//here is name validation
-			PreparedStatement ps = connection.prepareStatement("SELECT first_name FROM users WHERE id = ?");
-			ps.setInt(1, user.getId());
-			ResultSet result = ps.executeQuery();
-			result.next();
-			String currentName = result.getString("first_name");
+			String currentName = user.getFirstname();
 			if(!currentName.equals(validateName)) {
-				 ps = connection.prepareStatement("UPDATE users SET first_name= ? WHERE id=?;");
+				PreparedStatement ps = connection.prepareStatement("UPDATE users SET first_name= ? WHERE id=?;");
 					ps.setString(1, validateName);
 					ps.setLong(2, user.getId());
 					ps.executeUpdate();
@@ -444,14 +439,9 @@ public class UserDao implements IUserDao{
 
 		public void changeLastName(User user, String validateName) throws SQLException, InvalidDataException {
 
-			//here is name validation
-			PreparedStatement ps = connection.prepareStatement("SELECT last_name FROM users WHERE id = ?");
-			ps.setInt(1, user.getId());
-			ResultSet result = ps.executeQuery();
-			result.next();
-			String currentName = result.getString("last_name");
-			if(!currentName.equals(validateName)) {
-				 ps = connection.prepareStatement("UPDATE users SET last_name= ? WHERE id=?;");
+			String currentName = user.getLastname();
+				if(!currentName.equals(validateName)) {
+				PreparedStatement ps = connection.prepareStatement("UPDATE users SET last_name= ? WHERE id=?;");
 					ps.setString(1, validateName);
 					ps.setLong(2, user.getId());
 					ps.executeUpdate();
@@ -462,14 +452,10 @@ public class UserDao implements IUserDao{
 
 		public void changeEmail(User user, String editedEmail) throws InvalidDataException, SQLException {
 
-			//here is email validation
-			PreparedStatement ps = connection.prepareStatement("SELECT email FROM users WHERE id = ?");
-			ps.setInt(1, user.getId());
-			ResultSet result = ps.executeQuery();
-			result.next();
-			String email = result.getString("email");
+			
+			String email = user.getEmail();
 			if(!email.equals(editedEmail)) {
-				 ps = connection.prepareStatement("UPDATE users SET email= ? WHERE id=?;");
+				PreparedStatement ps = connection.prepareStatement("UPDATE users SET email= ? WHERE id=?;");
 					ps.setString(1, editedEmail);
 					ps.setLong(2, user.getId());
 					ps.executeUpdate();
@@ -479,15 +465,11 @@ public class UserDao implements IUserDao{
 		}
 
 		public void changePassword(User user, String editedPassword) throws SQLException, InvalidDataException {
+			
 			String hashedPassword = BCrypt.hashpw(editedPassword, BCrypt.gensalt());
-			//here is password validation
-			PreparedStatement ps = connection.prepareStatement("SELECT password FROM users WHERE id = ?");
-			ps.setInt(1, user.getId());
-			ResultSet result = ps.executeQuery();
-			result.next();
-			String password = result.getString("password");
+			String password = user.getPassword();
 			if(!password.equals(hashedPassword)) {
-				 ps = connection.prepareStatement("UPDATE users SET password= ? WHERE id=?;");
+				PreparedStatement ps = connection.prepareStatement("UPDATE users SET password= ? WHERE id=?;");
 					ps.setString(1, hashedPassword);
 					ps.setLong(2, user.getId());
 					ps.executeUpdate();
