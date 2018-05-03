@@ -9,8 +9,14 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Remove Movie page</title>
 	</head>
-	<body>
 	
+	<body>
+
+		<form action="adminMain" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
+
 		<form action="removeMovie" method="post" >
 			<br>
 			<select name=movieSelect>

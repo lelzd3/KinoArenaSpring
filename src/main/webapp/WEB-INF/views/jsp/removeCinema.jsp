@@ -12,6 +12,11 @@
 	
 	<body>
 	
+		<form action="adminMain" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
+	
 		<form action="removeCinema" method="post" >
 			<br>
 			<select name=cinemaSelect>

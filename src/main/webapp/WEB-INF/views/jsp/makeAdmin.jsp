@@ -7,13 +7,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Make someone an admin</title>
-		<%
-			User admin = (User) request.getSession().getAttribute("admin");
-			//TODO make it so it gets all USERS- not admin
-			ArrayList<User> users = (ArrayList<User>) application.getAttribute("usersButNotAdmins");	
-		%>
 	</head>
 	<body>
+		
+		<form action="adminMain" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
 		
 		<form action="makeAdmin" method="post" id="makeAdminForm" name="makeAdminForm">
 			<br>

@@ -7,10 +7,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Remove Hall page</title>
-
 	</head>
 	
 	<body>
+	
+		<form action="adminMain" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
 	
 		<form action="removeHall" method="post" >
 			<br>

@@ -29,10 +29,6 @@ import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 
 @Controller
 public class UserController {
-
-	//remove later with login 
-	@Autowired
-	ServletContext context;
 	
 	@Autowired
 	private MovieDao movieDao;
@@ -59,18 +55,13 @@ public class UserController {
 	}
 	
 	//from index,error and register.jsp -> login.jsp
-	@RequestMapping(value = "loginPage", method = RequestMethod.GET)
+	@RequestMapping(value = "/loginPage", method = RequestMethod.GET)
 	public String getLoginPage(){
 		return "login";
 	}
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request,HttpSession session) throws InvalidDataException, SQLException, WrongCredentialsException{
-		context.setAttribute("broadcasts", broadcastDao.getAllBroadcasts());
-		context.setAttribute("movies", movieDao.getAllMovies());
-		context.setAttribute("halls", hallDao.getAllHalls());
-		context.setAttribute("cinemas", cinemaDao.getAllCinemas());
-		
 		session.setAttribute("movieDao",movieDao);
 		session.setAttribute("userDao",userDao);
 		session.setAttribute("broadcastDao",broadcastDao);
@@ -86,11 +77,6 @@ public class UserController {
 		if(user.getIsAdmin()) {
 
 			session.setAttribute("admin", user);
-		
-			//TODO USE USER MANAGER
-			
-			context.setAttribute("users", userDao.getAllUsers());
-			context.setAttribute("usersButNotAdmins", userDao.GetAllUsersButNoAdmins());
 			
 			return "adminMain";
 		}
@@ -109,7 +95,7 @@ public class UserController {
 		String email = request.getParameter("email");
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		Integer age = Integer.valueOf(request.getParameter("age"));
+		int age = Integer.valueOf(request.getParameter("age"));
 		System.out.println(age);
 			
 		if (username.isEmpty() || username.length() < 5) {

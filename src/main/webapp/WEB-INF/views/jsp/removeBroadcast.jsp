@@ -10,7 +10,10 @@
 	</head>
 	<body>
 	
-		
+		<form action="adminMain" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
 		
 		<form action="removeBroadcast" method="post" id="removeBroadcastForm" name="removeBroadcastForm">
 			<br>

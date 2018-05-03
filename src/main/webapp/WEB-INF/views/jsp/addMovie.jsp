@@ -8,6 +8,11 @@
 	</head>
 	
 	<body>
+	
+		<form action="adminMain" method="get">
+			<input type="submit" value ="Back">
+		</form>
+		<br><br><br><br>
 		
 		<form method="post" action="addMovie" enctype="multipart/form-data">
 			Title <input type="text" name="title" required>

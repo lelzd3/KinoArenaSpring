@@ -40,12 +40,7 @@ public class Hall {
 	}
 
 	public void setSeats(int seats) throws InvalidDataException {
-		if(seats > 0 && seats <= MAX_SEATS) {
-			this.seats = seats;
-		}
-		else {
-			throw new InvalidDataException("Invalid seats");
-		}
+		this.seats = seats;
 	}
 
 	public void setCinemaId(int cinemaId) {
