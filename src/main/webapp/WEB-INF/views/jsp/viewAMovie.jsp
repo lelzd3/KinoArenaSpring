@@ -40,32 +40,32 @@ response.setHeader("Cache-Control", "no-cache");
 		
 		<br><br>
 		<div class="one">
-			<strong><%= movie.getTitle() %></strong>
-			<br><br>
-			<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250">
-			<br><br>
-			<p><%= movie.getDescription() %></p>
+			<strong><%=movie.getTitle()%></strong>
 			<br>
-			<p>Duration: <%=movie.getDuration() %></p>
-			Rating: <%=movie.getRating() %>
+			<br> 
+			<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250"> <br>
 			<br>
-			<form action="rateMovie" method="post">
-				<input type="hidden" name="movieIdToBeRated" value="<%= movie.getId() %>">
-				<select name="ratingSelect">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="6">6</option>
-					<option value="7">7</option>
-					<option value="8">8</option>
-					<option value="9">9</option>
-					<option value="10">10</option>
-				</select>
-				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
-				<input type="submit" value="rateMovie">
-			</form>
+			<p><%=movie.getDescription()%></p>
+			<br>
+			Duration: <%=movie.getDuration()%>
+			<br><br>
+			<div id="l<%=movie.getId()%>">Rating: <%=movie.getRating()%></div>
+			<br>
+			
+			 <select id="r<%=movie.getId()%>" name="ratingSelect"> 
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+			</select>
+
+			<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
 			<br>
 			
 			<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
@@ -115,4 +115,29 @@ response.setHeader("Cache-Control", "no-cache");
 		
 		<br><br>
 	</body>
+	
+	<script>
+	//elementId is the select field id which is like  "r<movie.id>"
+	//ratingFieldId is the field id, which shows the rating, which is like "l<movie.id>"
+	function rateMovieClick(movieId){
+		var elementId = "r"+movieId; 
+		var newRating = document.getElementById(elementId).value;
+		
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.onreadystatechange = function(){
+			if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+
+				var respText = xmlHttp.responseText;
+				
+				var ratingFieldId = "l"+movieId;
+				
+				document.getElementById(ratingFieldId).innerHTML = "Rating: "+respText;
+			}
+		}
+		
+		xmlHttp.open("POST","rateMovie");
+		xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xmlHttp.send("id="+movieId+"&rating="+newRating);
+	}
+	</script>
 </html>

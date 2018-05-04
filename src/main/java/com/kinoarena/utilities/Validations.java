@@ -7,15 +7,6 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 public class Validations {
 
 	private static final int MIN_LENGTH_OF_PASSWORD = 8;
-	
-	private static Validations instance;
-
-	public synchronized static  Validations getInstance() {
-		if (instance == null) {
-			instance = new Validations();
-		}
-		return instance;
-	}
 
 	private Validations() {}
 	

@@ -18,5 +18,6 @@ public class NavigationController {
 	public String returnToUserMain() {
 		return "main";
 	}
-	
+
+
 }

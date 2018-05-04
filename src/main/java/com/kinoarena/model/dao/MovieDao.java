@@ -53,7 +53,7 @@ public class MovieDao implements IMovieDao{
 	}
 	
 	@Override
-	public Collection<Movie> getAllMovies()  throws SQLException, InvalidDataException {
+	public ArrayList<Movie> getAllMovies()  throws SQLException, InvalidDataException {
 		PreparedStatement s = connection.prepareStatement("SELECT id,title,description,rating,duration,file_location FROM movies");
 		ArrayList<Movie> movies = new ArrayList<>();
 		ResultSet result = s.executeQuery();
@@ -88,6 +88,8 @@ public class MovieDao implements IMovieDao{
 		return movie;
 	}
 
+	
+	@Override
 	public ArrayList<String> getMoviesContains(String term) throws SQLException {
 		
 		ArrayList<String> movies = new ArrayList<>();
@@ -103,6 +105,7 @@ public class MovieDao implements IMovieDao{
 		return movies;
 	}
 
+	@Override
 	public ArrayList<String> getAllMoviesNames() throws SQLException {
 		
 		ArrayList<String> moviesNames = new ArrayList<>();
@@ -116,7 +119,8 @@ public class MovieDao implements IMovieDao{
 		}
 		return moviesNames;
 	}
-
+	
+	@Override
 	public Movie getMovieByName(String name) throws InvalidDataException, SQLException {
 		
 		String query = "SELECT id, title, description, rating ,  duration , file_location FROM movies WHERE title = ?";
@@ -138,7 +142,7 @@ public class MovieDao implements IMovieDao{
 	
 	}
 	
-	
+	@Override
 	public void updateFileLocaiton(Movie movie,String file_location) throws SQLException {
 		String query = "UPDATE movies SET file_location = ? WHERE id = ?";
 		//System.out.println("movie");
@@ -149,5 +153,41 @@ public class MovieDao implements IMovieDao{
 		ps.close();
 	
 	}
+	@Override
+	public double getMovieRatingById(int movieIdToBeRated) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT rating FROM movies WHERE id = ?");
+		ps.setInt(1, movieIdToBeRated);
+		ResultSet result = ps.executeQuery();
+		if(result.next()) {
+			return result.getDouble("rating");
+		}
+		return 0.0;
+		
+	}
 	
+	@Override
+	public ArrayList<Integer> getAllFavouriteMovieIdsForUser(int userId) throws SQLException{
+		PreparedStatement ps = connection.prepareStatement("SELECT movies_id FROM users_favorite_movies WHERE users_id = ?");
+		ps.setInt(1, userId);
+		ResultSet result = ps.executeQuery();
+		ArrayList<Integer> favMoviesIds = new ArrayList<Integer>();
+		while(result.next()) {
+			favMoviesIds.add(result.getInt("movies_id"));
+		}
+		ps.close();
+		return favMoviesIds;
+	}
+
+	@Override
+	public ArrayList<Integer> getAllWatchlistMovieIdsForUser(int userId) throws Exception {
+		PreparedStatement ps = connection.prepareStatement("SELECT movies_id FROM users_watchlist_movies WHERE users_id = ?");
+		ps.setInt(1, userId);
+		ResultSet result = ps.executeQuery();
+		ArrayList<Integer> watchMovieIds = new ArrayList<Integer>();
+		while(result.next()) {
+			watchMovieIds.add(result.getInt("movies_id"));
+		}
+		ps.close();
+		return watchMovieIds;
+	}
 }

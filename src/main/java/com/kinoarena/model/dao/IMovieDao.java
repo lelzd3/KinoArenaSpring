@@ -1,8 +1,6 @@
 package com.kinoarena.model.dao;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.kinoarena.model.pojo.Movie;
 
@@ -12,12 +10,21 @@ public interface IMovieDao {
 
 	public void deleteMovie(Movie m) throws Exception;
 
-	public Collection<Movie> getAllMovies() throws Exception;
+	public ArrayList<Movie> getAllMovies() throws Exception;
 
 	public Movie getMovieById(int id) throws Exception;
 	
-	public ArrayList<String> getMoviesContains(String term) throws SQLException;
+	public ArrayList<String> getMoviesContains(String term) throws Exception;
 	
-	public ArrayList<String> getAllMoviesNames() throws SQLException;
+	public ArrayList<String> getAllMoviesNames() throws Exception;
+	
+	public Movie getMovieByName(String name) throws Exception;
+	
+	public void updateFileLocaiton(Movie movie,String file_location) throws Exception;
+	
+	public double getMovieRatingById(int movieIdToBeRated) throws Exception;
 
+	public ArrayList<Integer> getAllFavouriteMovieIdsForUser(int userId) throws Exception;
+	
+	public ArrayList<Integer> getAllWatchlistMovieIdsForUser(int userId) throws Exception;
 }

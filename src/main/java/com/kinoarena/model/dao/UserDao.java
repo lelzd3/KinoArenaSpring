@@ -91,7 +91,6 @@ public class UserDao implements IUserDao{
 	
 	}
 
-	@SuppressWarnings("resource")
 	@Override // rating should be between 1 and 10 
 	public void rateMovie(User u, Movie m,int rating) throws SQLException, InvalidDataException {
 		// TODO rateMovie method in UserDao , SHOULD INSERT DOUBLE RATING IN DB!!!!

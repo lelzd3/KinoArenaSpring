@@ -73,18 +73,34 @@ public class MovieController {
 		Files.copy(serverFile.toPath(), response.getOutputStream());
 	}
 
+//	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
+//	public String rateMovie(HttpServletRequest request) throws SQLException, InvalidDataException {
+//		User user = (User) request.getSession().getAttribute("user");
+//		
+//		String jspName = request.getParameter("hiddenJspName");
+//		
+//		int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
+//		int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
+//
+//		Movie movie = movieDao.getMovieById(movieIdToBeRated);
+//		userDao.rateMovie(user, movie, newRating);
+//		return jspName;
+//	}
+	
 	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
-	public String rateMovie(HttpServletRequest request) throws SQLException, InvalidDataException {
+	@ResponseBody
+	public double rateMovieAjax(HttpServletRequest request) throws SQLException, InvalidDataException {
 		User user = (User) request.getSession().getAttribute("user");
-		
-		String jspName = request.getParameter("hiddenJspName");
-		
-		int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
-		int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
+	
+		int movieIdToBeRated = Integer.parseInt(request.getParameter("id"));
+		int newRating = Integer.parseInt(request.getParameter("rating"));
 
 		Movie movie = movieDao.getMovieById(movieIdToBeRated);
 		userDao.rateMovie(user, movie, newRating);
-		return jspName;
+		
+		double newAvgRating = movieDao.getMovieRatingById(movieIdToBeRated);
+		
+		return newAvgRating;
 	}
 
 	@RequestMapping(value = "/reserveInterim", method = RequestMethod.POST)

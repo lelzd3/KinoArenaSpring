@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 
@@ -77,7 +78,7 @@ public class BroadcastDao implements IBroadcastDao {
 		return broadcasts;
 	}
 
-	@Override
+	@Override //delete this
 	public void setPromoPercent(Broadcast b, double promoPercent) throws SQLException, InvalidDataException {
 
 		if(promoPercent <= 0) {
@@ -145,6 +146,5 @@ public class BroadcastDao implements IBroadcastDao {
 		ps.executeUpdate();
 		ps.close();
 	}
-	
 
 }

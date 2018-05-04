@@ -52,7 +52,7 @@ response.setHeader("Cache-Control", "no-cache");
 		<form action=logout method="get">
 			<input type="submit" value="Logout"><br>
 		</form>
-		
+	
 		
 	</body>
 </html>

@@ -33,10 +33,11 @@ response.setHeader("Cache-Control", "no-cache");
 			User user = (User) session.getAttribute("user");
 			
 			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
-			UserDao userDao = (UserDao) session.getAttribute("userDao");
 			BroadcastDao broadcastDao =  (BroadcastDao) session.getAttribute("broadcastDao");
 			
 			ArrayList<Movie> movies = (ArrayList<Movie>)movieDao.getAllMovies();
+			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
+			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());
 		%>
 	</head>
 
@@ -65,32 +66,29 @@ response.setHeader("Cache-Control", "no-cache");
 				<br>
 				<p><%=movie.getDescription()%></p>
 				<br>
-				<p>
-					Duration:
-					<%=movie.getDuration()%></p>
-					Rating:
-					<%=movie.getRating()%>
+				Duration: <%=movie.getDuration()%>
+				<br><br>
+				<div id="l<%=movie.getId()%>">Rating: <%=movie.getRating()%></div>
 				<br>
-				<form action="rateMovie" method="post">
-					<input type="hidden" name="movieIdToBeRated"value="<%=movie.getId()%>">
-					 <select name="ratingSelect">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-					</select>
-					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
-					<input type="submit" value="rateMovie">
-				</form>
+				
+				 <select id="r<%=movie.getId()%>" name="ratingSelect"> 
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+
+				<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
+	
 		
-				<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
-		
+				
+				<% if(!favMovies.contains(movie.getId())){ %>
 				<form action = "addInFavorite" method = "post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
@@ -105,8 +103,7 @@ response.setHeader("Cache-Control", "no-cache");
 		
 				<% }  %>
 					
-				<% if(!userDao.isMovieInWatchlist(user.getId(),movie.getId())){ %>
-		
+				<% if(!watchMovies.contains(movie.getId())){ %>
 				<form action = "addInWatchlist" method = "post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
@@ -169,6 +166,30 @@ response.setHeader("Cache-Control", "no-cache");
 					});
 				});
 			})
+			
+			
+			//elementId is the select field id which is like  "r<movie.id>"
+			//ratingFieldId is the field id, which shows the rating, which is like "l<movie.id>"
+			function rateMovieClick(movieId){
+				var elementId = "r"+movieId; 
+				var newRating = document.getElementById(elementId).value;
+				
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.onreadystatechange = function(){
+					if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+
+						var respText = xmlHttp.responseText;
+						
+						var ratingFieldId = "l"+movieId;
+						
+						document.getElementById(ratingFieldId).innerHTML = "Rating: "+respText;
+					}
+				}
+				
+				xmlHttp.open("POST","rateMovie");
+				xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xmlHttp.send("id="+movieId+"&rating="+newRating);
+			}
 		</script>
 	
 	</body>
