@@ -195,6 +195,7 @@ public class MovieDao implements IMovieDao{
 		return watchMovieIds;
 	}
 	
+	@Override
 	public ArrayList<String> getAllGenresForAMovie(int movieId) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT `genres`.`genre_name` FROM `movies_has_genres`"
 				+ "JOIN `genres` on `genres`.`id`=`movies_has_genres`.`genres_id`"
@@ -209,6 +210,7 @@ public class MovieDao implements IMovieDao{
 		return allGenres;
 	}
 
+	@Override
 	public ArrayList<String> getAllGenres() throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT genre_name FROM genres");
 		ResultSet result = ps.executeQuery();
@@ -220,6 +222,7 @@ public class MovieDao implements IMovieDao{
 		return allGenres;
 	}
 	
+	@Override
 	public int getGenreIdByName(String genre) throws SQLException {
 		PreparedStatement ps = connection.prepareStatement("SELECT id FROM genres WHERE genre_name = ?");
 		ps.setString(1, genre);
@@ -230,6 +233,7 @@ public class MovieDao implements IMovieDao{
 		return genreId;
 	}
 	
+	@Override
 	public void addGenresForAMovie(int movieId, ArrayList<String> genres) throws SQLException {
 		PreparedStatement s = null;
 		for(String str:genres) {
@@ -243,6 +247,7 @@ public class MovieDao implements IMovieDao{
 		s.close();
 	}
 
+	@Override
 	public void deleteGenresFromMovie(int movieId) throws SQLException {
 		PreparedStatement s = connection.prepareStatement("DELETE FROM movies_has_genres where movies_id = ?");
 		s.setInt(1, movieId);

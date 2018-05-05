@@ -34,7 +34,7 @@ response.setHeader("Cache-Control", "no-cache");
 			 		 <option value="${genre}">${genre}</option>
 				</c:forEach>
 			</select>
-			
+			<br><br>
 			<input type="submit">
 		</form>
 		

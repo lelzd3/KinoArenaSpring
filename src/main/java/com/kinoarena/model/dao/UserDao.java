@@ -240,7 +240,7 @@ public class UserDao implements IUserDao{
 		
 	}
 
-	//TODO SHOULD TEST THIS METHOD
+	//TODO SHOULD TEST THIS METHOD NOTUSED
 	public User getUserByEmail(String email) throws InvalidDataException, SQLException {
 		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin FROM users WHERE email = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
@@ -289,7 +289,8 @@ public class UserDao implements IUserDao{
 		return users;
 	}
 
-	public Collection<User> GetAllUsersButNoAdmins() throws SQLException, InvalidDataException {
+	@Override
+	public Collection<User> getAllUsersButNoAdmins() throws SQLException, InvalidDataException {
 		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin,age FROM users  WHERE is_Admin = 0");
 		ResultSet result = ps.executeQuery();
 		ArrayList<User> users = new ArrayList<User>();
@@ -314,180 +315,187 @@ public class UserDao implements IUserDao{
 		}
 	
 	// Adding favourite product to user account:
-		public void addInFavorite(int userId, int movieId) throws SQLException {
-			PreparedStatement statement = connection.prepareStatement("INSERT INTO users_favorite_movies (users_id, movies_id) VALUES (?,?)");
-			statement.setLong(1, userId);
-			statement.setLong(2, movieId);
-			statement.executeUpdate();
-			statement.close();
-			
-		}
+	@Override
+	public void addInFavorite(int userId, int movieId) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO users_favorite_movies (users_id, movies_id) VALUES (?,?)");
+		statement.setLong(1, userId);
+		statement.setLong(2, movieId);
+		statement.executeUpdate();
+		statement.close();
 		
-		// Remove favourite product:
-		public void removeFavouriteMovie(int userId, int  movieId) throws SQLException {
-			PreparedStatement statment = connection.prepareStatement("DELETE FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
-			statment.setInt(1, userId);
-			statment.setInt(2, movieId);
-			statment.executeUpdate();
-			statment.close();
-		
-		}
-
-		public ArrayList<Movie> viewFavourite(User user) throws InvalidDataException, SQLException {
-			String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_favorite_movies AS f"
-					+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
-			
-			PreparedStatement statement = connection.prepareStatement(query);
-			ResultSet result = statement.executeQuery();
-			ArrayList<Movie> movies = new ArrayList<>();
-			while (result.next()) {
-				Movie m = new Movie(
-						result.getInt("id"),
-						result.getString("title"),
-						result.getString("description"),
-						result.getDouble("rating"),
-						result.getDouble("duration"),
-						result.getString("file_location"),
-						movieDao.getAllGenresForAMovie(result.getInt("id"))
-						);
-				movies.add(m);
-			}
-			
-			statement.close();
-			return movies;
-		}
-
-		public boolean isMovieInFavourite(int userId, int movieId) throws SQLException {
-			
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
-			ps.setInt(1, userId);
-			ps.setInt(2, movieId);
-			ResultSet rs = ps.executeQuery();
-			boolean isThere = rs.next();
-			ps.close();
-			rs.close();
-			if(isThere){
-				return true;
-			}else{
-				return false;
-			}
-		}
-
-		public ArrayList<Movie> viewWatchlist(User user) throws InvalidDataException, SQLException {
-			String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_watchlist_movies AS f"
-					+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
-			
-			PreparedStatement statement = connection.prepareStatement(query);
-			ResultSet result = statement.executeQuery();
-			ArrayList<Movie> movies = new ArrayList<>();
-			while (result.next()) {
-				Movie m = new Movie(
-						result.getInt("id"),
-						result.getString("title"),
-						result.getString("description"),
-						result.getDouble("rating"),
-						result.getDouble("duration"),
-						result.getString("file_location"),
-						movieDao.getAllGenresForAMovie(result.getInt("id"))
-						);
-				movies.add(m);
-			}
-			
-			statement.close();
-			return movies;
-		}
-
-		public void addInWatchlist(int userId, Integer movieId) throws SQLException {
-			PreparedStatement statement = connection.prepareStatement("INSERT INTO users_watchlist_movies (users_id, movies_id) VALUES (?,?)");
-			statement.setLong(1, userId);
-			statement.setLong(2, movieId);
-			statement.executeUpdate();
-			statement.close();
-		}
-
-		public void removeFavouriteWatchlist(int userId, Integer movieId) throws SQLException {
-			PreparedStatement statment = connection.prepareStatement("DELETE FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
-			statment.setInt(1, userId);
-			statment.setInt(2, movieId);
-			statment.executeUpdate();
-			statment.close();
-		}
-		
-		public boolean isMovieInWatchlist(int userId, int movieId) throws SQLException {
-			
-			PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
-			ps.setInt(1, userId);
-			ps.setInt(2, movieId);
-			ResultSet rs = ps.executeQuery();
-			boolean isThere = rs.next();
-			ps.close();
-			rs.close();
-			if(isThere){
-				return true;
-			}else{
-				return false;
-			}
-		}
-
-		public void changeFirstName(User user, String validateName) throws SQLException, InvalidDataException {
-
-			String currentName = user.getFirstname();
-			if(!currentName.equals(validateName)) {
-				PreparedStatement ps = connection.prepareStatement("UPDATE users SET first_name= ? WHERE id=?;");
-					ps.setString(1, validateName);
-					ps.setLong(2, user.getId());
-					ps.executeUpdate();
-					ps.close();
-					user.setFirstName(validateName);
-			}
-		}
-
-		public void changeLastName(User user, String validateName) throws SQLException, InvalidDataException {
-
-			String currentName = user.getLastname();
-				if(!currentName.equals(validateName)) {
-				PreparedStatement ps = connection.prepareStatement("UPDATE users SET last_name= ? WHERE id=?;");
-					ps.setString(1, validateName);
-					ps.setLong(2, user.getId());
-					ps.executeUpdate();
-					ps.close();
-                    user.setLastName(validateName);
-			}
-		}
-
-		public void changeEmail(User user, String editedEmail) throws InvalidDataException, SQLException {
-
-			
-			String email = user.getEmail();
-			if(!email.equals(editedEmail)) {
-				PreparedStatement ps = connection.prepareStatement("UPDATE users SET email= ? WHERE id=?;");
-					ps.setString(1, editedEmail);
-					ps.setLong(2, user.getId());
-					ps.executeUpdate();
-					ps.close();
-					user.setEmail(editedEmail);
-			}
-		}
-
-		public void changePassword(User user, String editedPassword) throws SQLException, InvalidDataException {
-			
-			String hashedPassword = BCrypt.hashpw(editedPassword, BCrypt.gensalt());
-			String password = user.getPassword();
-			if(!password.equals(hashedPassword)) {
-				PreparedStatement ps = connection.prepareStatement("UPDATE users SET password= ? WHERE id=?;");
-					ps.setString(1, hashedPassword);
-					ps.setLong(2, user.getId());
-					ps.executeUpdate();
-					ps.close();
-					user.setPassword(hashedPassword);
-			}
-			System.out.println(user.getPassword());
-		}
-		
-
-
-
-		
+	}
 	
+	// Remove favourite product:
+	@Override
+	public void removeFavouriteMovie(int userId, int  movieId) throws SQLException {
+		PreparedStatement statment = connection.prepareStatement("DELETE FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
+		statment.setInt(1, userId);
+		statment.setInt(2, movieId);
+		statment.executeUpdate();
+		statment.close();
+	
+	}
+
+	@Override
+	public ArrayList<Movie> viewFavourite(User user) throws InvalidDataException, SQLException {
+		String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_favorite_movies AS f"
+				+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
+		
+		PreparedStatement statement = connection.prepareStatement(query);
+		ResultSet result = statement.executeQuery();
+		ArrayList<Movie> movies = new ArrayList<>();
+		while (result.next()) {
+			Movie m = new Movie(
+					result.getInt("id"),
+					result.getString("title"),
+					result.getString("description"),
+					result.getDouble("rating"),
+					result.getDouble("duration"),
+					result.getString("file_location"),
+					movieDao.getAllGenresForAMovie(result.getInt("id"))
+					);
+			movies.add(m);
+		}
+		
+		statement.close();
+		return movies;
+	}
+
+	@Override
+	public boolean isMovieInFavourite(int userId, int movieId) throws SQLException {
+		
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_favorite_movies WHERE users_id = ? AND movies_id = ?");
+		ps.setInt(1, userId);
+		ps.setInt(2, movieId);
+		ResultSet rs = ps.executeQuery();
+		boolean isThere = rs.next();
+		ps.close();
+		rs.close();
+		if(isThere){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public ArrayList<Movie> viewWatchlist(User user) throws InvalidDataException, SQLException {
+		String query = "SELECT id,title,description,rating,duration,file_location  FROM movies AS m JOIN users_watchlist_movies AS f"
+				+ " ON( m.id = f.movies_id )WHERE f.users_id =" + user.getId();
+		
+		PreparedStatement statement = connection.prepareStatement(query);
+		ResultSet result = statement.executeQuery();
+		ArrayList<Movie> movies = new ArrayList<>();
+		while (result.next()) {
+			Movie m = new Movie(
+					result.getInt("id"),
+					result.getString("title"),
+					result.getString("description"),
+					result.getDouble("rating"),
+					result.getDouble("duration"),
+					result.getString("file_location"),
+					movieDao.getAllGenresForAMovie(result.getInt("id"))
+					);
+			movies.add(m);
+		}
+		
+		statement.close();
+		return movies;
+	}
+
+	@Override
+	public void addInWatchlist(int userId, Integer movieId) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO users_watchlist_movies (users_id, movies_id) VALUES (?,?)");
+		statement.setLong(1, userId);
+		statement.setLong(2, movieId);
+		statement.executeUpdate();
+		statement.close();
+	}
+
+	@Override
+	public void removeFavouriteWatchlist(int userId, Integer movieId) throws SQLException {
+		PreparedStatement statment = connection.prepareStatement("DELETE FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
+		statment.setInt(1, userId);
+		statment.setInt(2, movieId);
+		statment.executeUpdate();
+		statment.close();
+	}
+	
+	@Override
+	public boolean isMovieInWatchlist(int userId, int movieId) throws SQLException {
+		
+		PreparedStatement ps = connection.prepareStatement("SELECT * FROM users_watchlist_movies WHERE users_id = ? AND movies_id = ?");
+		ps.setInt(1, userId);
+		ps.setInt(2, movieId);
+		ResultSet rs = ps.executeQuery();
+		boolean isThere = rs.next();
+		ps.close();
+		rs.close();
+		if(isThere){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public void changeFirstName(User user, String validateName) throws SQLException, InvalidDataException {
+
+		String currentName = user.getFirstname();
+		if(!currentName.equals(validateName)) {
+			PreparedStatement ps = connection.prepareStatement("UPDATE users SET first_name= ? WHERE id=?;");
+				ps.setString(1, validateName);
+				ps.setLong(2, user.getId());
+				ps.executeUpdate();
+				ps.close();
+				user.setFirstName(validateName);
+		}
+	}
+
+	@Override
+	public void changeLastName(User user, String validateName) throws SQLException, InvalidDataException {
+
+		String currentName = user.getLastname();
+			if(!currentName.equals(validateName)) {
+			PreparedStatement ps = connection.prepareStatement("UPDATE users SET last_name= ? WHERE id=?;");
+				ps.setString(1, validateName);
+				ps.setLong(2, user.getId());
+				ps.executeUpdate();
+				ps.close();
+                user.setLastName(validateName);
+		}
+	}
+
+	@Override
+	public void changeEmail(User user, String editedEmail) throws InvalidDataException, SQLException {
+
+		
+		String email = user.getEmail();
+		if(!email.equals(editedEmail)) {
+			PreparedStatement ps = connection.prepareStatement("UPDATE users SET email= ? WHERE id=?;");
+				ps.setString(1, editedEmail);
+				ps.setLong(2, user.getId());
+				ps.executeUpdate();
+				ps.close();
+				user.setEmail(editedEmail);
+		}
+	}
+
+	@Override
+	public void changePassword(User user, String editedPassword) throws SQLException, InvalidDataException {
+		
+		String hashedPassword = BCrypt.hashpw(editedPassword, BCrypt.gensalt());
+		String password = user.getPassword();
+		if(!password.equals(hashedPassword)) {
+			PreparedStatement ps = connection.prepareStatement("UPDATE users SET password= ? WHERE id=?;");
+				ps.setString(1, hashedPassword);
+				ps.setLong(2, user.getId());
+				ps.executeUpdate();
+				ps.close();
+				user.setPassword(hashedPassword);
+		}
+		System.out.println(user.getPassword());
+	}
+		
 	
 }

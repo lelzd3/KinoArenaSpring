@@ -121,7 +121,7 @@ public class AdminController {
 	@RequestMapping(value = "/makeAdminPage", method = RequestMethod.GET)
 	public String getToMakeAdmin(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
 
-		springModel.addAttribute("usersThatAreNotAdmin", userDao.GetAllUsersButNoAdmins());
+		springModel.addAttribute("usersThatAreNotAdmin", userDao.getAllUsersButNoAdmins());
 		return "makeAdmin";
 	}
 	
@@ -298,9 +298,8 @@ public class AdminController {
 		User admin = (User) session.getAttribute("admin");
 	
 		Movie movieToDelete= movieDao.getMovieById(movieId);
-		//TODO use adminManager and check if is admin
 		//should check how to use On delete cascade to many;many relationship so that not use deleteGenresFromMovie()
-		movieDao.deleteGenresFromMovie(movieId);
+		adminManager.deleteGenresFromMovie(admin, movieId);
 		adminManager.removeMovie(movieToDelete, admin);
 	
 		return "adminMain";

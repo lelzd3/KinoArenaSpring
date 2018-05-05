@@ -27,4 +27,14 @@ public interface IMovieDao {
 	public ArrayList<Integer> getAllFavouriteMovieIdsForUser(int userId) throws Exception;
 	
 	public ArrayList<Integer> getAllWatchlistMovieIdsForUser(int userId) throws Exception;
+	
+	public ArrayList<String> getAllGenresForAMovie(int movieId) throws Exception;
+
+	public ArrayList<String> getAllGenres() throws Exception;
+	
+	public int getGenreIdByName(String genre) throws Exception;
+	
+	public void addGenresForAMovie(int movieId, ArrayList<String> genres) throws Exception;
+
+	public void deleteGenresFromMovie(int movieId) throws Exception;
 }
