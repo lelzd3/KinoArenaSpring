@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kinoarena.controller.manager.DBManager;
@@ -27,6 +28,9 @@ public class UserDao implements IUserDao{
 		connection = DBManager.getInstance().getConnection();
 	}
 
+	@Autowired
+	private MovieDao movieDao;
+	
 	@Override
 	public void loginCheck(String username, String password) throws SQLException, WrongCredentialsException {
 		
@@ -343,7 +347,8 @@ public class UserDao implements IUserDao{
 						result.getString("description"),
 						result.getDouble("rating"),
 						result.getDouble("duration"),
-						result.getString("file_location")
+						result.getString("file_location"),
+						movieDao.getAllGenresForAMovie(result.getInt("id"))
 						);
 				movies.add(m);
 			}
@@ -382,7 +387,8 @@ public class UserDao implements IUserDao{
 						result.getString("description"),
 						result.getDouble("rating"),
 						result.getDouble("duration"),
-						result.getString("file_location")
+						result.getString("file_location"),
+						movieDao.getAllGenresForAMovie(result.getInt("id"))
 						);
 				movies.add(m);
 			}

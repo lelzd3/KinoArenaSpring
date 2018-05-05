@@ -86,6 +86,12 @@ response.setHeader("Cache-Control", "no-cache");
 
 				<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
 	
+				<br>
+				<ul>
+				<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
+				<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
+				<%} %>
+				</ul>
 		
 				
 				<% if(!favMovies.contains(movie.getId())){ %>
@@ -133,8 +139,6 @@ response.setHeader("Cache-Control", "no-cache");
 					<input type="submit" value="Choose Broadcast to book seats for">
 						
 				</form>
-				<br>
-			
 			</div>
 				<br>
 				<br>

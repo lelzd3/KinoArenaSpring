@@ -247,7 +247,8 @@ public class AdminController {
 
 	//adminPanel.jsp -> addMovie.jsp
 	@RequestMapping(value = "/addMoviePage", method = RequestMethod.GET)
-	public String getToAddMovie() {
+	public String getToAddMovie(Model springModel) throws SQLException {
+		springModel.addAttribute("genres", movieDao.getAllGenres());
 		return "addMovie";
 	}
 	
@@ -258,15 +259,16 @@ public class AdminController {
 			@RequestParam("description") String description,
 			@RequestParam("duration") double duration,
 			@RequestParam("file") MultipartFile uploadedFile,
+			@RequestParam("genresSelect") ArrayList<String> genresSelected,
 			HttpSession session, Model model,HttpServletRequest request) throws InvalidDataException, SQLException, NotAnAdminException, IOException {
 	
 
 		User admin = (User) session.getAttribute("admin");
 	
 		Double rating = 0.0;
-		
-		Movie movie = new Movie(title, description, rating, duration);
-		adminManager.addNewMovie(movie, admin);
+		System.out.println(genresSelected);
+		Movie movie = new Movie(title, description, rating, duration,genresSelected);
+		adminManager.addNewMovie(movie, admin,genresSelected);
 		
 		String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;
 		movie.setFile_location(file_location);
@@ -296,6 +298,9 @@ public class AdminController {
 		User admin = (User) session.getAttribute("admin");
 	
 		Movie movieToDelete= movieDao.getMovieById(movieId);
+		//TODO use adminManager and check if is admin
+		//should check how to use On delete cascade to many;many relationship so that not use deleteGenresFromMovie()
+		movieDao.deleteGenresFromMovie(movieId);
 		adminManager.removeMovie(movieToDelete, admin);
 	
 		return "adminMain";

@@ -1,3 +1,4 @@
+<%@page import="com.kinoarena.model.dao.MovieDao"%>
 <%
 response.setHeader("Pragma", "No-cache");
 response.setDateHeader("Expires", 0);
@@ -21,6 +22,7 @@ response.setHeader("Cache-Control", "no-cache");
 			UserDao userDao = (UserDao)session.getAttribute("userDao");
 			BroadcastDao broadcastDao = (BroadcastDao)session.getAttribute("broadcastDao");
 			Movie movie =(Movie) request.getSession().getAttribute("selectedMovie");
+			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
 		%>
 		<style>
 		.one{
@@ -101,6 +103,11 @@ response.setHeader("Cache-Control", "no-cache");
 			<% }  %>
 				
 			<br>
+				<ul>
+				<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
+				<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
+				<%} %>
+				</ul>
 			<form action="reserveInterim" method="post">
 				<select name="broadcastSelect">
 				<%
@@ -108,7 +115,7 @@ response.setHeader("Cache-Control", "no-cache");
 					<option value="<%= broadcast.getId() %>"><%="Cinema_id: "+  broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: "+ broadcast.getMovieId() %></option>
 				<%} %>
 			</select>
-			<input type="submit" value="Choose Broadcast to book seats for">
+				<input type="submit" value="Choose Broadcast to book seats for">
 			</form>
 			<br>
 		</div>

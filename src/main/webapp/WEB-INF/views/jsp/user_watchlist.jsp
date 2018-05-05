@@ -24,6 +24,7 @@ response.setHeader("Cache-Control", "no-cache");
 		UserDao userDao = (UserDao)session.getAttribute("userDao");
 		BroadcastDao broadcastDao = (BroadcastDao)session.getAttribute("broadcastDao");
 		ArrayList<Movie> movies = (ArrayList<Movie>) userDao.viewWatchlist(user);
+		MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
 		%>
 		<style>
 			.one{
@@ -80,6 +81,13 @@ response.setHeader("Cache-Control", "no-cache");
 				<input type = "submit"  value = "Remove from watchlist">
 			</form> 
 			
+			<br>
+				<ul>
+				<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
+					<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
+				<%} %>
+				</ul>
+							
 			<br> <br>
 			<form action="reserveInterim" method="post">
 				<select name="broadcastSelect">

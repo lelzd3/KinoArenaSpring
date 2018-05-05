@@ -4,6 +4,7 @@ response.setDateHeader("Expires", 0);
 response.setHeader("Cache-Control", "no-cache");
 %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -27,6 +28,13 @@ response.setHeader("Cache-Control", "no-cache");
 			<br><br>
 			File <input type="file" accept="image/*" name="file">
 			<br><br>
+			Select genres 
+			<select name="genresSelect" multiple>
+				<c:forEach var="genre" items="${genres}"  >
+			 		 <option value="${genre}">${genre}</option>
+				</c:forEach>
+			</select>
+			
 			<input type="submit">
 		</form>
 		

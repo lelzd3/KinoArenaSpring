@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.kinoarena.controller.manager.DBManager;
+import com.kinoarena.model.pojo.Genre;
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
@@ -59,13 +60,14 @@ public class MovieDao implements IMovieDao{
 		ResultSet result = s.executeQuery();
 		while(result.next()) {
 			Movie m = new Movie(
-					result.getInt("id"),
-					result.getString("title"),
-					result.getString("description"),
-					result.getDouble("rating"),
-					result.getDouble("duration"),
-					result.getString("file_location")
-					);
+						result.getInt("id"),
+						result.getString("title"),
+						result.getString("description"),
+						result.getDouble("rating"),
+						result.getDouble("duration"),
+						result.getString("file_location"),
+						getAllGenresForAMovie(result.getInt("id"))
+						);
 			movies.add(m);
 		}
 		return movies;
@@ -83,7 +85,8 @@ public class MovieDao implements IMovieDao{
 					result.getString("description"),
 					result.getDouble("rating"),
 					result.getDouble("duration"),
-					result.getString("file_location")
+					result.getString("file_location"),
+					getAllGenresForAMovie(result.getInt("id"))
 					);
 		return movie;
 	}
@@ -135,7 +138,8 @@ public class MovieDao implements IMovieDao{
 					result.getString("description"),
 					result.getDouble("rating"),
 					result.getDouble("duration"),
-					result.getString("file_location")
+					result.getString("file_location"),
+					getAllGenresForAMovie(result.getInt("id"))
 					);
 		
 		return movie;
@@ -190,4 +194,60 @@ public class MovieDao implements IMovieDao{
 		ps.close();
 		return watchMovieIds;
 	}
+	
+	public ArrayList<String> getAllGenresForAMovie(int movieId) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT `genres`.`genre_name` FROM `movies_has_genres`"
+				+ "JOIN `genres` on `genres`.`id`=`movies_has_genres`.`genres_id`"
+				+ " WHERE `movies_has_genres`.`movies_id` = ?");
+		ps.setInt(1, movieId);
+		ResultSet result = ps.executeQuery();
+		ArrayList<String> allGenres = new ArrayList<String>();
+		while(result.next()) {
+			allGenres.add(result.getString("genre_name"));
+		}
+		ps.close();
+		return allGenres;
+	}
+
+	public ArrayList<String> getAllGenres() throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT genre_name FROM genres");
+		ResultSet result = ps.executeQuery();
+		ArrayList<String> allGenres = new ArrayList<String>();
+		while(result.next()) {
+			allGenres.add(result.getString("genre_name"));
+		}
+		ps.close();
+		return allGenres;
+	}
+	
+	public int getGenreIdByName(String genre) throws SQLException {
+		PreparedStatement ps = connection.prepareStatement("SELECT id FROM genres WHERE genre_name = ?");
+		ps.setString(1, genre);
+		ResultSet result = ps.executeQuery();
+		result.next();
+		int genreId= result.getInt("id");
+		ps.close();
+		return genreId;
+	}
+	
+	public void addGenresForAMovie(int movieId, ArrayList<String> genres) throws SQLException {
+		PreparedStatement s = null;
+		for(String str:genres) {
+			s = connection.prepareStatement("INSERT INTO movies_has_genres (movies_id, genres_id) VALUES (?,?)");
+			s.setInt(1, movieId);
+			int genreId = getGenreIdByName(str);
+			System.out.println(genreId);
+			s.setInt(2, genreId);
+			s.executeUpdate();
+		}
+		s.close();
+	}
+
+	public void deleteGenresFromMovie(int movieId) throws SQLException {
+		PreparedStatement s = connection.prepareStatement("DELETE FROM movies_has_genres where movies_id = ?");
+		s.setInt(1, movieId);
+		s.executeUpdate();
+		s.close();
+	}
+
 }

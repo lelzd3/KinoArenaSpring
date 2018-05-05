@@ -1,5 +1,7 @@
 package com.kinoarena.model.pojo;
 
+import java.util.ArrayList;
+
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public class Movie  {
@@ -12,27 +14,29 @@ public class Movie  {
 	private double rating;
 	private double duration;
 	private String file_location;
+	private ArrayList<String> genres;
 	// FIX ER DIAGRAM!!!!!!!
-	
-	public Movie(String title, String description, double rating, double duration) throws InvalidDataException {
+
+	public Movie(String title, String description, double rating, double duration, ArrayList<String> genres) throws InvalidDataException {
 		setTitle(title);
 		setDescription(description);
 		setRating(rating);
 		setDuration(duration);
+		setGenres(genres);
 	}
 	
-	public Movie(String title, String description, double rating, double duration,String file_location) throws InvalidDataException {
-		this(title,description,rating,duration);
+	public Movie(String title, String description, double rating, double duration,String file_location, ArrayList<String> genres) throws InvalidDataException {
+		this(title,description,rating,duration,genres);
 		this.file_location=file_location;
 	}
 
-	public Movie(int id,String title, String description, double rating, double duration) throws InvalidDataException {
-		this(title,description,rating,duration);
+	public Movie(int id,String title, String description, double rating, double duration,ArrayList<String> genres) throws InvalidDataException {
+		this(title,description,rating,duration,genres);
 		setId(id);
 	}
 
-	public Movie(int id,String title, String description, double rating, double duration,String file_location) throws InvalidDataException {
-		this(id,title,description,rating,duration);
+	public Movie(int id,String title, String description, double rating, double duration,String file_location,ArrayList<String> genres) throws InvalidDataException {
+		this(id,title,description,rating,duration,genres);
 		this.file_location=file_location;
 	}
 	
@@ -106,6 +110,18 @@ public class Movie  {
 		this.file_location = file_location;
 	}
 
+	
+	public ArrayList<String> getGenres() {
+		return genres;
+	}
+
+	public void setGenres(ArrayList<String> genres) {
+		if(!genres.isEmpty()) {
+			this.genres = genres;	
+		}
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Movie [id=" + id + ", title=" + title + ", description=" + description + ", rating=" + rating

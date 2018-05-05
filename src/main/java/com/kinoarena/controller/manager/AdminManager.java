@@ -3,6 +3,7 @@ package com.kinoarena.controller.manager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,9 +47,10 @@ public class AdminManager {
 		connection = DBManager.getInstance().getConnection();
 	}
 	
-	public void addNewMovie(Movie m, User admin) throws SQLException, NotAnAdminException {
-		if(admin.getIsAdmin()){
+	public void addNewMovie(Movie m, User admin,ArrayList<String> genres) throws SQLException, NotAnAdminException {
+			if(admin.getIsAdmin()){
 			movieDao.addMovie(m);
+			movieDao.addGenresForAMovie(m.getId(), genres);
 		}else{
 			throw new NotAnAdminException();
 		}
