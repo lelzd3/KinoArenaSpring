@@ -20,13 +20,14 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta charset="ISO-8859-1">
 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-		<link rel="stylesheet" 
-		  href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"><title>All Movies page</title>
-	
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"><title>All Movies page</title>
+		
 		<style>
 		.one {
 			border: 1px solid darkslategray;
 			font-size: 150%;
+			border-style: outset;
+			margin-bottom: 5%;
 		}
 		</style>
 		<%
@@ -39,30 +40,36 @@ response.setHeader("Cache-Control", "no-cache");
 			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
 			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());
 		%>
+		
 	</head>
 
 	<body>
+
 	
 		<form action="main" method="get">
 				<input type="submit" value ="Back">
 			</form>
 		<br><br>
 		
+	<jsp:include page="header.jsp"/>
+	<div class="wrapper bgded overlay light" >
+	<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
 		<form action="search" method="post">
 			<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
 			<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
 		</form>
+		<br><br><br><br><br><br>
 	
 		<%
 		for (Movie movie : movies) {
 		%>
-			<br>
-			<br>
-			<div class="one">
+		<div class="one">
+	
+			
 				<strong><%=movie.getTitle()%></strong>
 				<br>
 				<br> 
-				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250"> <br>
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
 				<br>
 				<p><%=movie.getDescription()%></p>
 				<br>
@@ -139,16 +146,17 @@ response.setHeader("Cache-Control", "no-cache");
 					<input type="submit" value="Choose Broadcast to book seats for">
 						
 				</form>
-			</div>
+
 				<br>
 				<br>
+		</div>
 		<%
 		}
 		%>
-	
-	
-	
-	
+	</div>
+	</div>
+	</body>
+
 		<script>
 			//search
 			$(document).ready(function() {
@@ -195,7 +203,4 @@ response.setHeader("Cache-Control", "no-cache");
 				xmlHttp.send("id="+movieId+"&rating="+newRating);
 			}
 		</script>
-	
-	</body>
-
 </html>

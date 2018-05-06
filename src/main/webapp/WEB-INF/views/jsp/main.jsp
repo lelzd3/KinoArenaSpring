@@ -53,6 +53,9 @@ response.setHeader("Cache-Control", "no-cache");
 			<input type="submit" value="Logout"><br>
 		</form>
 	
+	
+		<br>
+		<a href="getTestMain">TEST LINK PLS WORK</a>
 		
 	</body>
 </html>

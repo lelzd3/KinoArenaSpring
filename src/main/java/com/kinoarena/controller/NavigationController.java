@@ -20,4 +20,9 @@ public class NavigationController {
 	}
 
 
+	//test main
+	@RequestMapping(value="/getTestMain", method = RequestMethod.GET)
+	public String returnToTestMain() {
+		return "testMain";
+	}
 }
