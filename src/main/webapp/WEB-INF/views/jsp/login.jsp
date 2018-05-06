@@ -18,7 +18,8 @@ response.setHeader("Cache-Control", "no-cache");
 <div class="container">
 	<section id="content">
 		<form action="login" method="post">
-			<h1>Login Form</h1>
+			<h1><strong> Login </strong></h1>
+			<h2>I tuka eventualno invalid message</h2>
 			<div>
 				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username" />
 			</div>

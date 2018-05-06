@@ -19,8 +19,7 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-		
-		<title>View a movie</title>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"><title>View a Movies page</title>
 		<%
 			User user = (User) request.getSession().getAttribute("user");
 			UserDao userDao = (UserDao)session.getAttribute("userDao");

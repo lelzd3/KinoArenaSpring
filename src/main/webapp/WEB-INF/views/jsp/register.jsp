@@ -20,6 +20,7 @@ response.setHeader("Cache-Control", "no-cache");
 	<section id="content">
 		<form action="register" method="post">
 			<h1>Register Form</h1>
+			<h2>tuk moje da slojim eventualen invalid message</h2>
 			<div>
 				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username" />
 			</div>
@@ -27,7 +28,7 @@ response.setHeader("Cache-Control", "no-cache");
 				<input type="password" name="password1" value="#12345678sS" placeholder="Password" required="" id="password" />
 			</div>
 			<div>
-				<input type="password" name="password2" value="#12345678sS" placeholder="Password" required="" id="password" />
+				<input type="password" name="password2" value="#12345678sS" placeholder="Confirm Password" required="" id="password" />
 			</div>
 			<div>
 				<input type="email" name="email" value="stan123@abv.bg" placeholder="Email" required="" id="username" />
