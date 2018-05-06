@@ -137,7 +137,7 @@ public class MovieController {
 		springModel.addAttribute("movieTitle", movie.getTitle());
 		springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
 		springModel.addAttribute("broadcastId",broadcastId);
-		springModel.addAttribute("broadcastPrice",totalPrice);
+			springModel.addAttribute("broadcastPrice",totalPrice);
 
 		return "reservationHall";
 

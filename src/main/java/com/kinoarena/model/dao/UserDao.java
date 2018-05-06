@@ -40,11 +40,11 @@ public class UserDao implements IUserDao{
 		//TODO encryption but in SERVLET!
 		if (!rs.next() ) {
 			// if there is nothing in result set -> username doesnt exists
-			throw new WrongCredentialsException("Invalid username");
+			throw new WrongCredentialsException("Invalid username or password");
 		}
 		if (! BCrypt.checkpw(password, rs.getString("password") )) { //TODO in servlet?
 			// if there is username but the pass doesnt match -> invalid password
-			throw new WrongCredentialsException("Invalid password");
+			throw new WrongCredentialsException("Invalid username or password");
 		}
 		ps.close();
 	}

@@ -10,16 +10,37 @@ response.setHeader("Cache-Control", "no-cache");
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>login page</title>
+        <link rel="stylesheet" href="css/loginStyle.css">
 	</head>
 	<body>
-		<h1>Login</h1>
-		
+
+  <body>
+<div class="container">
+	<section id="content">
 		<form action="login" method="post">
-			Username<input type="text" name="username" value="Stanislav1"><br>
-			Password<input type="password" name="password" value="#12345678sS"><br>
-			<input type="submit" value="Login"><br>
-			Don`t have an account? <a href="getRegisterPage">Register here</a>
-		</form>
-		
-	</body>
+			<h1>Login Form</h1>
+			<div>
+				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username" />
+			</div>
+			<div>
+				<input type="password" name="password" value="#12345678sS" placeholder="Password" required="" id="password" />
+			</div>
+			<div>
+				<input type="submit" value="Log in" />
+				<a href="getRegisterPage">Register</a>
+			</div>
+		</form><!-- form -->
+	</section><!-- content -->
+</div><!-- container -->
+</body>
+  
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
 </html>

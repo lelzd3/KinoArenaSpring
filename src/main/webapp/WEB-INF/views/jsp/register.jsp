@@ -9,42 +9,54 @@ response.setHeader("Cache-Control", "no-cache");
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Register</title>
+	      <link rel="stylesheet" href="css/loginStyle.css">
+
+	
 	</head>
-	<body>
-			<h1>Register</h1>
-			<form action="register" method="post">
-			<table align="center">
-		      	<tr>
-	              	<td>Username:</td>
-	              	<td><input type="text" class="w3-border w3-padding" name="username" required value="Stanislav1"></td>
-	            </tr>
-	            <tr>
-	              	<td>Password:</td>
-	              	<td><input type="password" class="w3-border w3-padding" name="password1" required value="#12345678sS"></td>
-	            </tr>
-	            <tr>
-	              	<td>Confirm Password:</td>
-	              	<td><input type="password" class="w3-border w3-padding" name="password2" required value="#12345678sS"></td>
-	            </tr>
-	            <tr>
-	              	<td>Email:</td>
-	              	<td><input type="email" class="w3-border w3-padding" name="email" required value="stan123@abv.bg"></td>
-	            </tr>
-	            <tr>
-	              	<td>First Name:</td>
-	              	<td><input type="text" class="w3-border w3-padding" name="firstName" required value="Stanchy"></td>
-	            </tr>
-	            <tr>
-	              	<td>Last Name:</td>
-	              	<td><input type="text" class="w3-border w3-padding" name="lastName" required value="Kaliparski"></td>
-	            </tr>
-	            <tr>
-	              	<td>Ages: </td>
-	              	<td><input type="number" class="w3-border w3-padding" name="age" required value="22"></td>
-	            </tr>
-	           </table>
-	           <button style="margin:auto;display:block" type="submit">Register</button><br>
-	           <a href="loginPage">Already have an account? Click here to login.</a>
-			</form>
-	</body>
+<body>
+
+  <body>
+<div class="container">
+	<section id="content">
+		<form action="register" method="post">
+			<h1>Register Form</h1>
+			<div>
+				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username" />
+			</div>
+			<div>
+				<input type="password" name="password1" value="#12345678sS" placeholder="Password" required="" id="password" />
+			</div>
+			<div>
+				<input type="password" name="password2" value="#12345678sS" placeholder="Password" required="" id="password" />
+			</div>
+			<div>
+				<input type="email" name="email" value="stan123@abv.bg" placeholder="Email" required="" id="username" />
+			</div>
+			<div>
+				<input type="text" name="firstName" value="Stanchy" placeholder="First Name" required="" id="username" />
+			</div>
+			<div>
+				<input type="text" name="lastName" value="Kaliparski" placeholder="Last Name" required="" id="username" />
+			</div>
+			<div>
+				<input type="number" name="age" value="22" placeholder="Age" required="" id="username" />
+			</div>
+			<div>
+				<input type="submit" value="Register" />
+				<a href="loginPage">Already have an account? Click here to login.</a>
+			</div>
+		</form><!-- form -->
+	</section><!-- content -->
+</div><!-- container -->
+</body>
+  
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
 </html>
