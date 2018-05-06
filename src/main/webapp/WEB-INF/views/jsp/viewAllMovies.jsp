@@ -44,29 +44,24 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 
 	<body>
-
 	
-		<form action="main" method="get">
-				<input type="submit" value ="Back">
-			</form>
-		<br><br>
-		
 	<jsp:include page="header.jsp"/>
+	
 	<div class="wrapper bgded overlay light" >
-	<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
-		<form action="search" method="post">
-			<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
-			<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
-		</form>
-		<br><br><br><br><br><br>
-	
-		<%
-		for (Movie movie : movies) {
-		%>
-		<div class="one">
-	
-			
-				<strong><%=movie.getTitle()%></strong>
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+			<h1 align="center"><strong>ALL MOVIES</strong></h1>
+			<form action="search" method="post">
+				<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
+				<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
+			</form>
+			<br><br><br><br>
+		
+			<%
+			for (Movie movie : movies) {
+			%>
+			<div class="one">
+				<br>
+				<h2 align="center"><strong><%=movie.getTitle()%></strong></h2>
 				<br>
 				<br> 
 				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
@@ -149,11 +144,11 @@ response.setHeader("Cache-Control", "no-cache");
 
 				<br>
 				<br>
+			</div>
+			<%
+			}
+			%>
 		</div>
-		<%
-		}
-		%>
-	</div>
 	</div>
 	</body>
 

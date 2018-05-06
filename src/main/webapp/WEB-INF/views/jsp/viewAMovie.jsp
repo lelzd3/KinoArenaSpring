@@ -10,8 +10,7 @@ response.setHeader("Cache-Control", "no-cache");
 <%@page import="com.kinoarena.model.pojo.Movie"%>
 <%@page import="com.kinoarena.model.pojo.User"%>
 <%@page import="java.util.ArrayList"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -38,97 +37,102 @@ response.setHeader("Cache-Control", "no-cache");
 
 	<body>
 	
-	<form action="search" method="post">
-			<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
-			<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
-		</form>
-
-		<form action="viewAllMoviesPage" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<br><br>
-		<div class="one">
-			<strong><%=movie.getTitle()%></strong>
-			<br>
-			<br> 
-			<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250"> <br>
-			<br>
-			<p><%=movie.getDescription()%></p>
-			<br>
-			Duration: <%=movie.getDuration()%>
+	
+	<jsp:include page="header.jsp"/>
+	
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+	
+			<form action="search" method="post">
+				<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
+				<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
+			</form>
+	
+			
 			<br><br>
-			<div id="l<%=movie.getId()%>">Rating: <%=movie.getRating()%></div>
-			<br>
-			
-			 <select id="r<%=movie.getId()%>" name="ratingSelect"> 
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-			</select>
-
-			<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
-			<br>
-			
-			<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
-
-			<form action = "addInFavorite" method = "post">
-				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Add in favorites"/>
-			</form>
-			<% } else{ %>
-			<form action = "removeFromFavorite" method="post">
-				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Remove from favourites">
-			</form> 
-
-			<% }  %>
-			
-			 <% if(!userDao.isMovieInWatchlist(user.getId(),movie.getId())){ %>
-
-			<form action = "addInWatchlist" method = "post">
-				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Add in watchlist"/>
-			</form>
-			<% } else{ %>
-			<form action = "removeFromWatchlist" method="post">
-				<input type="hidden" name="hiddenJspName" value ="viewAMovie">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit" value = "Remove from watchlist">
-			</form> 
-
-			<% }  %>
+			<div class="one">
+				<br>
+				<h1 align="center"><strong><%=movie.getTitle()%></strong></h1>
+				<br>
+				<br> 
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
+				<br>
+				<p><%=movie.getDescription()%></p>
+				<br>
+				Duration: <%=movie.getDuration()%>
+				<br><br>
+				<div id="l<%=movie.getId()%>">Rating: <%=movie.getRating()%></div>
+				<br>
 				
-			<br>
-				<ul>
-				<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
-				<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
-				<%} %>
-				</ul>
-			<form action="reserveInterim" method="post">
-				<select name="broadcastSelect">
-				<%
-				for(Broadcast broadcast : (ArrayList<Broadcast>)broadcastDao.getAllBroadcastsForAMovie(movie)) { %>
-					<option value="<%= broadcast.getId() %>"><%="Cinema_id: "+  broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: "+ broadcast.getMovieId() %></option>
-				<%} %>
-			</select>
-				<input type="submit" value="Choose Broadcast to book seats for">
-			</form>
-			<br>
+				 <select id="r<%=movie.getId()%>" name="ratingSelect"> 
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+	
+				<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
+				<br>
+				
+				<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
+	
+				<form action = "addInFavorite" method = "post">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+					<input type = "submit" value = "Add in favorites"/>
+				</form>
+				<% } else{ %>
+				<form action = "removeFromFavorite" method="post">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+					<input type = "submit" value = "Remove from favourites">
+				</form> 
+	
+				<% }  %>
+				
+				 <% if(!userDao.isMovieInWatchlist(user.getId(),movie.getId())){ %>
+	
+				<form action = "addInWatchlist" method = "post">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+					<input type = "submit" value = "Add in watchlist"/>
+				</form>
+				<% } else{ %>
+				<form action = "removeFromWatchlist" method="post">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+					<input type = "submit" value = "Remove from watchlist">
+				</form> 
+	
+				<% }  %>
+					
+				<br>
+					<ul>
+					<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
+					<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
+					<%} %>
+					</ul>
+				<form action="reserveInterim" method="post">
+					<select name="broadcastSelect">
+					<%
+					for(Broadcast broadcast : (ArrayList<Broadcast>)broadcastDao.getAllBroadcastsForAMovie(movie)) { %>
+						<option value="<%= broadcast.getId() %>"><%="Cinema_id: "+  broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: "+ broadcast.getMovieId() %></option>
+					<%} %>
+				</select>
+					<input type="submit" value="Choose Broadcast to book seats for">
+				</form>
+				<br>
+			</div>
 		</div>
-		
-		<br><br>
+	</div>
+	
+	<br><br>
 	</body>
 	
 	<script>

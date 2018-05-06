@@ -31,55 +31,54 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	
 	<body>
-		<form action="main" method="get">
-				<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<h1 align="center">My reservations</h2>
+	<jsp:include page="header.jsp"/>
+	
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+
 			
-		<%
-		if(reservations.size()==0){
-		%>
-		<h1 align="center">You dont have any reservations yet!</h1>	
+			<h1 align="center"><strong>My reservations</strong></h1>
 				
-		<%
-		}
-		else{
-		%>
-		<table>
-		  <tr>
-		    <td>Reservation No</td>
-		    <td>Reservation info</td>
-		  </tr>
 			<%
-			for (String string : reservations) {
-				int count = 1;
-				String[] arr = string.split(",");
-				String reservationId = arr[0];
-				reservationId = reservationId.replaceAll("\\D+","");
-				//geting id of each reservation
-				System.out.println(reservationId);	
+			if(reservations.size()==0){
 			%>
-		  <tr>
-		    <td class="counterCell"></td>
-		    <td>
-			    <form>
-			       <%=string%>
-			    </form>
-		    </td>
-		    <td align='center'>
-			    <form action="reservations" method="post">
-			        <input type = "hidden" name = "selectedReservation" value = "<%=reservationId%>"/>
-			    	<input type=submit value="cancel reservation" style="width:100%">	    	
-			    </form>
-			</td>
-		  </tr>
-			
-		<%
+			<h1 align="center"><strong>You dont have any reservations yet!</strong></h1>			
+			<%
 			}
-		}
-		%>
-		
+			else{
+			%>
+			<table>
+			  <tr style="border-bottom: 1px solid #000" >
+			    <th>Reservation No</th>
+			    <th>Reservation info</th>
+			    <th></th>
+			  </tr>
+				<%
+				for (String string : reservations) {
+					String[] arr = string.split(",");
+					String reservationId = arr[0];
+					reservationId = reservationId.replaceAll("\\D+","");
+					//geting id of each reservation
+				%>
+				<tr style="border-bottom: 1px solid #000">
+					<td><%=reservationId%></td>
+					<td><%=string%></td>
+					<td>
+					<form action="reservations" method="post">
+				        <input type = "hidden" name = "selectedReservation" value = "<%=reservationId%>"/>
+				    	<input type=submit value="cancel reservation" style="width:100%">	    	
+				    </form>
+				    </td>
+				</tr>
+			
+				<%
+				} 
+				%>
+			</table> 
+			<%
+			}
+			%>
+		</div>
+	</div>	
 	</body>
 </html>

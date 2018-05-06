@@ -32,110 +32,110 @@ response.setHeader("Cache-Control", "no-cache");
 			}
 		</style>
 	</head>
+	
 	<body>
+	<jsp:include page="header.jsp"/>
 	
-		<form action="main" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<%
-		for (Movie movie : movies) {
-		%>
-		<br>
-		<br>
-		<div class="one">
-			<strong><%=movie.getTitle()%></strong>
-			<br>
-			<br> 
-			<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="250" width="250"> <br>
-			<br>
-			<p><%=movie.getDescription()%></p>
-			<br>
-			Duration: <%=movie.getDuration()%>
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+			<h1 align="center"><strong>YOUR FAVOURITE MOVIES</strong></h1>
 			<br><br>
-			<div id="l<%=movie.getId()%>">Rating: <%=movie.getRating()%></div>
+			
+			<%
+			for (Movie movie : movies) {
+			%>
 			<br>
-			
-			 <select id="r<%=movie.getId()%>" name="ratingSelect"> 
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-			</select>
-
-			<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
-			
-			<br><br>
-			<form action ="removeFromFavorite" method="post">
-				<input type="hidden" name="hiddenJspName" value ="user_favourites">
-				<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-				<input type = "submit"  value = "Remove from favorite">
-			</form> 
-
+			<br>
+			<div class="one">
 				<br>
-				<ul>
-				<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
-				<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
-				<%} %>
-				</ul>			
-			<br><br>
-			<form action="reserveInterim" method="post">
-				<select name="broadcastSelect">
-				<%
-				for (Broadcast broadcast : (ArrayList<Broadcast>) broadcastDao.getAllBroadcastsForAMovie(movie)) {
-				%>
-					<option value="<%=broadcast.getId()%>"><%="Cinema_id: " + broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId()+ ", Movie_id: " + broadcast.getMovieId()%></option>
-				<%
-				}
-				%>
-				</select> 
-				<input type="submit" value="Choose Broadcast to book seats for">
-			</form>
-			<br>
-	
-		</div>
-		<br>
-		<br>
-		<%
-			}
-		%>
-	
-	
-	
-		<script>
-
-			
-			//elementId is the select field id which is like  "r<movie.id>"
-			//ratingFieldId is the field id, which shows the rating, which is like "l<movie.id>"
-			function rateMovieClick(movieId){
-				var elementId = "r"+movieId; 
-				var newRating = document.getElementById(elementId).value;
+				<h2 align="center"><strong><%=movie.getTitle()%></strong></h2>
+				<br>
+				<br> 
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
+				<br>
+				<p><%=movie.getDescription()%></p>
+				<br>
+				Duration: <%=movie.getDuration()%>
+				<br><br>
+				<div id="l<%=movie.getId()%>">Rating: <%=movie.getRating()%></div>
+				<br>
 				
-				var xmlHttp = new XMLHttpRequest();
-				xmlHttp.onreadystatechange = function(){
-					if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
-
-						var respText = xmlHttp.responseText;
-						
-						var ratingFieldId = "l"+movieId;
-						
-						document.getElementById(ratingFieldId).innerHTML = "Rating: "+respText;
+				 <select id="r<%=movie.getId()%>" name="ratingSelect"> 
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+	
+				<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
+				
+				<br><br>
+				<form action ="removeFromFavorite" method="post">
+					<input type="hidden" name="hiddenJspName" value ="user_favourites">
+					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
+					<input type = "submit"  value = "Remove from favorite">
+				</form> 
+	
+					<br>
+					<ul>
+					<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
+					<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
+					<%} %>
+					</ul>			
+				<br><br>
+				<form action="reserveInterim" method="post">
+					<select name="broadcastSelect">
+					<%
+					for (Broadcast broadcast : (ArrayList<Broadcast>) broadcastDao.getAllBroadcastsForAMovie(movie)) {
+					%>
+						<option value="<%=broadcast.getId()%>"><%="Cinema_id: " + broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId()+ ", Movie_id: " + broadcast.getMovieId()%></option>
+					<%
 					}
+					%>
+					</select> 
+					<input type="submit" value="Choose Broadcast to book seats for">
+				</form>
+				<br>
+		
+			</div>
+			<br>
+			<br>
+			<%
 				}
-				
-				xmlHttp.open("POST","rateMovie");
-				xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				xmlHttp.send("id="+movieId+"&rating="+newRating);
-			}
-		</script>
-		</script>
-	
+			%>
+		</div>
+	</div>
+
 	</body>
+	
+	<script>
+		//elementId is the select field id which is like  "r<movie.id>"
+		//ratingFieldId is the field id, which shows the rating, which is like "l<movie.id>"
+		function rateMovieClick(movieId){
+			var elementId = "r"+movieId; 
+			var newRating = document.getElementById(elementId).value;
+			
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.onreadystatechange = function(){
+				if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+
+					var respText = xmlHttp.responseText;
+					
+					var ratingFieldId = "l"+movieId;
+					
+					document.getElementById(ratingFieldId).innerHTML = "Rating: "+respText;
+				}
+			}
+			
+			xmlHttp.open("POST","rateMovie");
+			xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xmlHttp.send("id="+movieId+"&rating="+newRating);
+		}
+	</script>
 </html>

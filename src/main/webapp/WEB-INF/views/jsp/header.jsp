@@ -19,8 +19,8 @@
 		    <ul class="clear">
 		      <li class="active"><a href="getTestMain">HOME</a></li>
 		      <li><a href="viewAllMoviesPage">ALL MOVIES</a></li>
-		      <li><a href="viewUserWatchlist">YOUR FAVOURITES</a></li>
-		      <li><a href="viewUserFavourites">YOUR WATCHLIST</a></li>
+		      <li><a href="viewUserFavourites">YOUR FAVOURITES</a></li>
+		      <li><a href="viewUserWatchlist">YOUR WATCHLIST</a></li>
 		      <li><a href="reservations">YOUR RESERVATIONS</a></li>
 		      <li><a href="edit">EDIT PROFILE</a></li>  
 		      <li><a href="logout">LOGOUT</a></li>

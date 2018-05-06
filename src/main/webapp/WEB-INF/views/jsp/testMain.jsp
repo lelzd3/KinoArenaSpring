@@ -4,34 +4,27 @@
 <html>
 	
 	<head>
-	<title>Jovaphile</title>
-	
-	<link href="css/layout.css" rel="stylesheet" type="text/css">
-		<!-- JAVASCRIPTS -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery.backtotop.js"></script>
-	<script src="js/jquery.mobilemenu.js"></script>
+	<title>Home</title>
+
 	</head>
+	
 	<body id="top">
 	<!-- ################################################################################################ -->
 	
 		<jsp:include page="header.jsp"/>
-	<!-- ################################################################################################ -->
-	<div class="wrapper bgded overlay light" >
-	  <div id="pageintro" class="hoc clear"> 
-	    <!-- ################################################################################################ -->
-	    <article>
-	      <h3 class="heading">IN WORKS</h3>
-	      <p>TUKA MI SA ISKA DA IMA NEKVI "NOVINI"</p>
-	    
-	
-	    </article>
-	    <!-- ################################################################################################ -->
-	  </div>
-	</div>
-	
-	
-	
+		<!-- ################################################################################################ -->
+		<div class="wrapper bgded overlay light" >
+		  <div id="pageintro" class="hoc clear"> 
+		    <!-- ################################################################################################ -->
+		    <article>
+		      <h3 class="heading">IN WORKS</h3>
+		      <p>TUKA MI SA ISKA DA IMA NEKVI "NOVINI" ili tuka da e tfa hello user , promociite i tka </p>
+		    <p>tfa jsp trqq se prekrusti na home.jsp i tka i metoda mapping da mu sa promeni po natam i taka.</p>
+			<p>i nai veroqtno login metoda sh vrushta kum home.jsp ( tiq raboti si gi pisha za da gi ne zabravqm :D)</p>
+		    </article>
+		    <!-- ################################################################################################ -->
+		  </div>
+		</div>
 
 	</body>	
 </html>
