@@ -14,4 +14,4 @@ public class GlobalExceptionHandlerController {
 		return "error";
 	}
 	
-}
+}	
