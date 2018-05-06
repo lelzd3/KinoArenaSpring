@@ -78,13 +78,13 @@ public class UserController {
 
 			session.setAttribute("admin", user);
 			
-			return "adminMain";
+//			return "adminMain";
 		}
 		else {
 			session.setAttribute("user", user);
-			return "main";
+//			return "main";
 		}
-	
+		return "main";
 	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST )
 	public String register(HttpServletRequest request,HttpSession s) throws WrongCredentialsException, InvalidDataException, SQLException{
