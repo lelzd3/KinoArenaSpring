@@ -128,6 +128,10 @@ public class MovieController {
 			totalPrice = totalPrice - amountToDecrease;
 		}
 		
+		totalPrice = totalPrice*100;
+		totalPrice = Math.round(totalPrice);
+		totalPrice = totalPrice/100;
+         		
 		springModel.addAttribute("cinemaName",cinema.getName());
 		springModel.addAttribute("hallId",broadcast.getHallId());
 		springModel.addAttribute("movieTitle", movie.getTitle());

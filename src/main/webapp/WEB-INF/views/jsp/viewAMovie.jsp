@@ -15,7 +15,11 @@ response.setHeader("Cache-Control", "no-cache");
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+	
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		
 		<title>View a movie</title>
 		<%
 			User user = (User) request.getSession().getAttribute("user");
@@ -34,6 +38,11 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 
 	<body>
+	
+	<form action="search" method="post">
+			<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
+			<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
+		</form>
 
 		<form action="viewAllMoviesPage" method="get">
 			<input type="submit" value ="Back">
@@ -124,6 +133,28 @@ response.setHeader("Cache-Control", "no-cache");
 	</body>
 	
 	<script>
+	//search
+	$(document).ready(function() {
+		$(function() {
+			$("#search").autocomplete({
+				source : function(request, response) {
+					$.ajax({
+						url : "searchAutoComplete",
+						type : "GET",
+						data : {
+							term : request.term
+						},
+						dataType : "json",
+						success : function(data) {
+							response(data);
+						}
+					});
+				}
+			});
+		});
+	})
+	
+	
 	//elementId is the select field id which is like  "r<movie.id>"
 	//ratingFieldId is the field id, which shows the rating, which is like "l<movie.id>"
 	function rateMovieClick(movieId){

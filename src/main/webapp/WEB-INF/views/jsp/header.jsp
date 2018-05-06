@@ -7,7 +7,6 @@
 		<title>Header jsp</title>
 		
 		<link href="css/layout.css" rel="stylesheet" type="text/css">
-		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.backtotop.js"></script>
 		<script src="js/jquery.mobilemenu.js"></script>
 	</head>
