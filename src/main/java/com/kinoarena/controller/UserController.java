@@ -3,9 +3,18 @@ package com.kinoarena.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
+import java.util.Random;
 
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +56,72 @@ public class UserController {
 	
 	@Autowired 
 	private UserDao userDao; // change later all UserDao to UserManager (add methods in manager)
+	
+	private String mailUsername = "kinoArenaSpring@gmail.com";
+	private String mailPassword = "kinoarena123";
+	
+	@RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
+	public String passwordRecovery() {
+		return "passwordRecovery";
+	}
+	
+	@RequestMapping(value = "/passwordRecovery", method = RequestMethod.POST)
+	public String passwordRecovery(HttpServletRequest req, HttpServletResponse resp, 
+			Model springModel) throws Exception {
+		String receiverEmail = req.getParameter("email");
+		
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+
+		Session session = Session.getDefaultInstance(props,
+			new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(mailUsername,mailPassword);
+				}
+			});
+
+		try {
+			User user = userDao.getUserByEmail(receiverEmail);
+			String username = user.getEmail();
+			String randomPassword = generateRandomPassword();
+			
+			userDao.setNewPasswod(receiverEmail, randomPassword);
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(mailUsername));
+			message.setRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(receiverEmail));
+			message.setSubject("Kino Arena email recovery");
+			message.setText("Dear "+ username +"," +
+					"Your new password has been set to " + randomPassword);
+			Transport.send(message);
+			return "login";
+		} catch (Exception e) {
+			e.printStackTrace();
+			springModel.addAttribute("error", "Invalid email entered");
+			return passwordRecovery();
+		}
+	}
+
+	private String generateRandomPassword() {
+		String upperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String lowerLetters = upperLetters.toLowerCase();
+		String numbers = "0123456789";
+		String specialChars = "@#$%^&+=";
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 5; i++) {
+			sb.append(upperLetters.charAt(random.nextInt(upperLetters.length())));
+			sb.append(lowerLetters.charAt(random.nextInt(lowerLetters.length())));
+			sb.append(numbers.charAt(random.nextInt(numbers.length())));
+			sb.append(specialChars.charAt(random.nextInt(specialChars.length())));
+		}
+		return sb.toString();
+	}
 	
 	
 	@RequestMapping(value="/index.html", method=RequestMethod.GET)

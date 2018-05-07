@@ -33,7 +33,8 @@ response.setHeader("Cache-Control", "no-cache");
 			</div>
 			<div>
 				<input type="submit" value="Log in" />
-				<a href="getRegisterPage">Register</a>
+				 <a href="passwordRecovery">Forgot your password?</a><br/>
+				<a href="getRegisterPage">Don't have an account? Click here to register.</a>
 			</div>
 		</form><!-- form -->
 	</section><!-- content -->

@@ -242,7 +242,7 @@ public class UserDao implements IUserDao{
 
 	//TODO SHOULD TEST THIS METHOD NOTUSED
 	public User getUserByEmail(String email) throws InvalidDataException, SQLException {
-		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin FROM users WHERE email = ?";
+		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users WHERE email = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, email);
 		ResultSet result = ps.executeQuery();
@@ -495,6 +495,17 @@ public class UserDao implements IUserDao{
 				user.setPassword(hashedPassword);
 		}
 		System.out.println(user.getPassword());
+	}
+
+	public void setNewPasswod(String receiverEmail, String randomPassword) throws SQLException {
+		try (PreparedStatement ps = connection.prepareStatement("UPDATE users SET password = ? WHERE email = ?")) {
+			
+						String hashedPassword = BCrypt.hashpw(randomPassword, BCrypt.gensalt());
+						ps.setString(1, hashedPassword);
+						ps.setString(2, receiverEmail);
+						ps.executeUpdate();
+					}
+		
 	}
 		
 	
