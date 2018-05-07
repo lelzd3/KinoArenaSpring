@@ -20,7 +20,10 @@ response.setHeader("Cache-Control", "no-cache");
 	<section id="content">
 		<form action="register" method="post">
 			<h1>Register Form</h1>
-			<h2>tuk moje da slojim eventualen invalid message</h2>
+			
+	  	<c:if test="${ error != null }">
+	  		<h3 style="color: red; text-align: center">${ error }</h3>
+		</c:if>	
 			<div>
 				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username" />
 			</div>

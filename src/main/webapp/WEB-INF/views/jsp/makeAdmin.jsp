@@ -13,22 +13,26 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Make someone an admin</title>
 	</head>
+	
 	<body>
-		
-		<form action="adminMain" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<form action="makeAdmin" method="post" id="makeAdminForm" name="makeAdminForm">
+	<jsp:include page="header.jsp"/>
+	
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+			
+			<h1 align="center"><strong>Make another user admin</strong></h1>
 			<br>
-			<select name="usersSelect">
-				<c:forEach var="user" items="${usersThatAreNotAdmin}"  >
-			 		 <option value="${user.email}">${user.username}</option>
-				</c:forEach>
-			</select>
-			<br>
-			<input type="submit" value="makeAdmin">
-		</form>
+			<form action="makeAdmin" method="post" id="makeAdminForm" name="makeAdminForm">
+				<br>
+				<select name="usersSelect">
+					<c:forEach var="user" items="${usersThatAreNotAdmin}"  >
+				 		 <option value="${user.email}">${user.username}</option>
+					</c:forEach>
+				</select>
+				<br>
+				<input type="submit" value="makeAdmin">
+			</form>
+		</div>
+	</div>	
 	</body>
 </html>

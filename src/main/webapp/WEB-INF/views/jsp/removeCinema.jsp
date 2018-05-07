@@ -16,22 +16,24 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	
 	<body>
+	<jsp:include page="header.jsp"/>
 	
-		<form action="adminMain" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-	
-		<form action="removeCinema" method="post" >
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+		
+			<h1 align="center"><strong>Remove Cinema</strong></h1>
 			<br>
-			<select name=cinemaSelect>
-				<c:forEach var="cinema" items="${cinemas}">
-				<option value="${cinema.id}">${cinema.id} , ${cinema.name} , ${cinema.address} </option>
-				</c:forEach>
-			</select>
-			<br>
-			<input type="submit" value="removeCinema">
-		</form> 
-	
+			<form action="removeCinema" method="post" >
+				<br>
+				<select name=cinemaSelect>
+					<c:forEach var="cinema" items="${cinemas}">
+					<option value="${cinema.id}">${cinema.id} , ${cinema.name} , ${cinema.address} </option>
+					</c:forEach>
+				</select>
+				<br>
+				<input type="submit" value="removeCinema">
+			</form> 
+		</div>
+	</div>
 	</body>
 </html>

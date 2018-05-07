@@ -15,42 +15,44 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	
 	<body>
+	<jsp:include page="header.jsp"/>
 	
-		<form action="adminMain" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<form action="addBroadcast" method="post" id="addBroadcastForm" name="addBroadcastForm">
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+	
+			<h1 align="center"><strong>Add Broadcast</strong></h1>
 			<br>
-			Select Movie
-			<select name="movieSelect">
-				<c:forEach var="movie" items="${movies}"  >
-			 		 <option value="${movie.id}">${movie.title}</option>
-				</c:forEach>
-			</select>
-			<br>
-			Select Cinema
-			<select name="cinemaSelect">
-				<c:forEach var="cinema" items="${cinemas}"  >
-			 		 <option value="${cinema.id}">${cinema.name} , ${cinema.id}</option>
-				</c:forEach>
-			</select>
-			<br>
-			Select Hall
-			<select name="hallSelect">
-				<c:forEach var="hall" items="${halls}"  >
-			 		 <option value="${hall.id}">${hall.id} , ${hall.cinemaId}</option>
-				</c:forEach>
-			</select>
-			<br>
-			Date and Time <input type="datetime-local" name="projection_time" required>
-			<br>
-			Price <input type="number" name= "price" step="any" required>
-			<br>
-			<input type="submit" value="addBroadcast">
-		</form> 	
+			<form action="addBroadcast" method="post" id="addBroadcastForm" name="addBroadcastForm">
+				<br>
+				Select Movie
+				<select name="movieSelect">
+					<c:forEach var="movie" items="${movies}"  >
+				 		 <option value="${movie.id}">${movie.title}</option>
+					</c:forEach>
+				</select>
+				<br>
+				Select Cinema
+				<select name="cinemaSelect">
+					<c:forEach var="cinema" items="${cinemas}"  >
+				 		 <option value="${cinema.id}">${cinema.name} , ${cinema.id}</option>
+					</c:forEach>
+				</select>
+				<br>
+				Select Hall
+				<select name="hallSelect">
+					<c:forEach var="hall" items="${halls}"  >
+				 		 <option value="${hall.id}">${hall.id} , ${hall.cinemaId}</option>
+					</c:forEach>
+				</select>
+				<br>
+				Date and Time <input type="datetime-local" name="projection_time" required>
+				<br>
+				Price <input type="number" name= "price" step="any" required>
+				<br>
+				<input type="submit" value="addBroadcast">
+			</form> 	
 		<br>
-		
+		</div>
+	</div>	
 	</body>
 </html>

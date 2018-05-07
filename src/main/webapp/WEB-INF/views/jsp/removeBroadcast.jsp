@@ -13,23 +13,26 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Remove Broadcast page</title>
 	</head>
+	
 	<body>
+	<jsp:include page="header.jsp"/>
 	
-		<form action="adminMain" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<form action="removeBroadcast" method="post" id="removeBroadcastForm" name="removeBroadcastForm">
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+			
+			<h1 align="center"><strong>Remove Broadcast</strong></h1>
 			<br>
-			<select name="broadcastSelect">
-				<c:forEach var="broadcast" items="${broadcasts}">
-				<option value="${broadcast.id}">${broadcast.id} , ${broadcast.movieId} , ${broadcast.projectionTime} </option>
-				</c:forEach>
-			</select>
-			<br>
-			<input type="submit" value="removeBroadcast">
-		</form> 
-	
+			<form action="removeBroadcast" method="post" id="removeBroadcastForm" name="removeBroadcastForm">
+				<br>
+				<select name="broadcastSelect">
+					<c:forEach var="broadcast" items="${broadcasts}">
+					<option value="${broadcast.id}">${broadcast.id} , ${broadcast.movieId} , ${broadcast.projectionTime} </option>
+					</c:forEach>
+				</select>
+				<br>
+				<input type="submit" value="removeBroadcast">
+			</form>
+		</div> 
+	</div>
 	</body>
 </html>

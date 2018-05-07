@@ -14,24 +14,26 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	
 	<body>
+	<jsp:include page="header.jsp"/>
+	
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
 		
-		<form action="adminMain" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-		
-		<form action="changeBroadcastProjectionTime" method="post">
+			<h1 align="center"><strong>Change Broadcast Projection Time</strong></h1>
 			<br>
-			Select Broadcast
-			<select name="broadcastSelect">
-				<c:forEach var="broadcast" items="${broadcasts}">
-					<option value="${broadcast.id}">${broadcast.id} , ${broadcast.movieId} , ${broadcast.projectionTime}</option>
-				</c:forEach>
-			</select>
-			<br>
-			Date and Time <input type="datetime-local" name="newProjectionTime" required>
-			<input type="submit" value="Change Price">
-		</form>
-		
+			<form action="changeBroadcastProjectionTime" method="post">
+				<br>
+				Select Broadcast
+				<select name="broadcastSelect">
+					<c:forEach var="broadcast" items="${broadcasts}">
+						<option value="${broadcast.id}">${broadcast.id} , ${broadcast.movieId} , ${broadcast.projectionTime}</option>
+					</c:forEach>
+				</select>
+				<br>
+				Date and Time <input type="datetime-local" name="newProjectionTime" required>
+				<input type="submit" value="Change Price">
+			</form>
+		</div>
+	</div>	
 	</body>
 </html>

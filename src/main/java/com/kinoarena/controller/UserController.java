@@ -61,7 +61,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpSession session) throws InvalidDataException, SQLException, WrongCredentialsException{
+	public String login(HttpServletRequest request,HttpSession session, Model springModel) {
 		session.setAttribute("movieDao",movieDao);
 		session.setAttribute("userDao",userDao);
 		session.setAttribute("broadcastDao",broadcastDao);
@@ -71,24 +71,32 @@ public class UserController {
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password"); 
-		
+		try {
 		userDao.loginCheck(username, password);
 		User user = userDao.getUser(username);
+
 		if(user.getIsAdmin()) {
 
 			session.setAttribute("admin", user);
-			
-//			return "adminMain";
+			session.setAttribute("user", user);
+			return "testMain";
 		}
 		else {
 			session.setAttribute("user", user);
-//			return "main";
+			return "main";
 		}
-		return "main";
+		
+		
+		
+		}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
+			springModel.addAttribute("error", e.getMessage());
+			return "login";
+		}
+		
 	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST )
-	public String register(HttpServletRequest request,HttpSession s) throws WrongCredentialsException, InvalidDataException, SQLException{
-	
+	public String register(HttpServletRequest request,HttpSession s, Model springModel){
+	try {
 		String username = request.getParameter("username");
 		String pass1 = request.getParameter("password1");
 		String pass2 = request.getParameter("password2");
@@ -99,10 +107,10 @@ public class UserController {
 		System.out.println(age);
 			
 		if (username.isEmpty() || username.length() < 5) {
-			throw new WrongCredentialsException("username must be at least 5 chars long");
+			throw new WrongCredentialsException("Username must be at least 5 chars long");
 		}
 		if (!pass1.equals(pass2)) {
-			throw new WrongCredentialsException("passwords missmatch");
+			throw new WrongCredentialsException("Passwords missmatch");
 		}
 		if (!email.contains("@") || email.isEmpty()) {
 			throw new WrongCredentialsException("Invalid entered email");
@@ -120,7 +128,11 @@ public class UserController {
 		
 		s.setAttribute("user", user);
 		return "login";
-
+	}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
+		springModel.addAttribute("error", e.getMessage());
+		return "register";
+	}
+	
 	}
 	
 	

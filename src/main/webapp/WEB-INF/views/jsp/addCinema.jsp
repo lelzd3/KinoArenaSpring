@@ -13,20 +13,22 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	
 	<body>
+	<jsp:include page="header.jsp"/>
 	
-		<form action="adminMain" method="get">
-			<input type="submit" value ="Back">
-		</form>
-		<br><br><br><br>
-	
-		<form action="addCinema" method="post">
+	<div class="wrapper bgded overlay light" >
+		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
 			
-			Name <input type="text" name="name" required>
-			<br><br>
-			Address <input type="text" name="address" required>
-			<br><br>
-			<input type="submit" value="addCinema">
-		</form> 	
-		<br>
+			<h1 align="center"><strong>Add Cinema</strong></h1>
+			<br>
+			<form action="addCinema" method="post">		
+				Name <input type="text" name="name" required>
+				<br><br>
+				Address <input type="text" name="address" required>
+				<br><br>
+				<input type="submit" value="addCinema">
+			</form> 	
+
+		</div>
+	</div>		
 	</body>
 </html>

@@ -46,12 +46,12 @@ response.setHeader("Cache-Control", "no-cache");
 			%>
 			<br>
 			<br>
-			<div class="one">
+			<div class="one" align="center">
 				<br>
 				<h2 align="center"><strong><%=movie.getTitle()%></strong></h2>
 				<br>
 				<br> 
-				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="300" width="300" > <br>
 				<br>
 				<p><%=movie.getDescription()%></p>
 				<br>
@@ -80,7 +80,7 @@ response.setHeader("Cache-Control", "no-cache");
 				<form action ="removeFromWatchlist" method="post">
 					<input type="hidden" name="hiddenJspName" value ="user_watchlist">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit"  value = "Remove from watchlist">
+					<input type = "image" src="img/minus.png" style="width: 7.5%;" value = "Remove from watchlist">
 				</form> 
 				
 				<br>

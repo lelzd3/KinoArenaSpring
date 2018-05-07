@@ -25,6 +25,9 @@ response.setHeader("Cache-Control", "no-cache");
 			BroadcastDao broadcastDao = (BroadcastDao)session.getAttribute("broadcastDao");
 			Movie movie =(Movie) request.getSession().getAttribute("selectedMovie");
 			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
+			// make is so we make a smaller select query
+			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
+			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());
 		%>
 		<style>
 		.one{
@@ -50,12 +53,12 @@ response.setHeader("Cache-Control", "no-cache");
 	
 			
 			<br><br>
-			<div class="one">
+			<div class="one" align="center">
 				<br>
 				<h1 align="center"><strong><%=movie.getTitle()%></strong></h1>
 				<br>
 				<br> 
-				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="300" width="300"> <br>
 				<br>
 				<p><%=movie.getDescription()%></p>
 				<br>
@@ -80,36 +83,34 @@ response.setHeader("Cache-Control", "no-cache");
 				<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
 				<br>
 				
-				<% if(!userDao.isMovieInFavourite(user.getId(),movie.getId())){ %>
-	
+				<% if(!favMovies.contains(movie.getId())){ %>
 				<form action = "addInFavorite" method = "post">
-					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Add in favorites"/>
+					<input type = "image" src="img/unfavourite.png" style="width: 7.5%;" value = "Add in favorites"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromFavorite" method="post">
-					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Remove from favourites">
+					<input type = "image" src="img/favourite.png" style="width: 7.5%;" value = "Remove from favourites">
 				</form> 
-	
+		
 				<% }  %>
-				
-				 <% if(!userDao.isMovieInWatchlist(user.getId(),movie.getId())){ %>
-	
+					
+				<% if(!watchMovies.contains(movie.getId())){ %>
 				<form action = "addInWatchlist" method = "post">
-					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Add in watchlist"/>
+					<input type = "image" src="img/plus.png" style="width: 7.5%;" value = "Add in watchlist"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromWatchlist" method="post">
-					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
+					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Remove from watchlist">
+					<input type = "image" src="img/minus.png" style="width: 7.5%;" value = "Remove from watchlist">
 				</form> 
-	
+		
 				<% }  %>
 					
 				<br>

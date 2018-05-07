@@ -18,9 +18,6 @@ import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 public class UserManager {
 	
 	@Autowired
-	private Validations validator;
-	
-	@Autowired
 	private UserDao userDao;
 	
 	private static final int MIN_LENGTH_OF_PASSWORD = 8;
@@ -73,7 +70,7 @@ public class UserManager {
 	            if (!newPassword.equals(confirmedPassword)) {
 	                throw new InvalidDataException("Passwords don't match.");
 	            }
-	            if (!validator.verifyPassword(newPassword)) {
+	            if (!Validations.verifyPassword(newPassword)) {
 	                throw new InvalidDataException("Your new password is weak.");
 	            }
 	            editedPassword = newPassword;
@@ -81,7 +78,7 @@ public class UserManager {
 
 	        //Check email
 	        if (!user.getEmail().equals(email)) {
-	                if (!validator.verifyEmail(email)) {
+	                if (!Validations.verifyEmail(email)) {
 	                    throw new InvalidDataException("Not valid entered email");
 	                }
 	            
@@ -108,7 +105,7 @@ public class UserManager {
 	            }
 	        }
 	        if (ifNameIsChanged) {
-	            if (!validator.verifyName(name)) {
+	            if (!Validations.verifyName(name)) {
 	                throw new InvalidDataException("Not valid entered name!");
 	            }
 	            editedName = name;

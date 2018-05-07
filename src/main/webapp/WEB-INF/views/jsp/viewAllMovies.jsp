@@ -25,9 +25,19 @@ response.setHeader("Cache-Control", "no-cache");
 		<style>
 		.one {
 			border: 1px solid darkslategray;
+			position: relative;
+			display: inline-block;
 			font-size: 150%;
 			border-style: outset;
 			margin-bottom: 5%;
+			width: 49%;
+			height: 50%;
+			
+		}
+		.overflowText {
+		    width: 100%;
+		    height: 110px;
+		    overflow: auto;
 		}
 		</style>
 		<%
@@ -48,9 +58,11 @@ response.setHeader("Cache-Control", "no-cache");
 	<jsp:include page="header.jsp"/>
 	
 	<div class="wrapper bgded overlay light" >
-		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
+		<div id="pageintro" class="hoc clear" > <!-- toq div gi prai da sa centralno -->
+			
 			<h1 align="center"><strong>ALL MOVIES</strong></h1>
-			<form action="search" method="post">
+			
+			<form  action="search" method="post">
 				<button type="submit" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4">Search</button>
 				<input type="text" id="search" name="movie" class="w3-bar-item w3-button w3-padding-large w3-right w3-theme-d4" required>
 			</form>
@@ -59,14 +71,15 @@ response.setHeader("Cache-Control", "no-cache");
 			<%
 			for (Movie movie : movies) {
 			%>
-			<div class="one">
+			<div class="one" align="center">
 				<br>
 				<h2 align="center"><strong><%=movie.getTitle()%></strong></h2>
 				<br>
 				<br> 
-				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="500" width="500" style="margin-left: 25%"> <br>
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="300" width="300" >
 				<br>
-				<p><%=movie.getDescription()%></p>
+				<br>
+				<p class="overflowText"><%=movie.getDescription()%></p>
 				<br>
 				Duration: <%=movie.getDuration()%>
 				<br><br>
@@ -100,13 +113,13 @@ response.setHeader("Cache-Control", "no-cache");
 				<form action = "addInFavorite" method = "post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Add in favorites"/>
+					<input type = "image" src="img/unfavourite.png" style="width: 15%;" value = "Add in favorites"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromFavorite" method="post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Remove from favourites">
+					<input type = "image" src="img/favourite.png" style="width: 15%;" value = "Remove from favourites">
 				</form> 
 		
 				<% }  %>
@@ -115,13 +128,13 @@ response.setHeader("Cache-Control", "no-cache");
 				<form action = "addInWatchlist" method = "post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Add in watchlist"/>
+					<input type = "image" src="img/plus.png" style="width: 15%;" value = "Add in watchlist"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromWatchlist" method="post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "submit" value = "Remove from watchlist">
+					<input type = "image" src="img/minus.png" style="width: 15%;" value = "Remove from watchlist">
 				</form> 
 		
 				<% }  %>
@@ -137,8 +150,9 @@ response.setHeader("Cache-Control", "no-cache");
 					}
 					%>
 					</select>
+					<br>
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
-					<input type="submit" value="Choose Broadcast to book seats for">
+					<input type="submit" value="Reserve Tickets">
 						
 				</form>
 

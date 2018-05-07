@@ -18,8 +18,22 @@
 		    <!-- ################################################################################################ -->
 		    <ul class="clear">
 			    <li class="active"><a href="getTestMain">HOME</a></li>
-			    <c:if test="${empty sessionScope.user}">
-		    		<li><a href="viewAllMoviesPage">ADMIN PANEL</a></li>
+			    <c:if test="${!empty sessionScope.admin.username}">
+		    		<li><a class="drop" href="#">ADMIN PANEL</a>
+			    		<ul>
+			    			<li><a href="addMoviePage">Add Movie</a></li>
+			    			<li><a href="addHallPage">Add Hall</a></li>
+			    			<li><a href="addCinemaPage">Add Cinema</a></li>
+			    			<li><a href="addBroadcastPage">Add Broadcast</a></li>
+			    			<li><a href="removeBroadcastPage">Remove Broadcast</a></li>
+			    			<li><a href="removeMoviePage">Remove Movie</a></li>
+			    			<li><a href="removeCinemaPage">Remove Cinema</a></li>
+			    			<li><a href="removeHallPage">Remove Hall</a></li>
+			    			<li><a href="makeAdminPage">Make Admin</a></li>
+			    			<li><a href="changeBroadcastPricePage">Change Broadcast Price</a></li>
+			    			<li><a href="changeBroadcastProjectionTimePage">Change Broadcast Projection Time</a></li>
+			    		</ul>
+		    		</li>
 		    	</c:if>
 			    <li><a href="viewAllMoviesPage">ALL MOVIES</a></li>
 			    <li><a href="viewUserFavourites">YOUR FAVOURITES</a></li>
