@@ -1,30 +1,19 @@
 package com.kinoarena.utilities;
 
-import org.springframework.stereotype.Component;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
-@Component
 public class Validations {
 
 	private static final int MIN_LENGTH_OF_PASSWORD = 8;
 
 	private Validations() {}
-	
-	public static boolean inputValidation(String username, String password) throws InvalidDataException {
-		if(validation(username) && validation(password)) {
-			return true;
-		}
-		else {
-			throw new InvalidDataException("Invalid User name or password");
-		}
-	}
 
-	public static boolean validation(String text)  throws InvalidDataException {
+	private static boolean validation(String text)  throws InvalidDataException {
 		if( text != null && !text.trim().isEmpty()){
 			return true;
 		}
 		else {
-			throw new InvalidDataException("Invalid User name or password");
+			throw new InvalidDataException("Empty field");
 		}
 	}
 	
@@ -50,19 +39,7 @@ public class Validations {
 	        
 	    return true;
 	}
-	
-	public static boolean verifyPhoneNumber(String number) throws InvalidDataException {
-		if(!validation(number)) {
-			throw new InvalidDataException("Invalid Phone number");
-	    }
 
-	    if(number.length() != 10 || !number.matches("[0-9]+")) {
-			throw new InvalidDataException("Invalid Phone number");
-	    }
-	        
-	    return true;
-	}
-	
 	public static boolean verifyUsername(String username) throws InvalidDataException {
 
 	    if(!username.matches("[A-Za-z0-9_]+") || username.length() < 6) {

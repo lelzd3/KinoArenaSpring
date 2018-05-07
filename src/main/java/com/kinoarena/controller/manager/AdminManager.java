@@ -18,7 +18,6 @@ import com.kinoarena.model.pojo.Cinema;
 import com.kinoarena.model.pojo.Hall;
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.model.pojo.User;
-import com.kinoarena.utilities.exceptions.IlligalAdminActionException;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.NotAnAdminException;
 
@@ -121,16 +120,6 @@ public class AdminManager {
 			throw new NotAnAdminException();
 		}
 	}
-
-	//not used
-	public void changeUserIsBannedStatus(User admin, User u, boolean isBanned) throws NotAnAdminException, SQLException, IlligalAdminActionException {
-		if(admin.getIsAdmin()){
-			userDao.changeUserIsBannedStatus(u, isBanned);
-		}else{
-			throw new NotAnAdminException();
-		}
-	}
-
 
 	public void changeBroadcastPrice(User admin,int broadcastId, double newPrice) throws SQLException, NotAnAdminException, InvalidDataException {
 		if(admin.getIsAdmin()){

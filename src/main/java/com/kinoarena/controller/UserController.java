@@ -66,15 +66,13 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/passwordRecovery", method = RequestMethod.POST)
-	public String passwordRecovery(HttpServletRequest req, HttpServletResponse resp, 
-			Model springModel) throws Exception {
+	public String passwordRecovery(HttpServletRequest req, HttpServletResponse resp, Model springModel) throws Exception {
 		String receiverEmail = req.getParameter("email");
 		
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.class",
-				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.port", "465");
 
@@ -93,32 +91,26 @@ public class UserController {
 			userDao.setNewPasswod(receiverEmail, randomPassword);
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(mailUsername));
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(receiverEmail));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverEmail));
 			message.setSubject("Kino Arena email recovery");
-			message.setText("Dear "+ username +"," +
-					"Your new password has been set to " + randomPassword);
+			message.setText("Dear "+ username +"," + "Your new password has been set to " + randomPassword);
 			Transport.send(message);
 			return "login";
 		} catch (Exception e) {
 			e.printStackTrace();
 			springModel.addAttribute("error", "Invalid email entered");
-			return passwordRecovery();
+			return "passwordRecovery";
 		}
 	}
 
 	private String generateRandomPassword() {
 		String upperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String lowerLetters = upperLetters.toLowerCase();
-		String numbers = "0123456789";
-		String specialChars = "@#$%^&+=";
 		Random random = new Random();
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			sb.append(upperLetters.charAt(random.nextInt(upperLetters.length())));
 			sb.append(lowerLetters.charAt(random.nextInt(lowerLetters.length())));
-			sb.append(numbers.charAt(random.nextInt(numbers.length())));
-			sb.append(specialChars.charAt(random.nextInt(specialChars.length())));
 		}
 		return sb.toString();
 	}
@@ -146,9 +138,11 @@ public class UserController {
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password"); 
+		
 		try {
-		userDao.loginCheck(username, password);
-		User user = userDao.getUser(username);
+			
+			userDao.loginCheck(username, password);
+			User user = userDao.getUser(username);
 
 		if(user.getIsAdmin()) {
 
@@ -160,9 +154,7 @@ public class UserController {
 			session.setAttribute("user", user);
 			return "main";
 		}
-		
-		
-		
+
 		}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
 			springModel.addAttribute("message", e.getMessage());
 			return "login";
@@ -171,47 +163,47 @@ public class UserController {
 	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST )
 	public String register(HttpServletRequest request,HttpSession s, Model springModel){
-	try {
-		String username = request.getParameter("username");
-		String pass1 = request.getParameter("password1");
-		String pass2 = request.getParameter("password2");
-		String email = request.getParameter("email");
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		int age = Integer.valueOf(request.getParameter("age"));
-		System.out.println(age);
+		try {
+			String username = request.getParameter("username");
+			String pass1 = request.getParameter("password1");
+			String pass2 = request.getParameter("password2");
+			String email = request.getParameter("email");
+			String firstName = request.getParameter("firstName");
+			String lastName = request.getParameter("lastName");
+			int age = Integer.valueOf(request.getParameter("age"));
+				
+			userDao.existingEmailCheck(email);
+			userDao.existingUserNameCheck(username);
 			
-		userDao.existingEmailCheck(email);
-		userDao.existingUserNameCheck(username);
-		if (username.isEmpty() || username.length() < 5) {
-			throw new WrongCredentialsException("Username must be at least 5 chars long");
-		}
-		if (!pass1.equals(pass2)) {
-			throw new WrongCredentialsException("Passwords missmatch");
-		}
-		if (!email.contains("@") || email.isEmpty()) {
-			throw new WrongCredentialsException("Invalid entered email");
-		}
-		if (firstName.isEmpty()) {
-			throw new WrongCredentialsException("Invalid entered first name");
-		}
-		if (lastName.isEmpty()) {
-			throw new WrongCredentialsException("Invalid entered last name");
+			if (username.isEmpty() || username.length() < 5) {
+				throw new InvalidDataException("Username must be at least 5 chars long");
+			}
+			if (!pass1.equals(pass2)) {
+				throw new InvalidDataException("Passwords missmatch");
+			}
+			if (!email.contains("@") || email.isEmpty()) {
+				throw new InvalidDataException("Invalid entered email");
+			}
+			if (firstName.isEmpty()) {
+				throw new InvalidDataException("Invalid entered first name");
+			}
+			if (lastName.isEmpty()) {
+				throw new InvalidDataException("Invalid entered last name");
+			}
+			
+			// creating new user with these details
+			User user = new User(age , username, pass1, firstName, lastName, email);
+			// adding to db
+			userDao.addUser(user);
+			
+			s.setAttribute("user", user);
+			springModel.addAttribute("message", "Successfull registration");
+			return "login";
+		}catch(SQLException | InvalidDataException e) {
+			springModel.addAttribute("message", e.getMessage());
+			return "register";
 		}
 		
-		// creating new user with these details
-		User user = new User(age , username, pass1, firstName, lastName, email);
-		// adding to db
-		userDao.addUser(user);
-		
-		s.setAttribute("user", user);
-		springModel.addAttribute("message", "Successfull registration");
-		return "login";
-	}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
-		springModel.addAttribute("message", e.getMessage());
-		return "register";
-	}
-	
 	}
 	
 	

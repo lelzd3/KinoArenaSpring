@@ -3,9 +3,8 @@ response.setHeader("Pragma", "No-cache");
 response.setDateHeader("Expires", 0);
 response.setHeader("Cache-Control", "no-cache");
 %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -20,7 +19,7 @@ response.setHeader("Cache-Control", "no-cache");
 	<section id="content">
 		<form action="login" method="post">
 		
-		     <h1><strong> Login </strong></h1>
+		<h1><strong> Login </strong></h1>
 		
 	  	<c:if test="${ message != null }">
 	  		<h3 style="color: red; text-align: center">${ message }</h3>
@@ -33,7 +32,7 @@ response.setHeader("Cache-Control", "no-cache");
 			</div>
 			<div>
 				<input type="submit" value="Log in" />
-				 <a href="passwordRecovery">Forgot your password?</a><br/>
+				<a href="passwordRecovery">Forgot your password?</a><br/>
 				<a href="getRegisterPage">Don't have an account? Click here to register.</a>
 			</div>
 		</form><!-- form -->

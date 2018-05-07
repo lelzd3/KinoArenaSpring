@@ -205,7 +205,7 @@ public class AdminController {
 
 	//adminPanel.jsp -> changeBroadcastPrice.jsp	
 	@RequestMapping(value = "/changeBroadcastPricePage", method = RequestMethod.GET)
-	public String getToSetDiscount(Model springModel) throws InvalidDataException, SQLException {
+	public String goToChangeBroadcastPrice(Model springModel) throws InvalidDataException, SQLException {
 
 		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
 		return "changeBroadcastPrice";
@@ -213,7 +213,7 @@ public class AdminController {
 	
 	
 	@RequestMapping(value = "/changeBroadcastPrice", method = RequestMethod.POST)
-	public String setDiscount(
+	public String changeBroadcastPrice(
 			@RequestParam("broadcastSelect") int broadcastId,
 			@RequestParam("newPrice") double newPrice,
 			HttpSession session,HttpServletRequest request,

@@ -13,10 +13,8 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Admin Page</title>
 		<%
-		//can also be User user = (User) session.getAttribute("user")
 			User admin = (User) request.getSession().getAttribute("admin"); 
 			String s = session.getId();
-		//	ArrayList<Broadcast> broadcasts = (ArrayList<Broadcast>) application.getAttribute("broadcasts");
 		%>
 	</head>
 	

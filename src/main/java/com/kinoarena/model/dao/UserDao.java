@@ -15,7 +15,6 @@ import com.kinoarena.controller.manager.DBManager;
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.model.pojo.User;
 import com.kinoarena.utilities.BCrypt;
-import com.kinoarena.utilities.exceptions.IlligalAdminActionException;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 
@@ -95,17 +94,11 @@ public class UserDao implements IUserDao{
 	
 	}
 
-	@Override // rating should be between 1 and 10 
+	@SuppressWarnings("resource")
+	@Override
 	public void rateMovie(User u, Movie m,int rating) throws SQLException, InvalidDataException {
-		// TODO rateMovie method in UserDao , SHOULD INSERT DOUBLE RATING IN DB!!!!
-		// TODO MOVE rating validation in USER MANAGER or <unknown> SERVLET
-		//movies_id and users_id should be PK
-		if(rating<1 || rating>10) {
-			throw new InvalidDataException("Invalid entered rating. It should be between 1 and 10");
-		}
 		
 		double newRating = 0;
-		int oldRatingGiven = 0;
 		PreparedStatement ps = null;
 		try {
 			connection.setAutoCommit(false);
@@ -188,7 +181,7 @@ public class UserDao implements IUserDao{
 
 
 	public User getUser(String username) throws InvalidDataException, SQLException {
-		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users WHERE username = ?";
+		String sql = "SELECT id, first_name, last_name, username, password, email ,is_Admin, age FROM users WHERE username = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, username);
 		ResultSet result = ps.executeQuery();
@@ -205,7 +198,6 @@ public class UserDao implements IUserDao{
 					result.getString("first_name"),
 					result.getString("last_name"),
 					result.getString("email"),
-					result.getString("phone_number"),
 					isAdmin
 					);
 		
@@ -236,27 +228,9 @@ public class UserDao implements IUserDao{
 		
 	}
 
-	
-	//notused
-	public void changeUserIsBannedStatus(User u, boolean isBanned) throws IlligalAdminActionException, SQLException {
-		
-		if (u.getIsBanned() && isBanned) {
-			throw new IlligalAdminActionException();
-		} else if (!u.getIsBanned() && !isBanned) {
-			throw new IlligalAdminActionException();
-		} else {
-			PreparedStatement ps = connection.prepareStatement("UPDATE users SET isBanned = ? WHERE user_id = ?",Statement.RETURN_GENERATED_KEYS);
-			ps.setBoolean(1, isBanned);
-			ps.setInt(2, u.getId());
-			ps.executeUpdate();
-			ps.close();
-		}
-		
-	}
-
 	//TODO SHOULD TEST THIS METHOD NOTUSED
 	public User getUserByEmail(String email) throws InvalidDataException, SQLException {
-		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users WHERE email = ?";
+		String sql = "SELECT id, first_name, last_name, username, password, email , is_Admin, age FROM users WHERE email = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, email);
 		ResultSet result = ps.executeQuery();
@@ -272,7 +246,6 @@ public class UserDao implements IUserDao{
 					result.getString("first_name"),
 					result.getString("last_name"),
 					result.getString("email"),
-					result.getString("phone_number"),
 					isAdmin
 					);
 		
@@ -280,7 +253,7 @@ public class UserDao implements IUserDao{
 
 	@Override
 	public Collection<User> getAllUsers() throws SQLException, InvalidDataException   {
-		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users");
+		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , is_Admin, age FROM users");
 		ResultSet result = ps.executeQuery();
 		ArrayList<User> users = new ArrayList<User>();
 		
@@ -295,7 +268,6 @@ public class UserDao implements IUserDao{
 					result.getString("first_name"),
 					result.getString("last_name"),
 					result.getString("email"),
-					result.getString("phone_number"),
 					isAdmin
 					);
 			users.add(user);
@@ -305,7 +277,7 @@ public class UserDao implements IUserDao{
 
 	@Override
 	public Collection<User> getAllUsersButNoAdmins() throws SQLException, InvalidDataException {
-		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin,age FROM users  WHERE is_Admin = 0");
+		PreparedStatement ps = connection.prepareStatement("SELECT id, first_name, last_name, username, password, email , is_Admin,age FROM users  WHERE is_Admin = 0");
 		ResultSet result = ps.executeQuery();
 		ArrayList<User> users = new ArrayList<User>();
 		
@@ -320,7 +292,6 @@ public class UserDao implements IUserDao{
 					result.getString("first_name"),
 					result.getString("last_name"),
 					result.getString("email"),
-					result.getString("phone_number"),
 					isAdmin
 					);
 			users.add(user);
@@ -502,11 +473,11 @@ public class UserDao implements IUserDao{
 		String password = user.getPassword();
 		if(!password.equals(hashedPassword)) {
 			PreparedStatement ps = connection.prepareStatement("UPDATE users SET password= ? WHERE id=?;");
-				ps.setString(1, hashedPassword);
-				ps.setLong(2, user.getId());
-				ps.executeUpdate();
-				ps.close();
-				user.setPassword(hashedPassword);
+			ps.setString(1, hashedPassword);
+			ps.setLong(2, user.getId());
+			ps.executeUpdate();
+			ps.close();
+			user.setPassword(hashedPassword);
 		}
 		System.out.println(user.getPassword());
 	}
@@ -514,11 +485,11 @@ public class UserDao implements IUserDao{
 	public void setNewPasswod(String receiverEmail, String randomPassword) throws SQLException {
 		try (PreparedStatement ps = connection.prepareStatement("UPDATE users SET password = ? WHERE email = ?")) {
 			
-						String hashedPassword = BCrypt.hashpw(randomPassword, BCrypt.gensalt());
-						ps.setString(1, hashedPassword);
-						ps.setString(2, receiverEmail);
-						ps.executeUpdate();
-					}
+			String hashedPassword = BCrypt.hashpw(randomPassword, BCrypt.gensalt());
+			ps.setString(1, hashedPassword);
+			ps.setString(2, receiverEmail);
+			ps.executeUpdate();
+		}
 		
 	}
 		

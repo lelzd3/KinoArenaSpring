@@ -95,6 +95,10 @@ public class MovieController {
 		int movieIdToBeRated = Integer.parseInt(request.getParameter("id"));
 		int newRating = Integer.parseInt(request.getParameter("rating"));
 
+		if(newRating<1 || newRating>10) {
+			throw new InvalidDataException("Invalid entered rating. It should be between 1 and 10");
+		}
+		
 		Movie movie = movieDao.getMovieById(movieIdToBeRated);
 		userDao.rateMovie(user, movie, newRating);
 		
