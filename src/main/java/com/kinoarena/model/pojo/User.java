@@ -1,7 +1,5 @@
 package com.kinoarena.model.pojo;
 
-import javax.xml.bind.DataBindingException;
-
 import com.kinoarena.utilities.Validations;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
@@ -66,11 +64,13 @@ public class User {
 	public String getEmail() {
 		return email;
 	}
-	
-	
-	
+
 	public boolean getIsAdmin() {
 		return isAdmin;
+	}
+	
+	public int getAge() {
+		return age;
 	}
 
 	// setters:
@@ -107,10 +107,6 @@ public class User {
 		if(Validations.verifyEmail(email)){
 			this.email = email;
 		}
-	}
-	
-	public int getAge() {
-		return age;
 	}
 
 	public void setAge(int age) throws InvalidDataException {

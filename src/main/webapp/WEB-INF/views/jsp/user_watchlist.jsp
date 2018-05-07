@@ -95,12 +95,11 @@ response.setHeader("Cache-Control", "no-cache");
 					<input type = "image" src="img/minus.png" style="width: 7.5%;" value = "Remove from watchlist">
 				</form> 
 				
-				<br>
-					<ul>
-						<li><%=genresToShow%></li>
-					</ul>
-								
-				<br> <br>
+				
+				<br><br>
+				Genres: <%=genresToShow%>
+				<br><br>
+						
 				<form action="reserveInterim" method="post">
 					<select name="broadcastSelect">
 					<%

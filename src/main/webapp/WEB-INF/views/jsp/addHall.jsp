@@ -20,6 +20,9 @@ response.setHeader("Cache-Control", "no-cache");
 
 			<h1 align="center"><strong>Add Hall</strong></h1>
 			<br>
+			<c:if test="${ message != null }">
+	  		<h3 style="color: red; text-align: center">${ message }</h3>
+			</c:if>
 			<form action="addHall" method="post">
 				<br>
 				Select Cinema

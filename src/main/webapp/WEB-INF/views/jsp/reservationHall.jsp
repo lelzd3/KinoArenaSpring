@@ -30,7 +30,7 @@ response.setHeader("Cache-Control", "no-cache");
 </head>
 <body>
 <div class="content">
-	<h1>Reservation Hall</h1>
+	<h1 style="color:red"><strong>Reservation Hall</strong></h1>
 	<div class="main">
 		<h2> ${ cinemaName } , hall: ${ hallId } </h2>
 		<div class="demo">

@@ -84,7 +84,7 @@ public class AdminController {
 		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
 		adminManager.removeBroadcast(broadcast, admin);
 		springModel.addAttribute("message", "Successfully removed broadcast!");
-		return "adminMain";
+		return "removeBroadcast";
 	}
 
 	//adminPanel.jsp -> addBroadcast.jsp
@@ -115,7 +115,7 @@ public class AdminController {
 		Broadcast newBroadcast = new Broadcast(cinemaId, movieId, hallId, projectionTime, price);
 		adminManager.addNewBroadcast(newBroadcast, admin);
 		springModel.addAttribute("message", "Successfully added a broadcast!");
-		return "adminMain";
+		return "addBroadcast";
 	}
 
 	//adminPanel.jsp -> makeAdmin.jsp
@@ -138,7 +138,7 @@ public class AdminController {
 			adminManager.changeUserIsAdminStatus(user, email.trim());
 		}
 		springModel.addAttribute("message", "Admin is created");
-		return "adminMain";
+		return "makeAdmin";
 	}
 	
 	//adminPanel.jsp -> addCinema.jsp
@@ -158,9 +158,9 @@ public class AdminController {
 		Cinema newCinema = new Cinema(name, address);
 		adminManager.addNewCinema(newCinema, admin);
 		springModel.addAttribute("message","Successfully added a cinema");
-		return "adminMain";
+		return "addCinema";
     }
-	// adminMain.jsp -> removeCinema.jsp
+	
 	@RequestMapping(value = "/removeCinemaPage", method = RequestMethod.GET)
 	public String getToRemoveCinema(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
 		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
@@ -178,7 +178,7 @@ public class AdminController {
 
 		adminManager.removeCinema(cinemaToDelete,admin);
 		springModel.addAttribute("message","Successfully removed a cinema");
-		return "adminMain";
+		return "removeCinema";
 	}
 
 	//adminPanel.jsp->addHall.jsp
@@ -200,7 +200,7 @@ public class AdminController {
 		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
 		adminManager.addNewHall(newHall, admin);
 		springModel.addAttribute("message","Successfully added a hall");
-		return "adminMain";
+		return "addHall";
 	}
 
 	//adminPanel.jsp -> changeBroadcastPrice.jsp	
@@ -227,7 +227,7 @@ public class AdminController {
 		
 		adminManager.changeBroadcastPrice(admin, broadcastId, newPrice);
 		springModel.addAttribute("message","Successfully changed a price");
-		return "adminMain";
+		return "changeBroadcastPrice";
 	}
 
 	//adminPanel.jsp -> removeHall.jsp
@@ -249,7 +249,7 @@ public class AdminController {
 		Hall hallToDelete = hallDao.getHallById(hallId);
 		adminManager.removeHall(hallToDelete, admin);
 		springModel.addAttribute("message","Successfully removed a hall");
-		return "adminMain";
+		return "removeHall";
 	}
 
 	//adminPanel.jsp -> addMovie.jsp
@@ -286,7 +286,7 @@ public class AdminController {
 		Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 		model.addAttribute("message","Successfully added a movie");
-		return "adminMain";
+		return "addMovie";
 
     }
 
@@ -310,10 +310,9 @@ public class AdminController {
 		adminManager.deleteGenresFromMovie(admin, movieId);
 		adminManager.removeMovie(movieToDelete, admin);
 		model.addAttribute("message", "Successfully removed a moive!");
-		return "adminMain";
+		return "removeMovie";
 	}
 	
-	//adminMain.jsp -> changeBroadcastProjectionTimePage.jsp
 	@RequestMapping(value = "/changeBroadcastProjectionTimePage")
 	public String getToChangeProjectionTimePage(Model springModel) throws InvalidDataException, SQLException {
 		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
@@ -331,6 +330,6 @@ public class AdminController {
 		LocalDateTime newProjectionTime = LocalDateTime.parse(newTime);
 		adminManager.changeBroadcastProjectionTime(admin, broadcastId, newProjectionTime);
 		springModel.addAttribute("message", "Successfully changed a projection time!");
-		return "adminMain";
+		return "changeBroadcastProjectionTime";
 	}
 }

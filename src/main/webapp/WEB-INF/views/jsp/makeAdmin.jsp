@@ -22,6 +22,9 @@ response.setHeader("Cache-Control", "no-cache");
 			
 			<h1 align="center"><strong>Make another user admin</strong></h1>
 			<br>
+			<c:if test="${ message != null }">
+	  		<h3 style="color: red; text-align: center">${ message }</h3>
+			</c:if>
 			<form action="makeAdmin" method="post" id="makeAdminForm" name="makeAdminForm">
 				<br>
 				<select name="usersSelect">

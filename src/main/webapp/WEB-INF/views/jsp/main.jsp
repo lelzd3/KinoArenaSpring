@@ -55,7 +55,7 @@ response.setHeader("Cache-Control", "no-cache");
 	
 	
 		<br>
-		<a href="getTestMain">TEST LINK PLS WORK</a>
+		<a href="getHome">TEST LINK PLS WORK</a>
 		
 	</body>
 </html>

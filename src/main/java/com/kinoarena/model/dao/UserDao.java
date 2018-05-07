@@ -36,7 +36,6 @@ public class UserDao implements IUserDao{
 		PreparedStatement ps = connection.prepareStatement("SELECT password FROM users WHERE username = ?");
 		ps.setString(1, username);
 		ResultSet rs = ps.executeQuery();
-		//TODO encryption but in SERVLET!
 		if (!rs.next() ) {
 			// if there is nothing in result set -> username doesnt exists
 			throw new WrongCredentialsException("Invalid username or password");
@@ -188,7 +187,7 @@ public class UserDao implements IUserDao{
 		result.next();
 		
 		//TODO 
-		boolean isAdmin = result.getInt("is_Admin") == 1? true:false;
+		boolean isAdmin = result.getInt("is_Admin") == 1;
 		
 		return new User(
 					result.getInt("id"),

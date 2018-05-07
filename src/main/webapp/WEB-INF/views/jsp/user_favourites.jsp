@@ -94,11 +94,10 @@ response.setHeader("Cache-Control", "no-cache");
 					<input type = "image" src="img/favourite.png" style="width: 7.5%;" value = "Remove from favourites">
 				</form> 
 	
-					<br>
-					<ul>
-					<li><%=genresToShow%></li>
-					</ul>			
 				<br><br>
+				Genres: <%=genresToShow%>
+				<br><br>
+				
 				<form action="reserveInterim" method="post">
 					<select name="broadcastSelect">
 					<%

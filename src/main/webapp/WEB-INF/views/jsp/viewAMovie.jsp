@@ -116,10 +116,10 @@ response.setHeader("Cache-Control", "no-cache");
 		
 				<% }  %>
 					
-				<br>
-					<ul>
-					<li><%=genresToShow%></li>
-					</ul>
+				<br><br>
+				Genres: <%=genresToShow%>
+				<br><br>
+				
 				<form action="reserveInterim" method="post">
 					<select name="broadcastSelect">
 					<%

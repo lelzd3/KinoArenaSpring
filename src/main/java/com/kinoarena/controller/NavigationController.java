@@ -21,8 +21,8 @@ public class NavigationController {
 
 
 	//test main
-	@RequestMapping(value="/getTestMain", method = RequestMethod.GET)
+	@RequestMapping(value="/getHome", method = RequestMethod.GET)
 	public String returnToTestMain() {
-		return "testMain";
+		return "home";
 	}
 }

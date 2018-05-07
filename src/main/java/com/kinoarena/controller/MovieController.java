@@ -118,7 +118,7 @@ public class MovieController {
 		Cinema cinema = cinemaDao.getCinemaById(broadcast.getCinemaId());
 		Movie movie = movieDao.getMovieById(broadcast.getMovieId());
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd EE HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		
 		double totalPrice = broadcast.getPrice();
 		double amountToDecrease = totalPrice * 0.2;
@@ -141,7 +141,7 @@ public class MovieController {
 		springModel.addAttribute("movieTitle", movie.getTitle());
 		springModel.addAttribute("broadcastProjectionTime", broadcast.getProjectionTime().format(formatter));
 		springModel.addAttribute("broadcastId",broadcastId);
-			springModel.addAttribute("broadcastPrice",totalPrice);
+		springModel.addAttribute("broadcastPrice",totalPrice);
 
 		return "reservationHall";
 

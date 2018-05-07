@@ -12,7 +12,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,8 +28,6 @@ import com.kinoarena.model.dao.HallDao;
 import com.kinoarena.model.dao.MovieDao;
 import com.kinoarena.model.dao.ReservationDao;
 import com.kinoarena.model.dao.UserDao;
-import com.kinoarena.model.pojo.Movie;
-import com.kinoarena.model.pojo.Reservation;
 import com.kinoarena.model.pojo.User;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 import com.kinoarena.utilities.exceptions.WrongCredentialsException;
@@ -57,8 +54,8 @@ public class UserController {
 	@Autowired 
 	private UserDao userDao; // change later all UserDao to UserManager (add methods in manager)
 	
-	private String mailUsername = "kinoArenaSpring@gmail.com";
-	private String mailPassword = "kinoarena123";
+	private static final String MAIL_USERNAME = "kinoArenaSpring@gmail.com";
+	private static final String MAIL_PASSWORD = "kinoarena123";
 	
 	@RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
 	public String passwordRecovery() {
@@ -79,7 +76,7 @@ public class UserController {
 		Session session = Session.getDefaultInstance(props,
 			new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(mailUsername,mailPassword);
+					return new PasswordAuthentication(MAIL_USERNAME,MAIL_PASSWORD);
 				}
 			});
 
@@ -90,7 +87,7 @@ public class UserController {
 			
 			userDao.setNewPasswod(receiverEmail, randomPassword);
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(mailUsername));
+			message.setFrom(new InternetAddress(MAIL_USERNAME));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverEmail));
 			message.setSubject("Kino Arena email recovery");
 			message.setText("Dear "+ username +"," + "Your new password has been set to " + randomPassword);
@@ -118,7 +115,7 @@ public class UserController {
 	
 	@RequestMapping(value="/index.html", method=RequestMethod.GET)
 	public String sendIndex() {
-		return "index2";
+		return "login";
 	}
 	
 	//from index,error and register.jsp -> login.jsp
@@ -144,16 +141,12 @@ public class UserController {
 			userDao.loginCheck(username, password);
 			User user = userDao.getUser(username);
 
-		if(user.getIsAdmin()) {
-
-			session.setAttribute("admin", user);
+			if(user.getIsAdmin()) {
+				session.setAttribute("admin", user);
+			}
+	
 			session.setAttribute("user", user);
-			return "testMain";
-		}
-		else {
-			session.setAttribute("user", user);
-			return "main";
-		}
+			return "home";
 
 		}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
 			springModel.addAttribute("message", e.getMessage());

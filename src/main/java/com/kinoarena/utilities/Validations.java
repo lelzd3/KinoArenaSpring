@@ -30,11 +30,11 @@ public class Validations {
 	
 	public static boolean verifyName(String name) throws InvalidDataException {
 		if(!validation(name)) {
-			throw new InvalidDataException("Invalid Name");
+			throw new InvalidDataException("Invalid Name, its empty");
 	    }
 
 	    if(!name.matches("[a-zA-Z]*")) {
-			throw new InvalidDataException("Invalid Name");
+			throw new InvalidDataException("Invalid Name, name should consist only of letters");
 	    }
 	        
 	    return true;
@@ -42,7 +42,7 @@ public class Validations {
 
 	public static boolean verifyUsername(String username) throws InvalidDataException {
 
-	    if(!username.matches("[A-Za-z0-9_]+") || username.length() < 6) {
+	    if(!username.matches("[A-Za-z0-9_]+") || username.length() < 5) {
 			throw new InvalidDataException("Invalid username");
 	    }
 	        
@@ -53,16 +53,15 @@ public class Validations {
 		if(!validation(password)) {
 			throw new InvalidDataException("Invalid password");
 	    }
-// old regex "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$)"
-// new regex "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$"
-//		^                 # start-of-string
-//		(?=.*[0-9])       # a digit must occur at least once
-//		(?=.*[a-z])       # a lower case letter must occur at least once
-//		(?=.*[A-Z])       # an upper case letter must occur at least once
-//		(?=.*[@#$%^&+=])  # a special character must occur at least once
-//		(?=\S+$)          # no whitespace allowed in the entire string
-//		.{8,}             # anything, at least eight places though
-//		$                 # end-of-string
+		
+		//		^                 # start-of-string
+		//		(?=.*[0-9])       # a digit must occur at least once
+		//		(?=.*[a-z])       # a lower case letter must occur at least once
+		//		(?=.*[A-Z])       # an upper case letter must occur at least once
+		//		(?=.*[@#$%^&+=])  # a special character must occur at least once
+		//		(?=\S+$)          # no whitespace allowed in the entire string
+		//		.{8,}             # anything, at least eight places though
+		//		$                 # end-of-string
 							// this constant is useless cuz regex checks for atleast 8 
 	    if(!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$") || password.length() < MIN_LENGTH_OF_PASSWORD) { 
 	    	System.out.println("Please enter valid password: atleast one digit, one lowercase, one uppercase, at least one symbol! and no whitespace!");

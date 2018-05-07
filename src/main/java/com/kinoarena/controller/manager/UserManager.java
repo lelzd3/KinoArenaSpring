@@ -1,6 +1,5 @@
 package com.kinoarena.controller.manager;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,30 +19,25 @@ public class UserManager {
 	@Autowired
 	private UserDao userDao;
 	
-	private static final int MIN_LENGTH_OF_PASSWORD = 8;
-	
-	private static Connection connection;
-
-	private UserManager() {
-		connection = DBManager.getInstance().getConnection();
-	}
+	private UserManager() {}
 		
 	
 	public boolean login(String username, String password) throws SQLException, WrongCredentialsException {
 		try {
 			userDao.loginCheck(username, password);
 			return true;
-		} catch (SQLException e) {
-			System.out.println("SQLExcp in login " + e.getMessage());
-			throw e;
-		} catch (WrongCredentialsException e) {
-			System.out.println("WrongCrExcp in login " + e.getMessage() );
+		} catch (Exception e) {
 			throw e;
 		}
 	}
 	
 	public void rateMovie(User u, Movie m,int rating) throws SQLException, InvalidDataException {
-		userDao.rateMovie(u, m, rating);
+		try {
+			userDao.rateMovie(u, m, rating);
+		} catch(Exception e){
+			throw e;
+		}
+		
 	}
 	
 	
@@ -55,13 +49,9 @@ public class UserManager {
 	        if(oldPassword.length()==0 || oldPassword.isEmpty()) {
 	        	throw new InvalidDataException("If you want to make any changes please enter your password first!");
 	        }
-	        
-	        System.out.println(oldPassword);
-	        System.out.println(user.getPassword());    
+  
 	        //Check if this user is entered correct password
 	        if (! BCrypt.checkpw(oldPassword, user.getPassword() )) {
-	        	System.out.println(oldPassword);
-	        	System.out.println(user.getPassword());
 	            throw new InvalidDataException("You have entered wrong old password.");
 	        }
 
@@ -85,10 +75,15 @@ public class UserManager {
 	            editedEmail = email;
 	        }
 
-	        userDao.changeFirstName(user, validateName(user.getFirstname(), firstName));
-	        userDao.changeLastName(user ,validateName(user.getLastname(), lastName));
-	        userDao.changeEmail(user , editedEmail);
-	        userDao.changePassword(user ,editedPassword);
+	        try {
+	        	userDao.changeFirstName(user, validateName(user.getFirstname(), firstName));
+		        userDao.changeLastName(user ,validateName(user.getLastname(), lastName));
+		        userDao.changeEmail(user , editedEmail);
+		        userDao.changePassword(user ,editedPassword);
+	        } catch(Exception e){
+	        	throw e;
+	        }
+	        
 	 }
 	 
 	  private String validateName(String oldName, String name) throws InvalidDataException {

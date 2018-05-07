@@ -103,23 +103,22 @@ response.setHeader("Cache-Control", "no-cache");
 
 				<input type="button" onclick="rateMovieClick(<%=movie.getId()%>)" value="Rate Movie">
 	
-				<br>
-				<ul>
-				<li><%=genresToShow%></li>
-				</ul>
+				<br><br>
+				Genres: <%=genresToShow%>
+				<br><br>
 		
 				
 				<% if(!favMovies.contains(movie.getId())){ %>
 				<form action = "addInFavorite" method = "post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/unfavourite.png" style="width: 15%;" value = "Add in favorites"/>
+					<input type = "image" src="img/unfavourite.png" style="width: 7.5%;" value = "Add in favorites"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromFavorite" method="post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/favourite.png" style="width: 15%;" value = "Remove from favourites">
+					<input type = "image" src="img/favourite.png" style="width: 7.5%;" value = "Remove from favourites">
 				</form> 
 		
 				<% }  %>
@@ -128,13 +127,13 @@ response.setHeader("Cache-Control", "no-cache");
 				<form action = "addInWatchlist" method = "post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/plus.png" style="width: 15%;" value = "Add in watchlist"/>
+					<input type = "image" src="img/plus.png" style="width: 7.5%;" value = "Add in watchlist"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromWatchlist" method="post">
 					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/minus.png" style="width: 15%;" value = "Remove from watchlist">
+					<input type = "image" src="img/minus.png" style="width: 7.5%;" value = "Remove from watchlist">
 				</form> 
 		
 				<% }  %>
@@ -155,8 +154,6 @@ response.setHeader("Cache-Control", "no-cache");
 					<input type="submit" value="Reserve Tickets">
 						
 				</form>
-
-				<br>
 				<br>
 			</div>
 			<%

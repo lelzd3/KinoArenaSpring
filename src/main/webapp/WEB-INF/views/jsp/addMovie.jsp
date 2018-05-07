@@ -21,6 +21,9 @@ response.setHeader("Cache-Control", "no-cache");
 			
 			<h1 align="center"><strong>Add Movie</strong></h1>
 			<br>
+			<c:if test="${ message != null }">
+	  		<h3 style="color: red; text-align: center">${ message }</h3>
+			</c:if>
 			<form method="post" action="addMovie" enctype="multipart/form-data">
 				Title <input type="text" name="title" required>
 				<br><br>
