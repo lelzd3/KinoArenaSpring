@@ -21,9 +21,9 @@ response.setHeader("Cache-Control", "no-cache");
 			<h1 align="center"><strong>Add Cinema</strong></h1>
 			<br>
 			<form action="addCinema" method="post">		
-				Name <input type="text" name="name" required>
+				Name <input type="text" name="name" required maxlength="45">
 				<br><br>
-				Address <input type="text" name="address" required>
+				Address <input type="text" name="address" required maxlength="60">
 				<br><br>
 				<input type="submit" value="addCinema">
 			</form> 	

@@ -5,7 +5,8 @@ response.setHeader("Pragma", "No-cache");
 response.setDateHeader("Expires", 0);
 response.setHeader("Cache-Control", "no-cache");
 %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -24,6 +25,9 @@ response.setHeader("Cache-Control", "no-cache");
 		<h1 align="center">Hello admin, <%= admin.getUsername()  %></h1>
 		<h2 align="center">Session id is <%= s %></h2>
 		<br>
+		<c:if test="${ message != null }">
+	  		<h3 style="color: red; text-align: center">${ message }</h3>
+		</c:if>	
 
 		<form action="addMoviePage" method="get">
 			<button type="submit">Add Movie</button>
