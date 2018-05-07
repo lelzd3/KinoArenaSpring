@@ -145,7 +145,7 @@ public class UserController {
 	
 	//main.jsp -> viewAllMovies.jsp
 	@RequestMapping(value = "/viewAllMoviesPage", method = RequestMethod.GET)
-	public String viewAllMoviesPage(HttpServletRequest request,HttpSession session){
+	public String viewAllMoviesPage(HttpServletRequest request,HttpSession session, Model springModel){
 		return "viewAllMovies";
 	}
 	

@@ -70,6 +70,8 @@ response.setHeader("Cache-Control", "no-cache");
 		
 			<%
 			for (Movie movie : movies) {
+				String genres =  movieDao.getAllGenresForAMovie(movie.getId()).toString();
+				String genresToShow = genres.substring(1, genres.length()-1);
 			%>
 			<div class="one" align="center">
 				<br>
@@ -103,9 +105,7 @@ response.setHeader("Cache-Control", "no-cache");
 	
 				<br>
 				<ul>
-				<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
-				<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
-				<%} %>
+				<li><%=genresToShow%></li>
 				</ul>
 		
 				

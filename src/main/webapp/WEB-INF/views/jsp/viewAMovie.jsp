@@ -28,6 +28,9 @@ response.setHeader("Cache-Control", "no-cache");
 			// make is so we make a smaller select query
 			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
 			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());
+			
+			String genres =  movieDao.getAllGenresForAMovie(movie.getId()).toString();
+			String genresToShow = genres.substring(1, genres.length()-1);
 		%>
 		<style>
 		.one{
@@ -115,9 +118,7 @@ response.setHeader("Cache-Control", "no-cache");
 					
 				<br>
 					<ul>
-					<%for(int i = 0 ; i < movieDao.getAllGenresForAMovie(movie.getId()).size(); i++){ %>
-					<li><%=movieDao.getAllGenresForAMovie(movie.getId()).get(i)%></li>
-					<%} %>
+					<li><%=genresToShow%></li>
 					</ul>
 				<form action="reserveInterim" method="post">
 					<select name="broadcastSelect">
