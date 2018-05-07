@@ -164,7 +164,7 @@ public class UserController {
 		
 		
 		}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
-			springModel.addAttribute("error", e.getMessage());
+			springModel.addAttribute("message", e.getMessage());
 			return "login";
 		}
 		
@@ -181,6 +181,8 @@ public class UserController {
 		int age = Integer.valueOf(request.getParameter("age"));
 		System.out.println(age);
 			
+		userDao.existingEmailCheck(email);
+		userDao.existingUserNameCheck(username);
 		if (username.isEmpty() || username.length() < 5) {
 			throw new WrongCredentialsException("Username must be at least 5 chars long");
 		}
@@ -196,15 +198,17 @@ public class UserController {
 		if (lastName.isEmpty()) {
 			throw new WrongCredentialsException("Invalid entered last name");
 		}
+		
 		// creating new user with these details
 		User user = new User(age , username, pass1, firstName, lastName, email);
 		// adding to db
 		userDao.addUser(user);
 		
 		s.setAttribute("user", user);
+		springModel.addAttribute("message", "Successfull registration");
 		return "login";
 	}catch(WrongCredentialsException | SQLException | InvalidDataException e) {
-		springModel.addAttribute("error", e.getMessage());
+		springModel.addAttribute("message", e.getMessage());
 		return "register";
 	}
 	

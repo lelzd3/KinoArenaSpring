@@ -168,10 +168,24 @@ public class UserDao implements IUserDao{
 		ResultSet rs = ps.executeQuery();
 		// TODO check if this works
 		if (rs.next()) {
-			throw new InvalidDataException("Oops,problem in User Dao , this username is already used");
+			throw new InvalidDataException("This username is already used");
 		}
 		ps.close();
 	}
+	
+	@Override
+	public void existingEmailCheck(String email) throws InvalidDataException, SQLException {
+	
+		PreparedStatement ps = connection.prepareStatement("SELECT email FROM users WHERE email = ?");
+		ps.setString(1, email);
+		ResultSet rs = ps.executeQuery();
+		// TODO check if this works
+		if (rs.next()) {
+			throw new InvalidDataException("This email is already used");
+		}
+		ps.close();
+	}
+
 
 	public User getUser(String username) throws InvalidDataException, SQLException {
 		String sql = "SELECT id, first_name, last_name, username, password, email , phone_number,is_Admin, age FROM users WHERE username = ?";

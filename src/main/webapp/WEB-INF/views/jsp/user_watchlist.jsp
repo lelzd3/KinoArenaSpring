@@ -40,6 +40,15 @@ response.setHeader("Cache-Control", "no-cache");
 		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
 			<h1 align="center"><strong>WATCHLISTED MOVIES</strong></h1>
 			<br><br>
+			<%
+				if(movies.size()==0){
+			%>
+				<h1 align="center"><strong>You dont have any movies in watchlist yet!</strong></h1>			
+			<%
+			}
+			else{
+			%>		
+		
 		
 			<%
 			for (Movie movie : movies) {
@@ -110,8 +119,9 @@ response.setHeader("Cache-Control", "no-cache");
 			<br>
 			<br>
 			<%
-			}
+			}}
 			%>
+			
 		</div>	
 	</div>
 		<script>

@@ -1,10 +1,12 @@
 package com.kinoarena.model.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.model.pojo.User;
+import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public interface IUserDao {
 	
@@ -50,6 +52,8 @@ public interface IUserDao {
 	public void addInWatchlist(int userId, Integer movieId) throws Exception;
 
 	public ArrayList<Movie> viewWatchlist(User user) throws Exception;
+	
+	public void existingEmailCheck(String email) throws InvalidDataException, SQLException;
 
 
 

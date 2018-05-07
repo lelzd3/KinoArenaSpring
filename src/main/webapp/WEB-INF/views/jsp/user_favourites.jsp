@@ -42,6 +42,15 @@ response.setHeader("Cache-Control", "no-cache");
 			<br><br>
 			
 			<%
+				if(movies.size()==0){
+			%>
+				<h1 align="center"><strong>You dont have any favorite movies yet!</strong></h1>			
+			<%
+			}
+			else{
+			%>		
+			
+			<%
 			for (Movie movie : movies) {
 
 				String genres =  movieDao.getAllGenresForAMovie(movie.getId()).toString();
@@ -108,7 +117,7 @@ response.setHeader("Cache-Control", "no-cache");
 			<br>
 			<br>
 			<%
-				}
+				}}
 			%>
 		</div>
 	</div>

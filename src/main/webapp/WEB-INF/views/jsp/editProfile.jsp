@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%
 response.setHeader("Pragma", "No-cache");
 response.setDateHeader("Expires", 0);
@@ -18,6 +19,9 @@ response.setHeader("Cache-Control", "no-cache");
 		<div id="pageintro" class="hoc clear"> <!-- toq div gi prai da sa centralno -->
 		
 			<h1 align="center"><strong>View and change your details</strong></h1>
+			<c:if test="${ error != null }">
+		  		<h3 style="color: red; text-align: center">${ error }</h3>
+			</c:if>	
 			<br>
 			
 			<form action="edit" method="post" id="editProfileForm">

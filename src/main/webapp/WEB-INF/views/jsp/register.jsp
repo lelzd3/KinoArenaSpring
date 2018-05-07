@@ -21,8 +21,8 @@ response.setHeader("Cache-Control", "no-cache");
 		<form action="register" method="post">
 			<h1>Register Form</h1>
 			
-	  	<c:if test="${ error != null }">
-	  		<h3 style="color: red; text-align: center">${ error }</h3>
+	  	<c:if test="${ message != null }">
+	  		<h3 style="color: red; text-align: center">${ message }</h3>
 		</c:if>	
 			<div>
 				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username"  maxlength="45"/>

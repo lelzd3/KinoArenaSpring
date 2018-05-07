@@ -39,10 +39,16 @@ public class EditUserController {
 			@RequestParam(required=false,name="firstName") String firstName, 
 			@RequestParam(required=false,name="lastName") String lastName,
 			@RequestParam(required=false,name="email") String email,
-			HttpSession session) throws SQLException, InvalidDataException {
+			HttpSession session, Model springModel) throws SQLException {
 
 		User user = (User) session.getAttribute("user");
-		userManager.updateProfileInfo(user, oldPassword, newPassword, confirmPassword, firstName, lastName, email);
+		try {
+			userManager.updateProfileInfo(user, oldPassword, newPassword, confirmPassword, firstName, lastName, email);
+		} catch (InvalidDataException e) {
+			springModel.addAttribute("error", e.getMessage());
+			e.printStackTrace();
+			return "editProfile";
+		}
 
 		return "main";
 	}
