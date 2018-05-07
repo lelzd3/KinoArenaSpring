@@ -12,7 +12,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.kinoarena.controller.manager.DBManager;
-import com.kinoarena.model.pojo.Genre;
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.utilities.exceptions.InvalidDataException;
 
@@ -26,9 +25,11 @@ public class MovieDao implements IMovieDao{
 	}
 	
 	@Override
-	public void addMovie(Movie m) throws SQLException {
-		
-		PreparedStatement s = connection.prepareStatement("INSERT INTO movies (title, description,rating,duration,file_location) VALUES (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+	public void addMovie(Movie m, ArrayList<String> genres) throws SQLException {
+		PreparedStatement s = null;
+		try {
+		connection.setAutoCommit(false);
+		s = connection.prepareStatement("INSERT INTO movies (title, description,rating,duration,file_location) VALUES (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 		s.setString(1,m.getTitle());
 		s.setString(2, m.getDescription());
 		s.setDouble(3, m.getRating());
@@ -41,7 +42,18 @@ public class MovieDao implements IMovieDao{
 		result.next(); // we write next cuz it starts from -1
 		m.setId((int)result.getLong(1)); // or 1 instead of id
 		
-		s.close();
+		addGenresForAMovie(m.getId(), genres);
+		
+		connection.commit();
+		}
+		catch (SQLException e) {
+			connection.rollback();
+			throw e;
+		} finally {
+			s.close();
+			connection.setAutoCommit(true);
+		}
+		
 		
 	}
 	

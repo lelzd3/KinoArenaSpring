@@ -6,7 +6,7 @@ import com.kinoarena.model.pojo.Movie;
 
 public interface IMovieDao {
 
-	public void addMovie(Movie m) throws Exception;
+	public void addMovie(Movie m,ArrayList<String> genres) throws Exception;
 
 	public void deleteMovie(Movie m) throws Exception;
 

@@ -47,10 +47,9 @@ public class AdminManager {
 		connection = DBManager.getInstance().getConnection();
 	}
 	
-	public void addNewMovie(Movie m, User admin,ArrayList<String> genres) throws SQLException, NotAnAdminException {
+	public void addNewMovie(Movie m, User admin,ArrayList<String> genres) throws NotAnAdminException, SQLException {
 			if(admin.getIsAdmin()){
-			movieDao.addMovie(m);
-			movieDao.addGenresForAMovie(m.getId(), genres);
+			movieDao.addMovie(m,genres);
 		}else{
 			throw new NotAnAdminException();
 		}
