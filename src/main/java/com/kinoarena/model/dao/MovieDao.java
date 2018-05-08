@@ -69,6 +69,7 @@ public class MovieDao implements IMovieDao{
 		String query ="SELECT id,title,description,rating,duration,file_location FROM movies";
 		PreparedStatement ps = null;
 		try {
+			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ArrayList<Movie> movies = new ArrayList<>();
 			ResultSet result = ps.executeQuery();
@@ -84,6 +85,7 @@ public class MovieDao implements IMovieDao{
 							);
 				movies.add(m);
 			}
+			connection.commit();
 			return movies;
 		}
 		catch (SQLException e) {
@@ -101,6 +103,7 @@ public class MovieDao implements IMovieDao{
 		String query = "SELECT id,title,description,rating,duration,file_location FROM movies WHERE id=?";
 		PreparedStatement ps = null;
 		try {
+			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setInt(1, id);
 			ResultSet result = ps.executeQuery();
@@ -114,6 +117,7 @@ public class MovieDao implements IMovieDao{
 						result.getString("file_location"),
 						getAllGenresForAMovie(result.getInt("id"))
 						);
+			connection.commit();
 			return movie;
 		}
 		catch (SQLException e) {
@@ -160,6 +164,7 @@ public class MovieDao implements IMovieDao{
 		String query = "SELECT id, title, description, rating ,  duration , file_location FROM movies WHERE title = ?";
 		PreparedStatement ps = null;
 		try {
+			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(query);
 			ps.setString(1, name);
 			ResultSet result = ps.executeQuery();
@@ -173,7 +178,7 @@ public class MovieDao implements IMovieDao{
 						result.getString("file_location"),
 						getAllGenresForAMovie(result.getInt("id"))
 						);
-			
+			connection.commit();
 			return movie;
 		}
 		catch (SQLException e) {
@@ -279,26 +284,21 @@ public class MovieDao implements IMovieDao{
 		}
 	}
 	
+	//NotTransaction because it is used IN Transaction add movie
 	@Override
 	public void addGenresForAMovie(int movieId, ArrayList<String> genres) throws SQLException {
 		String query = "INSERT INTO movies_has_genres (movies_id, genres_id) VALUES (?,?)";
 		PreparedStatement ps = null;
-		try {
-			for(String genreName: genres) {
-				ps = connection.prepareStatement(query);
-				ps.setInt(1, movieId);
-				int genreId = getGenreIdByName(genreName);
-				ps.setInt(2, genreId);
-				ps.executeUpdate();
-			}
+		for(String genreName: genres) {
+			ps = connection.prepareStatement(query);
+			ps.setInt(1, movieId);
+			int genreId = getGenreIdByName(genreName);
+			ps.setInt(2, genreId);
+			ps.executeUpdate();
 		}
-		catch (SQLException e) {
-			connection.rollback();
-			throw e;
-		} finally {
-			ps.close();
-			connection.setAutoCommit(true);
-		}
+
+		ps.close();
+		
 		
 	}
 

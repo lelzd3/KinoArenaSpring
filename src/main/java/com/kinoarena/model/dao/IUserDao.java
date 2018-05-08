@@ -1,20 +1,16 @@
 package com.kinoarena.model.dao;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import com.kinoarena.model.pojo.Movie;
 import com.kinoarena.model.pojo.User;
-import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public interface IUserDao {
 	
 	public void loginCheck(String username,String password) throws Exception;
 	
 	public void addUser(User u) throws Exception;
-	
-	public void deleteUser(User u) throws Exception;
 	
 	public void addMovieToFavoriteList(User u , Movie m) throws Exception;
 	
@@ -23,9 +19,6 @@ public interface IUserDao {
 	public void rateMovie(User u , Movie m, int rating) throws Exception;
 	
 	public void existingUserNameCheck(String username) throws Exception;
-	//TODO add phone number method
-
-	public Collection<User> getAllUsers() throws Exception;
 	
 	public void addInFavorite(int userId, int productId) throws Exception;
 	
@@ -53,8 +46,14 @@ public interface IUserDao {
 
 	public ArrayList<Movie> viewWatchlist(User user) throws Exception;
 	
-	public void existingEmailCheck(String email) throws InvalidDataException, SQLException;
+	public void existingEmailCheck(String email) throws Exception;
 
+	public User getUser(String username) throws Exception;
 
+	public void createAdmin(String email) throws Exception;
+
+	public User getUserByEmail(String email) throws Exception;
+
+	public void setNewPasswod(String receiverEmail, String randomPassword) throws Exception;
 
 }

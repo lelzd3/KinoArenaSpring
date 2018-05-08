@@ -19,8 +19,6 @@ public interface IReservationDao {
 
 	public ArrayList<String> getAllOccupiedSeatsForABroadcast(Broadcast broadcast) throws Exception;
 
-	public void bookSelectedSeats(int row, int col, int ticketReservId) throws Exception;
-
 	public ArrayList<String> getAllReservationsForUser(User user) throws Exception;
 
 }

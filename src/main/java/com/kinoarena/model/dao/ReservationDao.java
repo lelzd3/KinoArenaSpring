@@ -153,21 +153,11 @@ public class ReservationDao implements IReservationDao {
 	}
 
 	@Override
-	public void bookSelectedSeats(int row, int col, int ticketReservId) throws SQLException {
-		String query = "INSERT INTO reservations_seats (row_number,column_number,ticket_reservations_id) VALUES (?,?,?) ";
-		try(PreparedStatement ps = connection.prepareStatement(query)) {	
-			ps.setInt(1, row);
-			ps.setInt(2, col);
-			ps.setInt(3, ticketReservId);
-			ps.executeUpdate();
-		}
-	}
-
-	@Override
 	public ArrayList<String> getAllReservationsForUser(User user) throws SQLException {
 		ArrayList<String> allReservations = new ArrayList<String>();
 		PreparedStatement ps = null;
 		try {
+			connection.setAutoCommit(false);
 			ps = connection.prepareStatement(
 					"Select r.id, u.username , m.title , c.name, seats_number , time from reservations AS r"
 					+ " JOIN users AS u on r.users_id = u.id"
@@ -182,6 +172,7 @@ public class ReservationDao implements IReservationDao {
 					+", Movie title: "+result.getString("m.title")+ ", Cinema name: "+result.getString("c.name")
 					+", Seats reserved "+result.getInt("r.seats_number")+", Reservation made: "+result.getTimestamp("time"));
 			}
+			connection.commit();
 		} catch (SQLException e) {
 			throw e;
 		} finally {
