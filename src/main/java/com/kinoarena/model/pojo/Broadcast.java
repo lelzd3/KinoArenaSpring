@@ -6,6 +6,7 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public class Broadcast {
 
+	private static final int MAX_PRICE = 99;
 	private int id;
 	private int cinemaId;
     private int movieId;
@@ -57,8 +58,8 @@ public class Broadcast {
 	}
 	
 	public void setPrice(double price) throws InvalidDataException {
-		if(price < 0) {
-			throw new InvalidDataException("Oops , exception in broadcast pojo");
+		if(price < 0 && price < MAX_PRICE) {
+			throw new InvalidDataException("Oops , invalid price entered");
 		}
 		this.price = price;
 	}

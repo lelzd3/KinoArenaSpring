@@ -50,7 +50,7 @@ response.setHeader("Cache-Control", "no-cache");
 				<br>
 				Date and Time <input type="datetime-local" name="projection_time" required>
 				<br>
-				Price <input type="number" name= "price" step="any" required min="1" max="999">
+				Price <input type="number" name= "price" step="any" required min="1" max="99">
 				<br>
 				<input type="submit" value="addBroadcast">
 			</form> 	

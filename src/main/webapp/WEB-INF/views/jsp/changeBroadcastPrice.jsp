@@ -35,7 +35,7 @@ response.setHeader("Cache-Control", "no-cache");
 					</c:forEach>
 				</select>
 				<br>
-				New Price <input type="number" name="newPrice" step="any" required>
+				New Price <input type="number" name="newPrice" step="any" min="0" max="99" required>
 				<input type="submit" value="Change Price">
 			</form>
 		</div>

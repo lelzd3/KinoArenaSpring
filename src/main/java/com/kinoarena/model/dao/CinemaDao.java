@@ -46,6 +46,9 @@ public class CinemaDao implements ICinemaDao{
 			ps.setInt(1, c.getId());
 			ps.executeUpdate();
 		}
+		catch (SQLException e) {
+			throw new SQLException("Cannot delete cinema, because of exisiting hall!");
+		}
 	}
 	
 	@Override

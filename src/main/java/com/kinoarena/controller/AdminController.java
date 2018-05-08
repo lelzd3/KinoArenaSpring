@@ -39,6 +39,8 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 @Controller
 public class AdminController {
 	
+	private static final int MAX_PRICE = 99;
+
 	@Autowired
 	private MovieDao movieDao;
 	
@@ -219,6 +221,9 @@ public class AdminController {
 		
 		if(newPrice < 0) {
 			throw new InvalidDataException("New price is lower than 0");
+		}
+		if(newPrice > MAX_PRICE) {
+			throw new InvalidDataException("New price is lower than "+ MAX_PRICE);
 		}
 		
 		User admin = (User) session.getAttribute("admin");

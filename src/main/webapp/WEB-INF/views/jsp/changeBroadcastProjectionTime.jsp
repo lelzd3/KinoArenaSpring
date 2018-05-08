@@ -34,7 +34,7 @@ response.setHeader("Cache-Control", "no-cache");
 				</select>
 				<br>
 				Date and Time <input type="datetime-local" name="newProjectionTime" required>
-				<input type="submit" value="Change Price">
+				<input type="submit" value="Change Time">
 			</form>
 		</div>
 	</div>	

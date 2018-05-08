@@ -47,6 +47,9 @@ public class HallDao implements IHallDao{
 			ps.setInt(1, hall.getId());
 			ps.executeUpdate();
 		}
+		catch (SQLException e) {
+			throw new SQLException("Cannot delete hall, because of exisiting broadcast or reservation!");
+		}
 	}
 	
 	@Override
