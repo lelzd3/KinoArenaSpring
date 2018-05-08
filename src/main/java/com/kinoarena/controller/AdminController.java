@@ -79,6 +79,7 @@ public class AdminController {
 	
 		adminManager.removeBroadcast(broadcastId, admin);
 		springModel.addAttribute("message", "Successfully removed broadcast!");
+		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
 		return "removeBroadcast";
 	}
 
@@ -110,6 +111,9 @@ public class AdminController {
 		Broadcast newBroadcast = new Broadcast(cinemaId, movieId, hallId, projectionTime, price);
 		adminManager.addNewBroadcast(newBroadcast, admin);
 		springModel.addAttribute("message", "Successfully added a broadcast!");
+		springModel.addAttribute("movies", movieDao.getAllMovies());
+		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
+		springModel.addAttribute("halls", hallDao.getAllHalls());
 		return "addBroadcast";
 	}
 
@@ -127,12 +131,11 @@ public class AdminController {
 			Model springModel) throws NotAnAdminException, SQLException, InvalidDataException {
 
 		User user = (User) session.getAttribute("admin");
-		if (user != null && user.getIsAdmin()) {
-	
-			Validations.verifyEmail(email);
-			adminManager.changeUserIsAdminStatus(user, email.trim());
-		}
+		Validations.verifyEmail(email);
+		adminManager.changeUserIsAdminStatus(user, email.trim());
+
 		springModel.addAttribute("message", "Admin is created");
+		springModel.addAttribute("usersThatAreNotAdmin", userDao.getAllUsersButNoAdmins());
 		return "makeAdmin";
 	}
 	
@@ -172,6 +175,7 @@ public class AdminController {
 
 		adminManager.removeCinema(cinemaToDelete,admin);
 		springModel.addAttribute("message","Successfully removed a cinema");
+		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
 		return "removeCinema";
 	}
 
@@ -191,9 +195,9 @@ public class AdminController {
 		User admin = (User) session.getAttribute("admin");
 
 		Hall newHall = new Hall(cinemaId);
-		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
 		adminManager.addNewHall(newHall, admin);
 		springModel.addAttribute("message","Successfully added a hall");
+		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
 		return "addHall";
 	}
 
@@ -221,6 +225,7 @@ public class AdminController {
 		
 		adminManager.changeBroadcastPrice(admin, broadcastId, newPrice);
 		springModel.addAttribute("message","Successfully changed a price");
+		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
 		return "changeBroadcastPrice";
 	}
 
@@ -242,6 +247,7 @@ public class AdminController {
 		Hall hallToDelete = hallDao.getHallById(hallId);
 		adminManager.removeHall(hallToDelete, admin);
 		springModel.addAttribute("message","Successfully removed a hall");
+		springModel.addAttribute("halls",hallDao.getAllHalls());
 		return "removeHall";
 	}
 
@@ -259,7 +265,7 @@ public class AdminController {
 			@RequestParam("duration") double duration,
 			@RequestParam("file") MultipartFile uploadedFile,
 			@RequestParam("genresSelect") ArrayList<String> genresSelected,
-			HttpSession session, Model model) throws InvalidDataException, SQLException, NotAnAdminException, IOException {
+			HttpSession session, Model springModel) throws InvalidDataException, SQLException, NotAnAdminException, IOException {
 	
 
 		User admin = (User) session.getAttribute("admin");
@@ -276,7 +282,7 @@ public class AdminController {
 		File serverFile = new File(file_location);
 		Files.copy(uploadedFile.getInputStream(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-		model.addAttribute("message","Successfully added a movie");
+		springModel.addAttribute("message","Successfully added a movie");
 		return "addMovie";
 
     }
@@ -292,7 +298,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/removeMovie", method = RequestMethod.POST)
 	public String removeMovie(@RequestParam("movieSelect") int movieId,
-		HttpSession session, Model model) throws SQLException, InvalidDataException, NotAnAdminException {
+		HttpSession session, Model springModel) throws SQLException, InvalidDataException, NotAnAdminException {
 
 		User admin = (User) session.getAttribute("admin");
 	
@@ -300,7 +306,8 @@ public class AdminController {
 		//should check how to use On delete cascade to many;many relationship so that not use deleteGenresFromMovie()
 		adminManager.deleteGenresFromMovie(admin, movieId);
 		adminManager.removeMovie(movieToDelete, admin);
-		model.addAttribute("message", "Successfully removed a moive!");
+		springModel.addAttribute("message", "Successfully removed a moive!");
+		springModel.addAttribute("movies", movieDao.getAllMovies());
 		return "removeMovie";
 	}
 	
@@ -321,6 +328,7 @@ public class AdminController {
 		LocalDateTime newProjectionTime = LocalDateTime.parse(newTime);
 		adminManager.changeBroadcastProjectionTime(admin, broadcastId, newProjectionTime);
 		springModel.addAttribute("message", "Successfully changed a projection time!");
+		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
 		return "changeBroadcastProjectionTime";
 	}
 }
