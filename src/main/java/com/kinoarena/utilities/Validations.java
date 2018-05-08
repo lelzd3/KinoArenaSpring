@@ -4,8 +4,6 @@ import com.kinoarena.utilities.exceptions.InvalidDataException;
 
 public class Validations {
 
-	private static final int MIN_LENGTH_OF_PASSWORD = 8;
-
 	private Validations() {}
 
 	private static boolean validation(String text)  throws InvalidDataException {
@@ -19,7 +17,7 @@ public class Validations {
 	
 	public static boolean verifyEmail(String email) throws InvalidDataException {
 	    if(!validation(email)) {
-	    	 throw new InvalidDataException("Invalid e-mail");
+	    	 throw new InvalidDataException("Invalid e-mail, its empty");
 	    }
 	    
 	    if(!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
@@ -43,7 +41,7 @@ public class Validations {
 	public static boolean verifyUsername(String username) throws InvalidDataException {
 
 	    if(!username.matches("[A-Za-z0-9_]+") || username.length() < 5) {
-			throw new InvalidDataException("Invalid username");
+			throw new InvalidDataException("Invalid username, username should be atleast 5 characters long");
 	    }
 	        
 	    return true;
@@ -51,7 +49,7 @@ public class Validations {
 	
 	public static boolean verifyPassword(String password) throws InvalidDataException {
 		if(!validation(password)) {
-			throw new InvalidDataException("Invalid password");
+			throw new InvalidDataException("Invalid password, its empty");
 	    }
 		
 		//		^                 # start-of-string
@@ -63,9 +61,8 @@ public class Validations {
 		//		.{8,}             # anything, at least eight places though
 		//		$                 # end-of-string
 							// this constant is useless cuz regex checks for atleast 8 
-	    if(!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$") || password.length() < MIN_LENGTH_OF_PASSWORD) { 
-	    	System.out.println("Please enter valid password: atleast one digit, one lowercase, one uppercase, at least one symbol! and no whitespace!");
-	    	throw new InvalidDataException("Invalid password");
+	    if(!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")) { 
+	    	throw new InvalidDataException("Invalid password,Please enter valid password: atleast one digit, one lowercase, one uppercase, at least one symbol! and no whitespace! ");
 	    }
 	        
 	    return true;

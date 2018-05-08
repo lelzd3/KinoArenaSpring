@@ -24,7 +24,7 @@ public class EditUserController {
 	
 	//adminPanel.jsp -> addBroadcast.jsp
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String getToEditPage(Model springModel,HttpSession session,HttpServletRequest request) {
+	public String getToEditPage(Model springModel,HttpSession session) {
 		User user = (User) session.getAttribute("user");		
 		springModel.addAttribute("user", user);
 		return "editProfile";

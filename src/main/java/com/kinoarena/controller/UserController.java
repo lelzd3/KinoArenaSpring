@@ -12,6 +12,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +38,9 @@ import com.kinoarena.utilities.exceptions.WrongCredentialsException;
 public class UserController {
 	
 	@Autowired
+    ServletContext context;
+	
+	@Autowired
 	private MovieDao movieDao;
 	
 	@Autowired	
@@ -50,6 +54,7 @@ public class UserController {
 	
 	@Autowired
 	private ReservationDao reservationDao;
+
 	
 	@Autowired 
 	private UserDao userDao; // change later all UserDao to UserManager (add methods in manager)
@@ -125,14 +130,14 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpSession session, Model springModel) {
+	public String login(HttpServletRequest request,HttpSession session, Model springModel) throws SQLException {
 		session.setAttribute("movieDao",movieDao);
 		session.setAttribute("userDao",userDao);
 		session.setAttribute("broadcastDao",broadcastDao);
 		session.setAttribute("reservationDao", reservationDao);
 		session.setAttribute("cinemaDao", cinemaDao);
 		session.setAttribute("hallDao", hallDao);
-		
+
 		String username = request.getParameter("username");
 		String password = request.getParameter("password"); 
 		
@@ -165,23 +170,11 @@ public class UserController {
 			String lastName = request.getParameter("lastName");
 			int age = Integer.valueOf(request.getParameter("age"));
 				
-			userDao.existingEmailCheck(email);
 			userDao.existingUserNameCheck(username);
+			userDao.existingEmailCheck(email);
 			
-			if (username.isEmpty() || username.length() < 5) {
-				throw new InvalidDataException("Username must be at least 5 chars long");
-			}
 			if (!pass1.equals(pass2)) {
 				throw new InvalidDataException("Passwords missmatch");
-			}
-			if (!email.contains("@") || email.isEmpty()) {
-				throw new InvalidDataException("Invalid entered email");
-			}
-			if (firstName.isEmpty()) {
-				throw new InvalidDataException("Invalid entered first name");
-			}
-			if (lastName.isEmpty()) {
-				throw new InvalidDataException("Invalid entered last name");
 			}
 			
 			// creating new user with these details
@@ -220,13 +213,6 @@ public class UserController {
 		return "register";
 	}
 	
-	
-	//main.jsp -> viewAllReseravtions.jsp
-	//this method is not used?
-	@RequestMapping(value = "/reservationsPage", method = RequestMethod.GET)
-	public String viewAllReservations(){
-		return "viewAllReservations";
-	}
 
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
 	public String viewUserReservations(HttpSession session,Model model,HttpServletRequest request) throws SQLException{

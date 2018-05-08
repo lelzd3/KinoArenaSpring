@@ -18,7 +18,7 @@
 		    <!-- ################################################################################################ -->
 		    <ul class="clear">
 			    <li class="active"><a href="getTestMain">HOME</a></li>
-			    <c:if test="${!empty sessionScope.admin.username}">
+			    <c:if test="${user.isAdmin == true}">
 		    		<li><a class="drop" href="#">ADMIN PANEL</a>
 			    		<ul>
 			    			<li><a href="addMoviePage">Add Movie</a></li>

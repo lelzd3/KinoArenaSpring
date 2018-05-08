@@ -3,34 +3,25 @@ package com.kinoarena.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
-import com.kinoarena.controller.manager.AdminManager;
 import com.kinoarena.model.dao.BroadcastDao;
 import com.kinoarena.model.dao.CinemaDao;
-import com.kinoarena.model.dao.HallDao;
 import com.kinoarena.model.dao.MovieDao;
 import com.kinoarena.model.dao.ReservationDao;
 import com.kinoarena.model.dao.UserDao;
@@ -75,8 +66,8 @@ public class MovieController {
 	
 	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
 	@ResponseBody
-	public double rateMovieAjax(HttpServletRequest request) throws SQLException, InvalidDataException {
-		User user = (User) request.getSession().getAttribute("user");
+	public double rateMovieAjax(HttpServletRequest request,HttpSession session) throws SQLException, InvalidDataException {
+		User user = (User) session.getAttribute("user");
 	
 		int movieIdToBeRated = Integer.parseInt(request.getParameter("id"));
 		int newRating = Integer.parseInt(request.getParameter("rating"));
@@ -94,10 +85,11 @@ public class MovieController {
 	}
 
 	@RequestMapping(value = "/reserveInterim", method = RequestMethod.POST)
-	public String reserveInterim(HttpServletRequest request, HttpServletResponse response, Model springModel) throws SQLException, InvalidDataException {
+	public String reserveInterim(HttpServletRequest request, HttpServletResponse response,
+			Model springModel,HttpSession session) throws SQLException, InvalidDataException {
 
         //here we need user due to check his ages for discount
-		User user = (User) request.getSession().getAttribute("user");
+		User user = (User) session.getAttribute("user");
 
 		int broadcastId = Integer.parseInt(request.getParameter("broadcastSelect"));
 		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
@@ -135,13 +127,13 @@ public class MovieController {
 
 	
 	@RequestMapping(value="/reserveSubmit", method=RequestMethod.POST)
-	public String reserve(HttpServletRequest request,HttpServletResponse response,Model springModel) throws InvalidDataException, SQLException {
-		User user = (User) request.getSession().getAttribute("user");
+	public String reserve(HttpServletRequest request,HttpServletResponse response,
+			Model springModel,HttpSession session) throws InvalidDataException, SQLException {
+		User user = (User) session.getAttribute("user");
 		int broadcast_id = Integer.parseInt(request.getParameter("hiddenBroadcastId"));
 
 		String s = (String) request.getParameter("hiddenSeats");
-		if (s == "") {
-			// try with isEmpty()
+		if (s.isEmpty()) {
 			return "viewAllMovies";
 		}
 		String[] allSeats = s.split(",");
@@ -166,30 +158,25 @@ public class MovieController {
 	public String reserveSubmit(HttpServletRequest request,HttpServletResponse response,@PathVariable(value="broadcastId") Integer broadcastId) throws SQLException, InvalidDataException {
 		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
 		ArrayList<String> allSeatsForBroadcast = reservationDao.getAllOccupiedSeatsForABroadcast(broadcast);
-		//response.getWriter().write(allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1));
-		
+	
 		return allSeatsForBroadcast.toString().substring(1, allSeatsForBroadcast.toString().length()-1);
 	}
 
-
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public String search(HttpServletRequest request, HttpServletResponse response) throws InvalidDataException, SQLException {
+	public String search(HttpServletRequest request,HttpSession session, HttpServletResponse response) throws InvalidDataException, SQLException {
 		String name = request.getParameter("movie");
 		Movie selectedMovie = movieDao.getMovieByName(name);
-		request.getSession().setAttribute("selectedMovie", selectedMovie);
+		session.setAttribute("selectedMovie", selectedMovie);
 		
 		return "viewAMovie";
 	}
 	
-	//TODO put in the rest controller
 	@RequestMapping(value="/searchAutoComplete", method = RequestMethod.GET)
 	@ResponseBody
 	public ArrayList<String> searchAutoComplete(HttpServletResponse response, HttpServletRequest request) throws SQLException {
 		response.setContentType("application/json");
         String term = request.getParameter("term");
-        System.out.println("Data from ajax call " + term);
         ArrayList<String> allMovies = (ArrayList<String>) movieDao.getMoviesContains(term);
-        System.out.println(allMovies.toString());
         return allMovies;
 	}
 

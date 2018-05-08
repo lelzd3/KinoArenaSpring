@@ -67,7 +67,7 @@ public class AdminController {
 	
 	//adminPanel.jsp->removeBroadcast.jsp
 	@RequestMapping(value = "/removeBroadcastPage", method = RequestMethod.GET)
-	public String getToRemoveBroadcast(Model springModel,HttpServletRequest request) throws InvalidDataException, SQLException {
+	public String getToRemoveBroadcast(Model springModel) throws InvalidDataException, SQLException {
 		
 		springModel.addAttribute("broadcasts", broadcastDao.getAllBroadcasts());
 		return "removeBroadcast";
@@ -76,7 +76,7 @@ public class AdminController {
 	
 	
 	@RequestMapping(value = "/removeBroadcast", method = RequestMethod.POST)
-	public String removeBroadcast(@RequestParam("broadcastSelect") int broadcastId, HttpSession session,HttpServletRequest request,
+	public String removeBroadcast(@RequestParam("broadcastSelect") int broadcastId, HttpSession session,
 			Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
 
 		User admin = (User) session.getAttribute("admin");
@@ -89,7 +89,7 @@ public class AdminController {
 
 	//adminPanel.jsp -> addBroadcast.jsp
 	@RequestMapping(value = "/addBroadcastPage", method = RequestMethod.GET)
-	public String getToAddBroadcast(Model springModel,HttpSession session,HttpServletRequest request) throws SQLException, InvalidDataException {
+	public String getToAddBroadcast(Model springModel,HttpSession session) throws SQLException, InvalidDataException {
 	
 		User admin = (User) session.getAttribute("admin");
 
@@ -106,7 +106,7 @@ public class AdminController {
 					@RequestParam("cinemaSelect") int cinemaId,
 					@RequestParam("hallSelect") int hallId,
 					@RequestParam("projection_time") String time,
-					@RequestParam("price") double price, HttpSession session, HttpServletRequest request,
+					@RequestParam("price") double price, HttpSession session,
 					Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
 		
 		User admin = (User) session.getAttribute("admin");
@@ -120,7 +120,7 @@ public class AdminController {
 
 	//adminPanel.jsp -> makeAdmin.jsp
 	@RequestMapping(value = "/makeAdminPage", method = RequestMethod.GET)
-	public String getToMakeAdmin(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
+	public String getToMakeAdmin(Model springModel) throws SQLException, InvalidDataException {
 
 		springModel.addAttribute("usersThatAreNotAdmin", userDao.getAllUsersButNoAdmins());
 		return "makeAdmin";
@@ -129,7 +129,7 @@ public class AdminController {
 	
 	@RequestMapping(value = "/makeAdmin", method = RequestMethod.POST)
 	public String infoAdminCreateAdmin(@RequestParam("usersSelect") String email, HttpSession session,
-			Model springModel,HttpServletRequest request) throws NotAnAdminException, SQLException, InvalidDataException {
+			Model springModel) throws NotAnAdminException, SQLException, InvalidDataException {
 
 		User user = (User) session.getAttribute("admin");
 		if (user != null && user.getIsAdmin()) {
@@ -152,7 +152,7 @@ public class AdminController {
 	public String addCinema(
 			@RequestParam("address") String address,
 			@RequestParam("name") String name,
-			HttpSession session, Model springModel, HttpServletRequest request) throws SQLException, NotAnAdminException, InvalidDataException {
+			HttpSession session, Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
 
 		User admin = (User) session.getAttribute("admin");
 		Cinema newCinema = new Cinema(name, address);
@@ -162,7 +162,7 @@ public class AdminController {
     }
 	
 	@RequestMapping(value = "/removeCinemaPage", method = RequestMethod.GET)
-	public String getToRemoveCinema(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
+	public String getToRemoveCinema(Model springModel) throws SQLException, InvalidDataException {
 		springModel.addAttribute("cinemas", cinemaDao.getAllCinemas());
 		return "removeCinema";
 	}
@@ -170,8 +170,7 @@ public class AdminController {
 	@RequestMapping(value = "/removeCinema",method = RequestMethod.POST)
 	public String removeCinema(
 			@RequestParam("cinemaSelect") Integer cinemaId,
-			HttpSession session,HttpServletRequest request,
-			Model springModel) throws SQLException, InvalidDataException, NotAnAdminException {
+			HttpSession session,Model springModel) throws SQLException, InvalidDataException, NotAnAdminException {
 
 		User admin = (User) session.getAttribute("admin");
 		Cinema cinemaToDelete = cinemaDao.getCinemaById(cinemaId);
@@ -192,7 +191,7 @@ public class AdminController {
 	@RequestMapping(value = "/addHall", method = RequestMethod.POST)
 	public String addHall(
 			@RequestParam("cinemaSelect") int cinemaId ,
-			HttpSession session,HttpServletRequest request, Model springModel) throws InvalidDataException, SQLException, NotAnAdminException {
+			HttpSession session, Model springModel) throws InvalidDataException, SQLException, NotAnAdminException {
 
 		User admin = (User) session.getAttribute("admin");
 
@@ -216,7 +215,7 @@ public class AdminController {
 	public String changeBroadcastPrice(
 			@RequestParam("broadcastSelect") int broadcastId,
 			@RequestParam("newPrice") double newPrice,
-			HttpSession session,HttpServletRequest request,
+			HttpSession session,
 			Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
 		
 		if(newPrice < 0) {
@@ -232,7 +231,7 @@ public class AdminController {
 
 	//adminPanel.jsp -> removeHall.jsp
 	@RequestMapping(value = "/removeHallPage", method = RequestMethod.GET)
-	public String getToRemoveHall(Model springModel, HttpServletRequest request) throws SQLException, InvalidDataException {
+	public String getToRemoveHall(Model springModel) throws SQLException, InvalidDataException {
 		
 		springModel.addAttribute("halls",hallDao.getAllHalls());
 		return "removeHall";
@@ -242,8 +241,7 @@ public class AdminController {
 	@RequestMapping(value = "/removeHall", method = RequestMethod.POST)
 	public String removeHall(
 			@RequestParam("hallSelect") int hallId ,
-			HttpSession session,HttpServletRequest request,
-			Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
+			HttpSession session,Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
 
 		User admin = (User) session.getAttribute("admin");
 		Hall hallToDelete = hallDao.getHallById(hallId);
@@ -255,7 +253,6 @@ public class AdminController {
 	//adminPanel.jsp -> addMovie.jsp
 	@RequestMapping(value = "/addMoviePage", method = RequestMethod.GET)
 	public String getToAddMovie(Model springModel) throws SQLException {
-		springModel.addAttribute("genres", movieDao.getAllGenres());
 		return "addMovie";
 	}
 	
@@ -267,13 +264,12 @@ public class AdminController {
 			@RequestParam("duration") double duration,
 			@RequestParam("file") MultipartFile uploadedFile,
 			@RequestParam("genresSelect") ArrayList<String> genresSelected,
-			HttpSession session, Model model,HttpServletRequest request) throws InvalidDataException, SQLException, NotAnAdminException, IOException {
+			HttpSession session, Model model) throws InvalidDataException, SQLException, NotAnAdminException, IOException {
 	
 
 		User admin = (User) session.getAttribute("admin");
 	
 		Double rating = 0.0;
-		System.out.println(genresSelected);
 		Movie movie = new Movie(title, description, rating, duration,genresSelected);
 		adminManager.addNewMovie(movie, admin,genresSelected);
 		
@@ -292,7 +288,7 @@ public class AdminController {
 
 	//adminPanel.jsp -> removeMovie.jsp
 	@RequestMapping(value = "/removeMoviePage", method = RequestMethod.GET)
-	public String getToRemoveMovie(Model springModel,HttpServletRequest request) throws SQLException, InvalidDataException {
+	public String getToRemoveMovie(Model springModel) throws SQLException, InvalidDataException {
 			
 		springModel.addAttribute("movies", movieDao.getAllMovies());
 		return "removeMovie";
@@ -301,7 +297,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/removeMovie", method = RequestMethod.POST)
 	public String removeMovie(@RequestParam("movieSelect") int movieId,
-		HttpSession session, Model model,HttpServletRequest request) throws SQLException, InvalidDataException, NotAnAdminException {
+		HttpSession session, Model model) throws SQLException, InvalidDataException, NotAnAdminException {
 
 		User admin = (User) session.getAttribute("admin");
 	
@@ -323,7 +319,7 @@ public class AdminController {
 	public String changeBroadcastProjectionTime(
 			@RequestParam("broadcastSelect") int broadcastId,
 			@RequestParam("newProjectionTime") String newTime,
-			HttpSession session,HttpServletRequest request,
+			HttpSession session,
 			Model springModel) throws SQLException, NotAnAdminException, InvalidDataException {
 		
 		User admin = (User) session.getAttribute("admin");

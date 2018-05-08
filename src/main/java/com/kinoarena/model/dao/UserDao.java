@@ -171,7 +171,6 @@ public class UserDao implements IUserDao{
 		PreparedStatement ps = connection.prepareStatement("SELECT email FROM users WHERE email = ?");
 		ps.setString(1, email);
 		ResultSet rs = ps.executeQuery();
-		// TODO check if this works
 		if (rs.next()) {
 			throw new InvalidDataException("This email is already used");
 		}
