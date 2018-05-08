@@ -24,57 +24,61 @@ public class CinemaDao implements ICinemaDao{
 	}
 	
 	@Override
-	public void addCinema(Cinema c) throws SQLException {
-		
-		PreparedStatement s = connection.prepareStatement("INSERT INTO cinemas (name, address) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS);
-		s.setString(1, c.getName());
-		s.setString(2, c.getAddress());
-		s.executeUpdate();
-		
-		// set the ID for the instance of Cinema c
-		ResultSet result = s.getGeneratedKeys();
-		result.next(); // we write next cuz it starts from -1
-		c.setId((int)result.getLong(1)); // or 1 instead of id
-		
-		s.close();
+	public void addCinema(Cinema cinema) throws SQLException {
+		String query= "INSERT INTO cinemas (name, address) VALUES (?,?)";
+		try(PreparedStatement ps = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)){
+			ps.setString(1, cinema.getName());
+			ps.setString(2, cinema.getAddress());
+			ps.executeUpdate();
+			
+			// set the ID for the instance of Cinema c
+			ResultSet result = ps.getGeneratedKeys();
+			result.next(); // we write next cuz it starts from -1
+			cinema.setId((int)result.getLong(1)); // or 1 instead of id
+		}
 		
 	}
 	
 	@Override
 	public void deleteCinema(Cinema c) throws SQLException {
-		PreparedStatement s = connection.prepareStatement("DELETE FROM cinemas WHERE id = ?");
-		s.setInt(1, c.getId());
-		s.executeUpdate();
-		s.close();
+		String query = "DELETE FROM cinemas WHERE id = ?";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, c.getId());
+			ps.executeUpdate();
+		}
 	}
 	
 	@Override
 	public Collection<Cinema> getAllCinemas()  throws SQLException, InvalidDataException {
-		PreparedStatement s = connection.prepareStatement("SELECT id,name,address FROM cinemas");
 		ArrayList<Cinema> cinemas = new ArrayList<>();
-		ResultSet result = s.executeQuery();
-		while(result.next()) {
-			Cinema c = new Cinema(
-							  result.getInt("id"),
-							  result.getString("name"),
-							  result.getString("address")
-							  );
-			cinemas.add(c);
+		String query = "SELECT id,name,address FROM cinemas";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+			Cinema cinema = new Cinema(
+								  result.getInt("id"),
+								  result.getString("name"),
+								  result.getString("address")
+								  );
+				cinemas.add(cinema);
+			}
+			return cinemas;
 		}
-		return cinemas;
 	}
 	
 	@Override
 	public Cinema getCinemaById(int id)  throws SQLException, InvalidDataException {
-		PreparedStatement s = connection.prepareStatement("SELECT id,name,address FROM cinemas WHERE id=?");
-		s.setInt(1, id);
-		ResultSet result = s.executeQuery();
-		result.next();
+		String query = "SELECT id,name,address FROM cinemas WHERE id=?";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, id);
+			ResultSet result = ps.executeQuery();
+			result.next();
 			Cinema cinema = new Cinema(
-							  result.getInt("id"),
-							  result.getString("name"),
-							  result.getString("address")
-							  );
-		return cinema;
+								  result.getInt("id"),
+								  result.getString("name"),
+								  result.getString("address")
+								  );
+			return cinema;
+		}
 	}
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -79,11 +80,11 @@ public class UserController {
 		props.put("mail.smtp.port", "465");
 
 		Session session = Session.getDefaultInstance(props,
-			new javax.mail.Authenticator() {
+			new Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(MAIL_USERNAME,MAIL_PASSWORD);
-				}
-			});
+				return new PasswordAuthentication(MAIL_USERNAME,MAIL_PASSWORD);
+			}
+		});
 
 		try {
 			User user = userDao.getUserByEmail(receiverEmail);
@@ -131,12 +132,6 @@ public class UserController {
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public String login(HttpServletRequest request,HttpSession session, Model springModel) throws SQLException {
-		session.setAttribute("movieDao",movieDao);
-		session.setAttribute("userDao",userDao);
-		session.setAttribute("broadcastDao",broadcastDao);
-		session.setAttribute("reservationDao", reservationDao);
-		session.setAttribute("cinemaDao", cinemaDao);
-		session.setAttribute("hallDao", hallDao);
 
 		String username = request.getParameter("username");
 		String password = request.getParameter("password"); 

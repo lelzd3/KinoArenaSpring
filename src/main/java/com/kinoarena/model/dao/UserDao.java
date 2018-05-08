@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -482,7 +481,6 @@ public class UserDao implements IUserDao{
 
 	public void setNewPasswod(String receiverEmail, String randomPassword) throws SQLException {
 		try (PreparedStatement ps = connection.prepareStatement("UPDATE users SET password = ? WHERE email = ?")) {
-			
 			String hashedPassword = BCrypt.hashpw(randomPassword, BCrypt.gensalt());
 			ps.setString(1, hashedPassword);
 			ps.setString(2, receiverEmail);

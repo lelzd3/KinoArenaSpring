@@ -14,8 +14,8 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>My reservations</title>
 		<%
-			User user = (User) request.getSession().getAttribute("user");
-			ReservationDao reservationDao = (ReservationDao)session.getAttribute("reservationDao");
+			User user = (User) session.getAttribute("user");
+			ReservationDao reservationDao = (ReservationDao)application.getAttribute("reservationDao");
 			ArrayList<String> reservations = (ArrayList<String>) reservationDao.getAllReservationsForUser(user);
 		%>
 		<style>

@@ -31,34 +31,34 @@ public class ReservationDao implements IReservationDao {
 	@Override
 	public void addReservation(Reservation reservation, ArrayList<Seat> seats) throws SQLException {
 
-		PreparedStatement s = null;
+		PreparedStatement ps = null;
 		try {
 			connection.setAutoCommit(false);
-			s = connection.prepareStatement("INSERT INTO reservations (users_id,broadcasts_id,seats_number,time) VALUES (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
-			s.setInt(1, reservation.getUserId());
-			s.setInt(2, reservation.getBroadcastId());
-			s.setInt(3, reservation.getAllSeatsReserved().size());
+			ps = connection.prepareStatement("INSERT INTO reservations (users_id,broadcasts_id,seats_number,time) VALUES (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, reservation.getUserId());
+			ps.setInt(2, reservation.getBroadcastId());
+			ps.setInt(3, reservation.getAllSeatsReserved().size());
 			Timestamp time = Timestamp.valueOf(reservation.getTimeReservationIsMade());
-			s.setTimestamp(4, time);
-			s.executeUpdate();
+			ps.setTimestamp(4, time);
+			ps.executeUpdate();
 			
-			ResultSet result = s.getGeneratedKeys();
+			ResultSet result = ps.getGeneratedKeys();
 			result.next();
 			reservation.setId((int)result.getLong(1));
 
 			for (Seat seat : seats) {
-				s = connection.prepareStatement("INSERT INTO `reservations_seats` (`ticket_reservations_id` ,`row_number` ,`column_number`) VALUES (?,?,?)");
-				s.setInt(1, reservation.getId());
-				s.setInt(2, seat.getRow());
-				s.setInt(3, seat.getColumn());
-				s.executeUpdate();
+				ps = connection.prepareStatement("INSERT INTO `reservations_seats` (`ticket_reservations_id` ,`row_number` ,`column_number`) VALUES (?,?,?)");
+				ps.setInt(1, reservation.getId());
+				ps.setInt(2, seat.getRow());
+				ps.setInt(3, seat.getColumn());
+				ps.executeUpdate();
 			}
 			connection.commit();
 		} catch (SQLException e) {
 			connection.rollback();
 			throw e;
 		} finally {
-			s.close();
+			ps.close();
 			connection.setAutoCommit(true);
 		}
 	}
@@ -69,18 +69,18 @@ public class ReservationDao implements IReservationDao {
 		// Transaction remove from reservations table
 		// then remove all from reservations_seats where id = reservation id
         //here we use string due to cancelReservation in UserController
-		PreparedStatement s = null;
+		PreparedStatement ps = null;
 		try {
 			connection.setAutoCommit(false);
 			
-			s = connection.prepareStatement("DELETE FROM reservations_seats WHERE ticket_reservations_id = ?");
-			s.setString(1,reservationId);
-			s.executeUpdate();
+			ps = connection.prepareStatement("DELETE FROM reservations_seats WHERE ticket_reservations_id = ?");
+			ps.setString(1,reservationId);
+			ps.executeUpdate();
 			
 			
-			s = connection.prepareStatement("DELETE FROM reservations WHERE id = ?");
-			s.setString(1,reservationId);
-			s.executeUpdate();
+			ps = connection.prepareStatement("DELETE FROM reservations WHERE id = ?");
+			ps.setString(1,reservationId);
+			ps.executeUpdate();
 
 			
 			connection.commit();
@@ -88,35 +88,37 @@ public class ReservationDao implements IReservationDao {
 			connection.rollback();
 			throw e;
 		} finally {
-			s.close();
+			ps.close();
 			connection.setAutoCommit(true);
 		}
 
 	}
 
 	@Override
-	public Collection<Reservation> getAllReservationsForABroadcast(Broadcast b) throws SQLException, InvalidDataException {
-		PreparedStatement s = connection.prepareStatement("SELECT id,users_id,broadcasts_id,seats_number,time FROM reservations WHERE broadcasts_id = ?");
-		s.setInt(1, b.getId());
+	public Collection<Reservation> getAllReservationsForABroadcast(Broadcast broadcast) throws SQLException, InvalidDataException {
 		ArrayList<Reservation> reservations = new ArrayList<>();
-		ResultSet result = s.executeQuery();
-		while (result.next()) {
-			LocalDateTime time = result.getTimestamp("time").toLocalDateTime();
-			Reservation r = new Reservation(
-					result.getInt("id"),
-					result.getInt("users_id"),
-					result.getInt("broadcasts_id"),
-					result.getInt("seats_number"),
-					time
-					);
-			
-			reservations.add(r);
+		String query = "SELECT id,users_id,broadcasts_id,seats_number,time FROM reservations WHERE broadcasts_id = ?";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, broadcast.getId());
+			ResultSet result = ps.executeQuery();
+			while (result.next()) {
+				LocalDateTime time = result.getTimestamp("time").toLocalDateTime();
+				Reservation r = new Reservation(
+						result.getInt("id"),
+						result.getInt("users_id"),
+						result.getInt("broadcasts_id"),
+						result.getInt("seats_number"),
+						time
+						);
+				
+				reservations.add(r);
+			}
+			return reservations;
 		}
-
-		return reservations;
 	}
 
-	// TODO put in interface
+
+	@Override
 	public ArrayList<String> getAllOccupiedSeatsForABroadcast(Broadcast broadcast) throws SQLException, InvalidDataException {
 
 		ArrayList<String> allSeats = new ArrayList<String>();
@@ -126,17 +128,13 @@ public class ReservationDao implements IReservationDao {
 
 			ArrayList<Reservation> reservations = (ArrayList<Reservation>) getAllReservationsForABroadcast(broadcast);
 
-			// TODO optimise with 1 query , dynamically apend ? to string
 			for (Reservation reservation : reservations) {
-				// do a select query WHERE reservation_id = reservation.getId
 				ps = connection.prepareStatement("SELECT `row_number` , `column_number` FROM `reservations_seats` WHERE `ticket_reservations_id` = ?");
 				ps.setInt(1, reservation.getId());
 				ResultSet result = ps.executeQuery();
-				// make a resultset and while through him and append to allSeats
+				
 				while (result.next()) {
-
 					allSeats.add(result.getInt("row_number") + "_" + result.getInt("column_number"));
-
 				}
 
 			}
@@ -149,29 +147,23 @@ public class ReservationDao implements IReservationDao {
 		} finally {
 			ps.close();
 			connection.setAutoCommit(true);
-
 		}
 		return allSeats;
 
 	}
 
+	@Override
 	public void bookSelectedSeats(int row, int col, int ticketReservId) throws SQLException {
-		PreparedStatement ps = null;
-		try {
-			ps = connection
-					.prepareStatement("INSERT INTO reservations_seats (row_number,column_number,ticket_reservations_id) VALUES (?,?,?) ");
+		String query = "INSERT INTO reservations_seats (row_number,column_number,ticket_reservations_id) VALUES (?,?,?) ";
+		try(PreparedStatement ps = connection.prepareStatement(query)) {	
 			ps.setInt(1, row);
 			ps.setInt(2, col);
 			ps.setInt(3, ticketReservId);
 			ps.executeUpdate();
-
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			ps.close();
 		}
 	}
 
+	@Override
 	public ArrayList<String> getAllReservationsForUser(User user) throws SQLException {
 		ArrayList<String> allReservations = new ArrayList<String>();
 		PreparedStatement ps = null;

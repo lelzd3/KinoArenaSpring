@@ -38,10 +38,6 @@ import com.kinoarena.utilities.exceptions.NotAnAdminException;
 
 @Controller
 public class AdminController {
-
-	//remove it later with the context in login
-	@Autowired
-	ServletContext context;
 	
 	@Autowired
 	private MovieDao movieDao;
