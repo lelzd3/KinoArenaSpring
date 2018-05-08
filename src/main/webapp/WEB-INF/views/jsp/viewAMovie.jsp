@@ -1,3 +1,4 @@
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="com.kinoarena.model.dao.MovieDao"%>
 <%
 response.setHeader("Pragma", "No-cache");
@@ -28,7 +29,8 @@ response.setHeader("Cache-Control", "no-cache");
 			
 			Movie movie =(Movie) session.getAttribute("selectedMovie");
 			
-			// make is so we make a smaller select query
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			
 			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
 			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());
 			
@@ -127,7 +129,7 @@ response.setHeader("Cache-Control", "no-cache");
 					<select name="broadcastSelect">
 					<%
 					for(Broadcast broadcast : (ArrayList<Broadcast>)broadcastDao.getAllBroadcastsForAMovie(movie)) { %>
-						<option value="<%= broadcast.getId() %>"><%="Cinema_id: "+  broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: "+ broadcast.getMovieId() %></option>
+						<option value="<%= broadcast.getId() %>"><%="Projection Time: " + broadcast.getProjectionTime().format(formatter) %></option>
 					<%} %>
 				</select>
 					<input type="submit" value="Choose Broadcast to book seats for">

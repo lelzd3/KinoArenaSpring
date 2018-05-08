@@ -15,7 +15,6 @@ public class Movie  {
 	private double duration;
 	private String file_location;
 	private ArrayList<String> genres;
-	// FIX ER DIAGRAM!!!!!!!
 
 	public Movie(String title, String description, double rating, double duration, ArrayList<String> genres) throws InvalidDataException {
 		setTitle(title);
