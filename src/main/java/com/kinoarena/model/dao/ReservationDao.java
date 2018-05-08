@@ -56,7 +56,7 @@ public class ReservationDao implements IReservationDao {
 			connection.commit();
 		} catch (SQLException e) {
 			connection.rollback();
-			throw e;
+			throw new SQLException("Sorry, but seat is already booked :(");
 		} finally {
 			ps.close();
 			connection.setAutoCommit(true);

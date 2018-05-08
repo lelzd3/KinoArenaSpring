@@ -285,7 +285,10 @@ public class UserDao implements IUserDao{
 			ps.setLong(1, userId);
 			ps.setLong(2, movieId);
 			ps.executeUpdate();
-		}	
+		}
+		catch (SQLException e) {
+			throw new SQLException("You cant add a single movie in favorite list twice!");
+		}
 	}
 	
 	@Override
@@ -295,6 +298,9 @@ public class UserDao implements IUserDao{
 			ps.setInt(1, userId);
 			ps.setInt(2, movieId);
 			ps.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new SQLException("You cant remove a single movie in favorite list twice!");
 		}
 	}
 
@@ -397,6 +403,8 @@ public class UserDao implements IUserDao{
 			ps.setLong(1, userId);
 			ps.setLong(2, movieId);
 			ps.executeUpdate();
+		}catch (SQLException e) {
+			throw new SQLException("You cant add a single movie in watchlist twice!");
 		}
 	}
 
@@ -407,6 +415,8 @@ public class UserDao implements IUserDao{
 			ps.setInt(1, userId);
 			ps.setInt(2, movieId);
 			ps.executeUpdate();
+		}catch (SQLException e) {
+			throw new SQLException("You cant remove a single movie in watchlist twice!");
 		}
 	}
 	
@@ -467,6 +477,9 @@ public class UserDao implements IUserDao{
 				ps.setString(1, editedEmail);
 				ps.setLong(2, user.getId());
 				ps.executeUpdate();
+			}
+			catch(SQLException e) {
+				throw new SQLException("Email is already used");
 			}
 			user.setEmail(editedEmail);
 		}
