@@ -89,9 +89,9 @@ public class AdminManager {
 	}
 
 
-	public void removeBroadcast(Broadcast b, User admin) throws SQLException, NotAnAdminException, InvalidDataException {	
+	public void removeBroadcast(int broadcastId, User admin) throws SQLException, NotAnAdminException, InvalidDataException {	
 		if(admin.getIsAdmin()){
-			broadcastDao.deleteBroadcast(b);;
+			broadcastDao.deleteBroadcast(broadcastId);
 		}else{
 			throw new NotAnAdminException();
 		}

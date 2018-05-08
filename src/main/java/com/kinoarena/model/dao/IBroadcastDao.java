@@ -8,15 +8,13 @@ import com.kinoarena.model.pojo.Movie;
 
 public interface IBroadcastDao {
 
-	public void deleteBroadcast(Broadcast b) throws Exception;
+	public void deleteBroadcast(int broadcastId) throws Exception;
 	
 	public void changeBroadcastProjectionTime(int broadcastId,LocalDateTime projectionTime) throws Exception;
 
 	void addBroadcast(Broadcast b) throws Exception;
 
 	public Collection<Broadcast> getAllBroadcastsForAMovie(Movie m) throws Exception;
-	
-	public void setPromoPercent(Broadcast b, double promoPercent) throws Exception; //delete this
 	
 	public Collection<Broadcast> getAllBroadcasts() throws Exception;
 	

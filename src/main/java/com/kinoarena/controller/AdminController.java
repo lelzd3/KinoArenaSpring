@@ -81,8 +81,7 @@ public class AdminController {
 
 		User admin = (User) session.getAttribute("admin");
 	
-		Broadcast broadcast = broadcastDao.getBroadcastById(broadcastId);
-		adminManager.removeBroadcast(broadcast, admin);
+		adminManager.removeBroadcast(broadcastId, admin);
 		springModel.addAttribute("message", "Successfully removed broadcast!");
 		return "removeBroadcast";
 	}
