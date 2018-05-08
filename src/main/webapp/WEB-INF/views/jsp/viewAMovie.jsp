@@ -20,11 +20,14 @@ response.setHeader("Cache-Control", "no-cache");
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"><title>View a Movies page</title>
 		<%
-			User user = (User) request.getSession().getAttribute("user");
-			UserDao userDao = (UserDao)session.getAttribute("userDao");
-			BroadcastDao broadcastDao = (BroadcastDao)session.getAttribute("broadcastDao");
-			Movie movie =(Movie) request.getSession().getAttribute("selectedMovie");
-			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
+			User user = (User) session.getAttribute("user");
+		
+			UserDao userDao = (UserDao)application.getAttribute("userDao");
+			BroadcastDao broadcastDao = (BroadcastDao)application.getAttribute("broadcastDao");
+			MovieDao movieDao = (MovieDao)application.getAttribute("movieDao");
+			
+			Movie movie =(Movie) session.getAttribute("selectedMovie");
+			
 			// make is so we make a smaller select query
 			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
 			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());

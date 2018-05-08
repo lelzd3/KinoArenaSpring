@@ -19,11 +19,13 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Favorite movies</title>
 		<%
-			User user = (User) request.getSession().getAttribute("user");
-			UserDao userDao = (UserDao)session.getAttribute("userDao");
-			BroadcastDao broadcastDao = (BroadcastDao)session.getAttribute("broadcastDao");
+			User user = (User) session.getAttribute("user");
+		
+			UserDao userDao = (UserDao)application.getAttribute("userDao");
+			BroadcastDao broadcastDao = (BroadcastDao)application.getAttribute("broadcastDao");
+			MovieDao movieDao = (MovieDao)application.getAttribute("movieDao");
+			
 			ArrayList<Movie> movies = (ArrayList<Movie>) userDao.viewFavourite(user);
-			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
 		%>
 		<style>
 			.one{

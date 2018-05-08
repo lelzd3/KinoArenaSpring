@@ -26,71 +26,78 @@ public class HallDao implements IHallDao{
 	
 	
 	@Override
-	public void addHall(Hall h) throws SQLException {
-		
-		PreparedStatement s = connection.prepareStatement("INSERT INTO halls (cinemas_id) VALUES (?)",Statement.RETURN_GENERATED_KEYS);
-		s.setInt(1, h.getCinemaId());
-		s.executeUpdate();
-		
-		// set the ID for the instance of Hall h
-		ResultSet result = s.getGeneratedKeys();
-		result.next(); // we write next cuz it starts from -1
-		h.setId((int)result.getLong(1)); // or 1 instead of id
-		
-		s.close();
+	public void addHall(Hall hall) throws SQLException {
+		String query = "INSERT INTO halls (cinemas_id) VALUES (?)";
+		try(PreparedStatement ps = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)){
+			ps.setInt(1, hall.getCinemaId());
+			ps.executeUpdate();
+			
+			// set the ID for the instance of Hall h
+			ResultSet result = ps.getGeneratedKeys();
+			result.next(); // we write next cuz it starts from -1
+			hall.setId((int)result.getLong(1)); // or 1 instead of id
+		}
 		
 	}
 	
 	@Override
-	public void deleteHall(Hall h) throws SQLException {
-		PreparedStatement s = connection.prepareStatement("DELETE FROM halls WHERE id = ?");
-		s.setInt(1, h.getId());
-		s.executeUpdate();
-		s.close();
+	public void deleteHall(Hall hall) throws SQLException {
+		String query = "DELETE FROM halls WHERE id = ?";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, hall.getId());
+			ps.executeUpdate();
+		}
 	}
 	
 	@Override
 	public Collection<Hall> getAllHalls()  throws SQLException, InvalidDataException {
-		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id FROM halls");
 		ArrayList<Hall> halls = new ArrayList<>();
-		ResultSet result = s.executeQuery();
-		while(result.next()) {
-			Hall h = new Hall(
-							  result.getInt("id"),
-							  result.getInt("cinemas_id")
-							  );
-			halls.add(h);
+		String query = "SELECT id,cinemas_id FROM halls";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				Hall h = new Hall(
+								  result.getInt("id"),
+								  result.getInt("cinemas_id")
+								  );
+				halls.add(h);
+			}
+			return halls;
 		}
-		return halls;
 	}
 
 	@Override
-	public Collection<Hall> getAllHallsForACinema(Cinema c) throws Exception {
-		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id FROM halls WHERE cinemas_id = ?");
-		s.setInt(1, c.getId());
+	public Collection<Hall> getAllHallsForACinema(Cinema cinema) throws Exception {
 		ArrayList<Hall> halls = new ArrayList<>();
-		ResultSet result = s.executeQuery();
-		while(result.next()) {
-			Hall h = new Hall(
-							  result.getInt("id"),
-							  result.getInt("cinemas_id")
-							  );
-			halls.add(h);
+		String query = "SELECT id,cinemas_id FROM halls WHERE cinemas_id = ?";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, cinema.getId());
+			
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				Hall h = new Hall(
+								  result.getInt("id"),
+								  result.getInt("cinemas_id")
+								  );
+				halls.add(h);
+			}
+			return halls;
 		}
-		return halls;
 	}
 	
 	@Override
 	public Hall getHallById(int id) throws SQLException, InvalidDataException  {
-		PreparedStatement s = connection.prepareStatement("SELECT id,cinemas_id FROM halls WHERE id = ?");
-		s.setInt(1, id);
-		ResultSet result = s.executeQuery();
-		result.next();
-		Hall hall = new Hall(
-						result.getInt("id"),
-						result.getInt("cinemas_id")
-						 );
-		
-		return hall;
+		String query = "SELECT id,cinemas_id FROM halls WHERE id = ?";
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, id);
+			ResultSet result = ps.executeQuery();
+			result.next();
+			Hall hall = new Hall(
+							result.getInt("id"),
+							result.getInt("cinemas_id")
+							 );
+			
+			return hall;
+		}
 	}
 }

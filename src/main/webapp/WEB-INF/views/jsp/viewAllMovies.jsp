@@ -44,12 +44,13 @@ response.setHeader("Cache-Control", "no-cache");
 		<%
 			User user = (User) session.getAttribute("user");
 			
-			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
-			BroadcastDao broadcastDao =  (BroadcastDao) session.getAttribute("broadcastDao");
+			MovieDao movieDao = (MovieDao)application.getAttribute("movieDao");
+			BroadcastDao broadcastDao =  (BroadcastDao) application.getAttribute("broadcastDao");
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			
 			ArrayList<Movie> movies = (ArrayList<Movie>)movieDao.getAllMovies();
+			
 			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
 			ArrayList<Integer> watchMovies = movieDao.getAllWatchlistMovieIdsForUser(user.getId());
 		%>
