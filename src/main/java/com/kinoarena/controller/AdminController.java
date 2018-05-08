@@ -304,7 +304,6 @@ public class AdminController {
 	
 		Movie movieToDelete= movieDao.getMovieById(movieId);
 		//should check how to use On delete cascade to many;many relationship so that not use deleteGenresFromMovie()
-		adminManager.deleteGenresFromMovie(admin, movieId);
 		adminManager.removeMovie(movieToDelete, admin);
 		springModel.addAttribute("message", "Successfully removed a moive!");
 		springModel.addAttribute("movies", movieDao.getAllMovies());

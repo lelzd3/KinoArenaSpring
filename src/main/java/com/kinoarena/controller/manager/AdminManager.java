@@ -137,11 +137,4 @@ public class AdminManager {
 		}
 	}
 	
-	public void deleteGenresFromMovie(User admin,int movieId) throws SQLException, NotAnAdminException {
-		if(admin.getIsAdmin()){
-			movieDao.deleteGenresFromMovie(movieId);
-		}else{
-			throw new NotAnAdminException();
-		}
-	}
 }

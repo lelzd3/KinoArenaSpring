@@ -29,7 +29,7 @@ response.setHeader("Cache-Control", "no-cache");
 				<br><br>
 				Description<textarea name="description" rows="4" cols="50" required></textarea>
 				<br><br>
-				Duration <input type="number" name="duration" step="any" required>
+				Duration <input type="number" name="duration" step="any" min="1" max="10" required>
 				<br><br>
 				File <input type="file" accept="image/*" name="file">
 				<br><br>

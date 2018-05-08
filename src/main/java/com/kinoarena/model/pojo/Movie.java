@@ -98,7 +98,7 @@ public class Movie  {
 	}
 	
 	public void setDuration(double duration) throws InvalidDataException {
-		if(duration > 0) {
+		if(duration > 0 && duration < 10) {
 			this.duration = duration;
 		}
 		else {
