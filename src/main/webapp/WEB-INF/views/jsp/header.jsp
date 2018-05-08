@@ -17,7 +17,7 @@
 		  <nav id="mainav" class="hoc clear"> 
 		    <!-- ################################################################################################ -->
 		    <ul class="clear">
-			    <li class="active"><a href="getTestMain">HOME</a></li>
+			    <li class="active"><a href="getHome">HOME</a></li>
 			    <c:if test="${user.isAdmin == true}">
 		    		<li><a class="drop" href="#">ADMIN PANEL</a>
 			    		<ul>
