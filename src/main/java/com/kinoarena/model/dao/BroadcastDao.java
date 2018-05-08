@@ -64,10 +64,10 @@ public class BroadcastDao implements IBroadcastDao {
 	@Override
 	public Collection<Broadcast> getAllBroadcastsForAMovie(Movie m) throws SQLException, InvalidDataException  {
 		String query = "SELECT id,cinemas_id,movies_id,halls_id,projection_time, price FROM broadcasts WHERE movies_id = ?";
-		try(PreparedStatement s = connection.prepareStatement(query)){
-			s.setInt(1, m.getId());
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, m.getId());
 			ArrayList<Broadcast> broadcasts = new ArrayList<>();
-			ResultSet result = s.executeQuery();
+			ResultSet result = ps.executeQuery();
 			while (result.next()) {
 				LocalDateTime time = result.getTimestamp("projection_time").toLocalDateTime();
 				Broadcast b = new Broadcast(
@@ -87,9 +87,9 @@ public class BroadcastDao implements IBroadcastDao {
 	@Override
 	public Collection<Broadcast> getAllBroadcasts() throws InvalidDataException, SQLException  {
 		String query = "SELECT id,cinemas_id,movies_id,halls_id,projection_time, price FROM broadcasts";
-		try(PreparedStatement s = connection.prepareStatement(query)){
+		try(PreparedStatement ps = connection.prepareStatement(query)){
 			ArrayList<Broadcast> broadcasts = new ArrayList<>();
-			ResultSet result = s.executeQuery();
+			ResultSet result = ps.executeQuery();
 			while (result.next()) {
 				LocalDateTime time = result.getTimestamp("projection_time").toLocalDateTime();
 				Broadcast b = new Broadcast(result.getInt("id"), result.getInt("cinemas_id"), result.getInt("movies_id"),
@@ -102,9 +102,9 @@ public class BroadcastDao implements IBroadcastDao {
 
 	public Broadcast getBroadcastById(int id) throws SQLException, InvalidDataException {
 		String query = "SELECT id,cinemas_id,movies_id,halls_id,projection_time,price FROM broadcasts WHERE id = ?";
-		try(PreparedStatement s = connection.prepareStatement(query)){
-			s.setInt(1, id);
-			ResultSet result = s.executeQuery();
+		try(PreparedStatement ps = connection.prepareStatement(query)){
+			ps.setInt(1, id);
+			ResultSet result = ps.executeQuery();
 			try {
 				result.next();
 				LocalDateTime time = result.getTimestamp("projection_time").toLocalDateTime();
