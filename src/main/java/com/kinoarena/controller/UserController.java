@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kinoarena.model.dao.BroadcastDao;
 import com.kinoarena.model.dao.CinemaDao;
@@ -62,6 +63,12 @@ public class UserController {
 	
 	private static final String MAIL_USERNAME = "kinoArenaSpring@gmail.com";
 	private static final String MAIL_PASSWORD = "kinoarena123";
+	
+	//test main
+		@RequestMapping(value="/getHome", method = RequestMethod.GET)
+		public String returnToTestMain() {
+			return "home";
+		}
 	
 	@RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
 	public String passwordRecovery() {
@@ -230,6 +237,77 @@ public class UserController {
 	
 	}
 	
+	//main.jsp -> user_favourites.jsp
+		@RequestMapping(value = "/viewUserFavourites", method = RequestMethod.GET)
+		public String viewUserFavourites(HttpSession session,Model model,HttpServletRequest request){
+			return "user_favourites";
+		}
+		
+		@RequestMapping(value = "/addInFavorite", method = RequestMethod.POST)
+		public String addInFavorite(
+				@RequestParam("hiddenMovieId") Integer movieId,
+				HttpSession session,HttpServletRequest request) throws SQLException{
+			
+				User user = (User) session.getAttribute("user");
+				
+				String jspName = request.getParameter("hiddenJspName");
+				
+				userDao.addInFavorite(user.getId(), movieId);
+				
+				return jspName;
+		}
+		
+		@RequestMapping(value = "/removeFromFavorite", method = RequestMethod.POST)
+		public String removeFromFavorite(
+				@RequestParam("hiddenMovieId") Integer movieId,
+				HttpSession session,HttpServletRequest request) throws SQLException{
+
+				User user = (User) session.getAttribute("user");
+				
+				String jspName = request.getParameter("hiddenJspName");
+				
+	     		userDao.removeFavouriteMovie(user.getId(), movieId);
+
+				return jspName;
+		}
+
+		@RequestMapping(value = "/viewUserWatchlist", method = RequestMethod.GET)
+		public String infoUserFavourites() throws InvalidDataException, SQLException{
+
+			return "user_watchlist";
+		}
+		
+		@RequestMapping(value = "/addInWatchlist", method = RequestMethod.POST)
+		public String addInWatchlist(
+				@RequestParam("hiddenMovieId") Integer movieId,
+				HttpSession session,HttpServletRequest request) throws SQLException{
+
+			User user = (User) session.getAttribute("user");
+			
+			String jspName = request.getParameter("hiddenJspName");
+			
+			userDao.addInWatchlist(user.getId(), movieId);
+			
+			return jspName;
+		
+		}
+		
+		@RequestMapping(value = "/removeFromWatchlist", method = RequestMethod.POST)
+		public String removeFromWatchlist(
+				@RequestParam("hiddenMovieId") Integer movieId,
+				HttpSession session,HttpServletRequest request) throws SQLException{
+
+			User user = (User) session.getAttribute("user");
+			
+			String jspName = request.getParameter("hiddenJspName");
+			
+	 		userDao.removeFavouriteWatchlist(user.getId(), movieId);
+
+			return jspName;
+		
+		}
+		
+
 	
 
 }

@@ -50,12 +50,12 @@ public class EditUserController {
 			return "editProfile";
 		}
 
-		return "main";
+		return "home";
 	}
 	
 	@RequestMapping(value = "/cancel", method = RequestMethod.GET)
 	public String goToMainPage() {
-		return "main";
+		return "home";
 	}
 
 }
