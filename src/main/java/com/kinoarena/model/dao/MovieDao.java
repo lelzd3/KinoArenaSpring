@@ -58,16 +58,22 @@ public class MovieDao implements IMovieDao{
 	@Override
 	public void deleteMovie(Movie m) throws SQLException {
 		String query = "DELETE FROM movies WHERE id = ?";
-		try(PreparedStatement ps = connection.prepareStatement(query)){	
+		PreparedStatement ps = null;
+		try{
 			connection.setAutoCommit(false);
+			ps = connection.prepareStatement(query);
+			
 			deleteGenresFromMovie(m.getId());
 			ps.setInt(1, m.getId());
 			ps.executeUpdate();
+			connection.commit();
 		}
 		catch(SQLException e) {
+			connection.rollback();
 			throw new SQLException("Cannot delete movie, because of exisiting broadcast or reservation!");
 		}
 		finally {
+			ps.close();
 			connection.setAutoCommit(true);
 		}
 	}
