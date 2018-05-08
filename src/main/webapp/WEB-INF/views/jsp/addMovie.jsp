@@ -27,7 +27,7 @@ response.setHeader("Cache-Control", "no-cache");
 			<form method="post" action="addMovie" enctype="multipart/form-data">
 				Title <input type="text" name="title" required>
 				<br><br>
-				Description <input type="text" name="description" required>
+				Description<textarea name="description" rows="4" cols="50" required></textarea>
 				<br><br>
 				Duration <input type="number" name="duration" step="any" required>
 				<br><br>

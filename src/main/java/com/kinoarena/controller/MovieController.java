@@ -72,20 +72,6 @@ public class MovieController {
 		File serverFile = new File(file_location);
 		Files.copy(serverFile.toPath(), response.getOutputStream());
 	}
-
-//	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
-//	public String rateMovie(HttpServletRequest request) throws SQLException, InvalidDataException {
-//		User user = (User) request.getSession().getAttribute("user");
-//		
-//		String jspName = request.getParameter("hiddenJspName");
-//		
-//		int movieIdToBeRated = Integer.parseInt(request.getParameter("movieIdToBeRated"));
-//		int newRating = Integer.parseInt(request.getParameter("ratingSelect"));
-//
-//		Movie movie = movieDao.getMovieById(movieIdToBeRated);
-//		userDao.rateMovie(user, movie, newRating);
-//		return jspName;
-//	}
 	
 	@RequestMapping(value = "/rateMovie", method = RequestMethod.POST)
 	@ResponseBody

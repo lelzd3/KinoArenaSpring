@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ public class BroadcastDao implements IBroadcastDao {
 		ArrayList<Broadcast> broadcasts = new ArrayList<>();
 		ResultSet result = s.executeQuery();
 		while (result.next()) {
+			
 			LocalDateTime time = result.getTimestamp("projection_time").toLocalDateTime();
 			Broadcast b = new Broadcast(
 					result.getInt("id"),

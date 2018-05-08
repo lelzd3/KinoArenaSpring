@@ -1,3 +1,4 @@
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%
 response.setHeader("Pragma", "No-cache");
 response.setDateHeader("Expires", 0);
@@ -45,6 +46,8 @@ response.setHeader("Cache-Control", "no-cache");
 			
 			MovieDao movieDao = (MovieDao)session.getAttribute("movieDao");
 			BroadcastDao broadcastDao =  (BroadcastDao) session.getAttribute("broadcastDao");
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			
 			ArrayList<Movie> movies = (ArrayList<Movie>)movieDao.getAllMovies();
 			ArrayList<Integer> favMovies = movieDao.getAllFavouriteMovieIdsForUser(user.getId());
@@ -144,7 +147,7 @@ response.setHeader("Cache-Control", "no-cache");
 					<%
 					for (Broadcast broadcast : (ArrayList<Broadcast>) broadcastDao.getAllBroadcastsForAMovie(movie)) {
 					%>
-						<option value="<%=broadcast.getId()%>"><%="Cinema_id: " + broadcast.getCinemaId() + ", Broadast_id: " + broadcast.getId() + ", Movie_id: " + broadcast.getMovieId()%></option>
+						<option value="<%=broadcast.getId()%>"><%="Projection Time: " + broadcast.getProjectionTime().format(formatter) %></option>
 					<%
 					}
 					%>

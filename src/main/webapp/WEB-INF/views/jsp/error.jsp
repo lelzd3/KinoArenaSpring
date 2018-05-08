@@ -19,8 +19,12 @@ response.setHeader("Cache-Control", "no-cache");
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>error</title>
 	</head>
-	<body>
+	<body style="background-color: #CBCBCB">
 		<h1 align="center">Error occured</h1>
-		<span><img src='img/error.png' align="middle" class="center" /><h1  style='display:inline;'></h1></span>
+		<br>
+ 		<% Exception e = (Exception) request.getAttribute("exception"); %>
+		<h2>Reason: <%= e.getMessage() %></h2>
+		<h3>Exception <%= e.getStackTrace() %></h3>
+		<span><img src="img/error.png" align="middle" class="center" /></span>
 	</body>
 </html>
