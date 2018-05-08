@@ -46,6 +46,9 @@ public class BroadcastDao implements IBroadcastDao {
 			ps.setInt(1, broadcastId);
 			ps.executeUpdate();
 		}
+		catch (SQLException e) {
+			throw new SQLException("Cannot delete broadcast, because of exisiting reservation!");
+		}
 	}
 
 	@Override
