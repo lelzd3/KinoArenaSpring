@@ -68,7 +68,8 @@ response.setHeader("Cache-Control", "no-cache");
 				<h2 align="center"><strong><%=movie.getTitle()%></strong></h2>
 				<br>
 				<br> 
-				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="300" width="300"> <br>
+				<img src="getCover?file=<%=movie.getTitle() + ";" + movie.getId()%>" height="300" width="300">
+				<br>
 				<br>
 				<p><%=movie.getDescription()%></p>
 				<br>
@@ -96,7 +97,7 @@ response.setHeader("Cache-Control", "no-cache");
 				<form action ="removeFromFavorite" method="post">
 					<input type="hidden" name="hiddenJspName" value ="user_favourites">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/favourite.png" style="width: 7.5%;" value = "Remove from favourites">
+					<input type = "image" src="img/favourite.png" style="width: 5%;" value = "Remove from favourites">
 				</form> 
 	
 				<br><br>

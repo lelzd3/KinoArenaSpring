@@ -114,7 +114,7 @@ public class User {
 		this.age = age;
 		}
 		else {
-			throw new InvalidDataException("Invalid age entered!");
+			throw new InvalidDataException("Invalid age entered! Age must be between 0 and 120");
 		}
 	}
 

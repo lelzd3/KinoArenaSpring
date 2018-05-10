@@ -21,10 +21,9 @@ response.setHeader("Cache-Control", "no-cache");
 	</head>
 	<body style="background-color: #CBCBCB">
 		<h1 align="center">Error occured</h1>
-		<br>
+		<br align="center">
  		<% Exception e = (Exception) request.getAttribute("exception"); %>
-		<h2>Reason: <%= e.getMessage() %></h2>
-		<h3>Exception <%= e.getStackTrace() %></h3>
+		<h2 align="center" >Reason: <%= e.getMessage() %></h2>
 		<span><img src="img/error.png" align="middle" class="center" /></span>
 	</body>
 </html>

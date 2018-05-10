@@ -22,7 +22,6 @@ public class EditUserController {
 	@Autowired
 	private UserManager userManager;
 	
-	//adminPanel.jsp -> addBroadcast.jsp
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String getToEditPage(Model springModel,HttpSession session) {
 		User user = (User) session.getAttribute("user");		

@@ -61,9 +61,9 @@ public class MovieDao implements IMovieDao{
 		PreparedStatement ps = null;
 		try{
 			connection.setAutoCommit(false);
-			ps = connection.prepareStatement(query);
-			
 			deleteGenresFromMovie(m.getId());
+			ps = connection.prepareStatement(query);
+
 			ps.setInt(1, m.getId());
 			ps.executeUpdate();
 			connection.commit();

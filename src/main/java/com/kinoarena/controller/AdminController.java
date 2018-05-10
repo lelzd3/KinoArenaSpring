@@ -277,6 +277,7 @@ public class AdminController {
 	
 		Double rating = 0.0;
 		Movie movie = new Movie(title, description, rating, duration,genresSelected);
+		System.out.println(movie + " "+admin+" "+genresSelected);
 		adminManager.addNewMovie(movie, admin,genresSelected);
 		
 		String file_location = SERVER_FILES_LOCATION+movie.getTitle()+";"+movie.getId()+COVER_FILE_SUFFIX;

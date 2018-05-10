@@ -34,14 +34,18 @@ public class Validations {
 	    if(!name.matches("[a-zA-Z]*")) {
 			throw new InvalidDataException("Invalid Name, name should consist only of letters");
 	    }
+	    
+	    if(name.length() > 45) {
+	    	throw new InvalidDataException("Invalid Name, name maximum length is 45 characters");
+	    }
 	        
 	    return true;
 	}
 
 	public static boolean verifyUsername(String username) throws InvalidDataException {
 
-	    if(!username.matches("[A-Za-z0-9_]+") || username.length() < 5) {
-			throw new InvalidDataException("Invalid username, username should be atleast 5 characters long");
+	    if(!username.matches("[A-Za-z0-9_]+") || username.length() < 5 || username.length() > 45) {
+			throw new InvalidDataException("Invalid username, username must 5 - 45 characters long");
 	    }
 	        
 	    return true;
@@ -52,6 +56,9 @@ public class Validations {
 			throw new InvalidDataException("Invalid password, its empty");
 	    }
 		
+		if(password.length() > 255) {
+			throw new InvalidDataException("Invalid password, password maximum length is 255 characters");
+		}
 		//		^                 # start-of-string
 		//		(?=.*[0-9])       # a digit must occur at least once
 		//		(?=.*[a-z])       # a lower case letter must occur at least once
@@ -64,7 +71,7 @@ public class Validations {
 	    if(!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")) { 
 	    	throw new InvalidDataException("Invalid password,Please enter valid password: atleast one digit, one lowercase, one uppercase, at least one symbol! and no whitespace! ");
 	    }
-	        
+	      
 	    return true;
 	}
 	

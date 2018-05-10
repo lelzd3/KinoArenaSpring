@@ -97,7 +97,7 @@ response.setHeader("Cache-Control", "no-cache");
 				<form action ="removeFromWatchlist" method="post">
 					<input type="hidden" name="hiddenJspName" value ="user_watchlist">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/minus.png" style="width: 7.5%;" value = "Remove from watchlist">
+					<input type = "image" src="img/minus.png" style="width: 5%;" value = "Remove from watchlist">
 				</form> 
 				
 				

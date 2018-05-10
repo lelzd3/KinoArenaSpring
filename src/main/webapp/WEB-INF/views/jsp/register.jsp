@@ -25,25 +25,25 @@ response.setHeader("Cache-Control", "no-cache");
 	  		<h3 style="color: red; text-align: center">${ message }</h3>
 		</c:if>	
 			<div>
-				<input type="text" name="username" value="Stanislav1" placeholder="Username" required="" id="username"  maxlength="45"/>
+				<input type="text" name="username" value="" placeholder="Username" required id="username"  maxlength="45"/>
 			</div>
 			<div>
-				<input type="password" name="password1" value="#12345678sS" placeholder="Password" required="" id="password" maxlength="255"/>
+				<input type="password" name="password1" value="#12345678sS" placeholder="Password" required id="password" maxlength="255"/>
 			</div>
 			<div>
-				<input type="password" name="password2" value="#12345678sS" placeholder="Confirm Password" required="" id="password" maxlength="255" />
+				<input type="password" name="password2" value="#12345678sS" placeholder="Confirm Password" required id="password" maxlength="255" />
 			</div>
 			<div>
-				<input type="email" name="email" value="stan123@abv.bg" placeholder="Email" required="" id="username" maxlength="45"/>
+				<input type="email" name="email" value="" placeholder="Email" required id="username" maxlength="45"/>
 			</div>
 			<div>
-				<input type="text" name="firstName" value="Stanchy" placeholder="First Name" required="" id="username" maxlength="45" />
+				<input type="text" name="firstName" value="" placeholder="First Name" required id="username" maxlength="45" />
 			</div>
 			<div>
-				<input type="text" name="lastName" value="Kaliparski" placeholder="Last Name" required="" id="username" maxlength="45" />
+				<input type="text" name="lastName" value="" placeholder="Last Name" required id="username" maxlength="45" />
 			</div>
 			<div>
-				<input type="number" name="age" value="22" placeholder="Age" required="" id="username" min="1" max="120"/>
+				<input type="number" name="age" value="" placeholder="Age" required id="username" min="1" max="120"/>
 			</div>
 			<div>
 				<input type="submit" value="Register" />

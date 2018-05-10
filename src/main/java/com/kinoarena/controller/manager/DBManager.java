@@ -7,11 +7,11 @@ import java.sql.SQLException;
 
 public class DBManager {
 	 
-	private static final String DB_PASS = "Bobi12345";
+	private static final String DB_PASS = "root";
 	private static final String DB_USER = "root";
 	private static final String DB_PORT = "3306";
 	private static final String DB_IP = "localhost";
-	private static final String DB_NAME = "cinema"; //still not made
+	private static final String DB_NAME = "cinema";
 	// root@localhost:3306
 
 	private static Connection connection;

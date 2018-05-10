@@ -132,11 +132,11 @@ public class MovieController {
 		User user = (User) session.getAttribute("user");
 		int broadcast_id = Integer.parseInt(request.getParameter("hiddenBroadcastId"));
 
-		String s = (String) request.getParameter("hiddenSeats");
-		if (s.isEmpty()) {
+		String seats = (String) request.getParameter("hiddenSeats");
+		if (seats.isEmpty()) {
 			return "viewAllMovies";
 		}
-		String[] allSeats = s.split(",");
+		String[] allSeats = seats.split(",");
 		ArrayList<Seat> selectedSeats = new ArrayList<Seat>();
 
 		for (int i = 0; i < allSeats.length; i++) {

@@ -93,28 +93,28 @@ response.setHeader("Cache-Control", "no-cache");
 				
 				<% if(!favMovies.contains(movie.getId())){ %>
 				<form action = "addInFavorite" method = "post">
-					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/unfavourite.png" style="width: 7.5%;" value = "Add in favorites"/>
+					<input type = "image" src="img/unfavourite.png" style="width: 5%;" value = "Add in favorites"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromFavorite" method="post">
-					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
-					<input type = "image" src="img/favourite.png" style="width: 7.5%;" value = "Remove from favourites">
+					<input type = "image" src="img/favourite.png" style="width: 5%;" value = "Remove from favourites">
 				</form> 
 		
 				<% }  %>
 					
 				<% if(!watchMovies.contains(movie.getId())){ %>
 				<form action = "addInWatchlist" method = "post">
-					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 					<input type = "image" src="img/plus.png" style="width: 7.5%;" value = "Add in watchlist"/>
 				</form>
 				<% } else{ %>
 				<form action = "removeFromWatchlist" method="post">
-					<input type="hidden" name="hiddenJspName" value ="viewAllMovies">
+					<input type="hidden" name="hiddenJspName" value ="viewAMovie">
 					<input type = "hidden" name = "hiddenMovieId" value = "<%=movie.getId()%>"/>
 					<input type = "image" src="img/minus.png" style="width: 7.5%;" value = "Remove from watchlist">
 				</form> 
